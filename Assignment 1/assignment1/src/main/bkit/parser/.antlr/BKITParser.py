@@ -1,4 +1,4 @@
-# Generated from d:\Works\HK5\PPL\Assignment 1\initial\initial\src\main\bkit\parser\BKIT.g4 by ANTLR 4.8
+# Generated from d:\Works\HK5\PPL\Assignment 1\assignment1\src\main\bkit\parser\BKIT.g4 by ANTLR 4.8
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
@@ -11,7 +11,7 @@ else:
 
 def serializedATN():
     with StringIO() as buf:
-        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3B")
+        buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3C")
         buf.write("\13\4\2\t\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\2\2\3\2\2\2\2")
         buf.write("\t\2\4\3\2\2\2\4\5\7\5\2\2\5\6\7\62\2\2\6\7\7\3\2\2\7")
         buf.write("\b\7\63\2\2\b\t\7\2\2\3\t\3\3\2\2\2\2")
@@ -33,11 +33,11 @@ class BKITParser ( Parser ):
                      "'Then'", "'Else'", "'ElseIf'", "'EndIf'", "'For'", 
                      "'EndFor'", "'While'", "'EndWhile'", "'Break'", "'Continue'", 
                      "'Do'", "'EndDo'", "'True'", "'False'", "'+'", "'\u00E2\u02C6\u2019'", 
-                     "'\u00E2\u02C6\u2014'", "'\\'", "'%'", "'+.'", "'\u00E2\u02C6\u2019.'", 
-                     "'\u00E2\u02C6\u2014.'", "'\\.'", "'!'", "'&&'", "'||'", 
-                     "'=='", "'=/='", "'!='", "'<'", "'>'", "'<='", "'>='", 
-                     "'<.'", "'>.'", "'<=.'", "'>=.'", "'.'", "':'", "';'", 
-                     "'('", "')'", "'['", "']'", "'{'", "'}'" ]
+                     "'*'", "'\\'", "'%'", "'+.'", "'\u00E2\u02C6\u2019.'", 
+                     "'*.'", "'\\.'", "'!'", "'&&'", "'||'", "'=='", "'=/='", 
+                     "'!='", "'<'", "'>'", "'<='", "'>='", "'<.'", "'>.'", 
+                     "'<=.'", "'>=.'", "'.'", "':'", "';'", "'('", "')'", 
+                     "'['", "']'", "'{'", "'}'" ]
 
     symbolicNames = [ "<INVALID>", "ID", "COMMENT", "VAR", "FUNCTION", "PARAMETER", 
                       "RETURN", "BODY", "ENDBODY", "IF", "THEN", "ELSE", 
@@ -51,7 +51,7 @@ class BKITParser ( Parser ):
                       "DOT", "COLON", "SEMI", "LPAREN", "RPAREN", "LSQUARE", 
                       "RSQUARE", "LCURLY", "RCURLY", "INT_LITERAL", "FLOAT_LITERAL", 
                       "BOOLEAN", "STRING", "WS", "ERROR_CHAR", "UNCLOSE_STRING", 
-                      "ILLEGAL_ESCAPE", "UNTERMINATED_COMMENT" ]
+                      "ILLEGAL_ESCAPE", "ILLEGAL_CHAR", "UNTERMINATED_COMMENT" ]
 
     RULE_program = 0
 
@@ -121,7 +121,8 @@ class BKITParser ( Parser ):
     ERROR_CHAR=61
     UNCLOSE_STRING=62
     ILLEGAL_ESCAPE=63
-    UNTERMINATED_COMMENT=64
+    ILLEGAL_CHAR=64
+    UNTERMINATED_COMMENT=65
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)

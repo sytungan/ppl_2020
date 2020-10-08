@@ -30,7 +30,7 @@ program  : VAR COLON ID SEMI EOF ;
 ID: [a-z][a-zA-Z0-9]*;
 
 /// Comment
-COMMENT: '**' .*? '**';
+COMMENT: ('**' .*? '**') -> skip;
 
 /*--------------------Keywords--------------------------*/
 
@@ -67,12 +67,12 @@ FALSE: 'False';
 /// Arithmetic operators
 ADD: '+';
 SUB: '−';
-MUL: '∗';
+MUL: '*';
 DIV: '\\';
 MOD: '%';
 ADD_FLOAT: '+.'; 
 SUB_FLOAT: '−.';
-MUL_FLOAT: '∗.';
+MUL_FLOAT: '*.';
 DIV_FLOAT: '\\.';
 /// Logical operators
 NOT: '!';
@@ -116,7 +116,8 @@ INT_LITERAL
 fragment DEC: NON_ZERO [0-9]*;
 fragment HEX: NON_ZERO [0-9A-F]*;
 fragment OCT: NON_ZERO [0-7]*;
-fragment NON_ZERO: [1-9]; 
+fragment NON_ZERO: [1-9];
+
 /// Float
 FLOAT_LITERAL
     :   INT_PART DECIMAL_PART EXPONENT_PART
@@ -128,12 +129,16 @@ fragment DECIMAL_PART: '.' DIGIT*;
 fragment EXPONENT_PART: [eE] SIGN? DIGIT+;
 fragment DIGIT: [0-9];
 fragment SIGN: [+-];
+
 /// Boolean
 BOOLEAN: TRUE | FALSE;
+
 /// String
-STRING: '"' STRING_CHAR* '"';
-fragment STRING_CHAR: ESC_CHAR| ~[\n(OEF)"] | '\'' '"';
-fragment ESC_CHAR
+STRING: '"' STRING_CHAR* '"' {
+    self.text = (self.text)[1:-1] #To split string
+};
+fragment STRING_CHAR: ESCAPE_CHAR | ~[\n'"\\] | '\'' '"';
+fragment ESCAPE_CHAR
     : '\\b'
 	| '\\f'
 	| '\\r'
@@ -142,9 +147,21 @@ fragment ESC_CHAR
 	| '\\\''
 	| '\\\\'
     ;
+
+/// Array
+
 /*-------------------------------------------------------*/
+
+
 WS : [ \t\r\n\f]+ -> skip ; // skip spaces, tabs, newlines
+/*--------------------Lexical errors---------------------*/
 ERROR_CHAR: .;
-UNCLOSE_STRING: .;
-ILLEGAL_ESCAPE: .;
+UNCLOSE_STRING: '"' STRING_CHAR* ( '\n' | EOF ) {
+    self.text = (self.text)[1:]
+};
+ILLEGAL_ESCAPE: '"' STRING_CHAR* ILLEGAL_CHAR {
+    self.text = (self.text)[1:]
+};
+ILLEGAL_CHAR: '\\' ~[bfrnt'\\] | ~'\\';
 UNTERMINATED_COMMENT: '**' .*?;
+/*-------------------------------------------------------*/

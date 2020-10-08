@@ -5,10 +5,10 @@ class LexerSuite(unittest.TestCase):
       
     def test_lower_identifier(self):
         """test identifiers"""
-        self.assertTrue(TestLexer.checkLexeme(""" "\n" ""","?xxx,<EOF>",101))
+        self.assertTrue(TestLexer.checkLexeme(""" "abc\\\\" ""","""abc\\\\,<EOF>""",101))
 
     def test_lower_upper_id(self):
-        self.assertTrue(TestLexer.checkLexeme(""" "This is a string containing tab \\t" ""","!xxx,<EOF>",102))
+        self.assertTrue(TestLexer.checkLexeme(""" "This is a string containing tab \\t" ""","""This is a string containing tab \\t,<EOF>""",102))
 
     def test_wrong_token(self):
         self.assertTrue(TestLexer.checkLexeme("ab?svn","ab,Error Token ?",103))
