@@ -5,7 +5,7 @@ class LexerSuite(unittest.TestCase):
       
     def test_lower_identifier(self):
         """test identifiers"""
-        self.assertTrue(TestLexer.checkLexeme(""" "abc\\\\" ""","""abc\\\\,<EOF>""",101))
+        self.assertTrue(TestLexer.checkLexeme("5","""5,<EOF>""",101))
 
     def test_lower_upper_id(self):
         self.assertTrue(TestLexer.checkLexeme(""" "This is a string containing tab \\t" ""","""This is a string containing tab \\t,<EOF>""",102))
@@ -15,7 +15,7 @@ class LexerSuite(unittest.TestCase):
 
     def test_integer(self):
         """test integers"""
-        self.assertTrue(TestLexer.checkLexeme("Var x;","Var,x,;,<EOF>",104))
+        self.assertTrue(TestLexer.checkLexeme(""" {   1  ,  2,3  , 4} ""","{1,2,3,4},<EOF>",104))
 
     def test_illegal_escape(self):
         """test illegal escape"""

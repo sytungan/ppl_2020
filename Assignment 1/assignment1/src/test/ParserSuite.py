@@ -4,7 +4,10 @@ from TestUtils import TestParser
 class ParserSuite(unittest.TestCase):
     def test_simple_program(self):
         """Simple program: int main() {} """
-        input = """Var: x;"""
+        input = """Var: a = 5;
+Var: b[2][3] = {{2,3,4},{4,5,6}};
+Var: c, d = 6, e, f;
+Var: m, n[10];"""
         expect = "successful"
         self.assertTrue(TestParser.checkParser(input,expect,201))
     

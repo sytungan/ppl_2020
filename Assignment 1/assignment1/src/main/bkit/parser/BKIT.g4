@@ -24,17 +24,25 @@ options{
 	language=Python3;
 }
 
-program  : VAR COLON ID SEMI EOF ;
+/* ==================PARSER=RULES====================== */
+/// BKIT program
+program  : (global_var_declare)+ EOF;
+/// Global variable declaration part
+global_var_declare: VAR COLON var_list SEMI;
+var_list: variable_name (ASSIGN init_value)?;
+variable_name: (scalar_var | composite_var) (COMMA (scalar_var | composite_var))*;
+scalar_var: ID;
+composite_var: ID (LSQUARE INT_LIT RSQUARE)+;
+init_value: (LITERAL | ID) (COMMA (LITERAL | ID))*;
 
-/// Identifiers
+/* ===================LEXER=RULES=======================*/
+
+/*--------------------Identifiers-----------------------*/
+VAR: 'Var';
 ID: [a-z][a-zA-Z0-9]*;
-
-/// Comment
-COMMENT: ('**' .*? '**') -> skip;
+/*------------------------------------------------------*/
 
 /*--------------------Keywords--------------------------*/
-
-VAR: 'Var';
 /// Function
 FUNCTION:  'Function';
 PARAMETER: 'Parameter';
@@ -63,7 +71,6 @@ FALSE: 'False';
 /*-------------------------------------------------------*/
 
 /*--------------------Operators--------------------------*/
-
 /// Arithmetic operators
 ADD: '+';
 SUB: '−';
@@ -79,6 +86,7 @@ NOT: '!';
 AND: '&&';
 OR: '||';
 /// Equality operators
+ASSIGN: '=';
 EQUAL: '==';
 EQUAL_FLOAT: '=/=';
 NOT_EQUAL: '!=';
@@ -94,6 +102,7 @@ MORE_THAN_EQUAL_FLOAT: '>=.';
 /*-------------------------------------------------------*/
 
 /*--------------------Separators-------------------------*/
+COMMA: ',';
 DOT: '.';
 COLON: ':';
 SEMI: ';';
@@ -107,7 +116,7 @@ RCURLY: '}';
 
 /*---------------------Literals--------------------------*/
 /// Integer
-INT_LITERAL
+INT_LIT
     : '0'
     | DEC
     | '0'[xX]HEX
@@ -119,7 +128,7 @@ fragment OCT: NON_ZERO [0-7]*;
 fragment NON_ZERO: [1-9];
 
 /// Float
-FLOAT_LITERAL
+FLOAT_LIT
     :   INT_PART DECIMAL_PART EXPONENT_PART
     |   INT_PART EXPONENT_PART
     |   INT_PART DECIMAL_PART
@@ -131,10 +140,10 @@ fragment DIGIT: [0-9];
 fragment SIGN: [+-];
 
 /// Boolean
-BOOLEAN: TRUE | FALSE;
+BOOLEAN_LIT: TRUE | FALSE;
 
 /// String
-STRING: '"' STRING_CHAR* '"' {
+STRING_LIT: '"' STRING_CHAR* '"' {
     self.text = (self.text)[1:-1] #To split string
 };
 fragment STRING_CHAR: ESCAPE_CHAR | ~[\n'"\\] | '\'' '"';
@@ -149,11 +158,14 @@ fragment ESCAPE_CHAR
     ;
 
 /// Array
-
+LITERAL: INT_LIT | FLOAT_LIT | STRING_LIT | ARRAY_LIT;
+ARRAY_LIT: LCURLY (WS_A* (LITERAL)? WS_A* COMMA WS_A* LITERAL WS_A*)* RCURLY;
+fragment WS_A: ' ';
 /*-------------------------------------------------------*/
 
-
+COMMENT: ('**' .*? '**') -> skip; // skip comment
 WS : [ \t\r\n\f]+ -> skip ; // skip spaces, tabs, newlines
+
 /*--------------------Lexical errors---------------------*/
 ERROR_CHAR: .;
 UNCLOSE_STRING: '"' STRING_CHAR* ( '\n' | EOF ) {
@@ -162,6 +174,6 @@ UNCLOSE_STRING: '"' STRING_CHAR* ( '\n' | EOF ) {
 ILLEGAL_ESCAPE: '"' STRING_CHAR* ILLEGAL_CHAR {
     self.text = (self.text)[1:]
 };
-ILLEGAL_CHAR: '\\' ~[bfrnt'\\] | ~'\\';
+fragment ILLEGAL_CHAR: '\\' ~[bfrnt'\\] | ~'\\';
 UNTERMINATED_COMMENT: '**' .*?;
 /*-------------------------------------------------------*/
