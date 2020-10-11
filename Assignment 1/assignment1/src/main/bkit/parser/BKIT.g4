@@ -29,21 +29,22 @@ options{
 program  : (global_var_declare)+ EOF;
 /// Global variable declaration part
 global_var_declare: VAR COLON var_list SEMI;
-var_list: variable_name (ASSIGN init_value)?;
-variable_name: (scalar_var | composite_var) (COMMA (scalar_var | composite_var))*;
+var_list: variable (ASSIGN init_value)?;
+variable: variable_name (COMMA variable_name)*;
+variable_name: (scalar_var | composite_var);
 scalar_var: ID;
 composite_var: ID (LSQUARE INT_LIT RSQUARE)+;
-init_value: (LITERAL | ID) (COMMA (LITERAL | ID))*;
-
+init_value: (literal | scalar_var) (COMMA (LITERAL | scalar_var))*;
+literal: INT_LIT | ARRAY_LIT | STRING_LIT | FLOAT_LIT | BOOLEAN_LIT;
 /* ===================LEXER=RULES=======================*/
 
 /*--------------------Identifiers-----------------------*/
-VAR: 'Var';
 ID: [a-z][a-zA-Z0-9]*;
 /*------------------------------------------------------*/
 
 /*--------------------Keywords--------------------------*/
 /// Function
+VAR: 'Var';
 FUNCTION:  'Function';
 PARAMETER: 'Parameter';
 RETURN: 'Return';
@@ -158,9 +159,9 @@ fragment ESCAPE_CHAR
     ;
 
 /// Array
-LITERAL: INT_LIT | FLOAT_LIT | STRING_LIT | ARRAY_LIT;
 ARRAY_LIT: LCURLY (WS_A* (LITERAL)? WS_A* COMMA WS_A* LITERAL WS_A*)* RCURLY;
 fragment WS_A: ' ';
+LITERAL: INT_LIT | FLOAT_LIT | STRING_LIT | ARRAY_LIT | BOOLEAN_LIT;
 /*-------------------------------------------------------*/
 
 COMMENT: ('**' .*? '**') -> skip; // skip comment

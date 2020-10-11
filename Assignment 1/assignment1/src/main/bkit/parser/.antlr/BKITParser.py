@@ -12,27 +12,29 @@ else:
 def serializedATN():
     with StringIO() as buf:
         buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3F")
-        buf.write("B\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b")
-        buf.write("\t\b\3\2\6\2\22\n\2\r\2\16\2\23\3\2\3\2\3\3\3\3\3\3\3")
-        buf.write("\3\3\3\3\4\3\4\3\4\5\4 \n\4\3\5\3\5\5\5$\n\5\3\5\3\5\3")
-        buf.write("\5\5\5)\n\5\7\5+\n\5\f\5\16\5.\13\5\3\6\3\6\3\7\3\7\3")
-        buf.write("\7\3\7\6\7\66\n\7\r\7\16\7\67\3\b\3\b\3\b\7\b=\n\b\f\b")
-        buf.write("\16\b@\13\b\3\b\2\2\t\2\4\6\b\n\f\16\2\3\4\2\4\4??\2A")
-        buf.write("\2\21\3\2\2\2\4\27\3\2\2\2\6\34\3\2\2\2\b#\3\2\2\2\n/")
-        buf.write("\3\2\2\2\f\61\3\2\2\2\169\3\2\2\2\20\22\5\4\3\2\21\20")
-        buf.write("\3\2\2\2\22\23\3\2\2\2\23\21\3\2\2\2\23\24\3\2\2\2\24")
-        buf.write("\25\3\2\2\2\25\26\7\2\2\3\26\3\3\2\2\2\27\30\7\3\2\2\30")
-        buf.write("\31\7\63\2\2\31\32\5\6\4\2\32\33\7\64\2\2\33\5\3\2\2\2")
-        buf.write("\34\37\5\b\5\2\35\36\7%\2\2\36 \5\16\b\2\37\35\3\2\2\2")
-        buf.write("\37 \3\2\2\2 \7\3\2\2\2!$\5\n\6\2\"$\5\f\7\2#!\3\2\2\2")
-        buf.write("#\"\3\2\2\2$,\3\2\2\2%(\7\61\2\2&)\5\n\6\2\')\5\f\7\2")
-        buf.write("(&\3\2\2\2(\'\3\2\2\2)+\3\2\2\2*%\3\2\2\2+.\3\2\2\2,*")
-        buf.write("\3\2\2\2,-\3\2\2\2-\t\3\2\2\2.,\3\2\2\2/\60\7\4\2\2\60")
-        buf.write("\13\3\2\2\2\61\65\7\4\2\2\62\63\7\67\2\2\63\64\7;\2\2")
-        buf.write("\64\66\78\2\2\65\62\3\2\2\2\66\67\3\2\2\2\67\65\3\2\2")
-        buf.write("\2\678\3\2\2\28\r\3\2\2\29>\t\2\2\2:;\7\61\2\2;=\t\2\2")
-        buf.write("\2<:\3\2\2\2=@\3\2\2\2><\3\2\2\2>?\3\2\2\2?\17\3\2\2\2")
-        buf.write("@>\3\2\2\2\t\23\37#(,\67>")
+        buf.write("L\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b")
+        buf.write("\t\b\4\t\t\t\4\n\t\n\3\2\6\2\26\n\2\r\2\16\2\27\3\2\3")
+        buf.write("\2\3\3\3\3\3\3\3\3\3\3\3\4\3\4\3\4\5\4$\n\4\3\5\3\5\3")
+        buf.write("\5\7\5)\n\5\f\5\16\5,\13\5\3\6\3\6\5\6\60\n\6\3\7\3\7")
+        buf.write("\3\b\3\b\3\b\3\b\6\b8\n\b\r\b\16\b9\3\t\3\t\5\t>\n\t\3")
+        buf.write("\t\3\t\3\t\5\tC\n\t\7\tE\n\t\f\t\16\tH\13\t\3\n\3\n\3")
+        buf.write("\n\2\2\13\2\4\6\b\n\f\16\20\22\2\3\3\2;?\2J\2\25\3\2\2")
+        buf.write("\2\4\33\3\2\2\2\6 \3\2\2\2\b%\3\2\2\2\n/\3\2\2\2\f\61")
+        buf.write("\3\2\2\2\16\63\3\2\2\2\20=\3\2\2\2\22I\3\2\2\2\24\26\5")
+        buf.write("\4\3\2\25\24\3\2\2\2\26\27\3\2\2\2\27\25\3\2\2\2\27\30")
+        buf.write("\3\2\2\2\30\31\3\2\2\2\31\32\7\2\2\3\32\3\3\2\2\2\33\34")
+        buf.write("\7\4\2\2\34\35\7\63\2\2\35\36\5\6\4\2\36\37\7\64\2\2\37")
+        buf.write("\5\3\2\2\2 #\5\b\5\2!\"\7%\2\2\"$\5\20\t\2#!\3\2\2\2#")
+        buf.write("$\3\2\2\2$\7\3\2\2\2%*\5\n\6\2&\'\7\61\2\2\')\5\n\6\2")
+        buf.write("(&\3\2\2\2),\3\2\2\2*(\3\2\2\2*+\3\2\2\2+\t\3\2\2\2,*")
+        buf.write("\3\2\2\2-\60\5\f\7\2.\60\5\16\b\2/-\3\2\2\2/.\3\2\2\2")
+        buf.write("\60\13\3\2\2\2\61\62\7\3\2\2\62\r\3\2\2\2\63\67\7\3\2")
+        buf.write("\2\64\65\7\67\2\2\65\66\7;\2\2\668\78\2\2\67\64\3\2\2")
+        buf.write("\289\3\2\2\29\67\3\2\2\29:\3\2\2\2:\17\3\2\2\2;>\5\22")
+        buf.write("\n\2<>\5\f\7\2=;\3\2\2\2=<\3\2\2\2>F\3\2\2\2?B\7\61\2")
+        buf.write("\2@C\7@\2\2AC\5\f\7\2B@\3\2\2\2BA\3\2\2\2CE\3\2\2\2D?")
+        buf.write("\3\2\2\2EH\3\2\2\2FD\3\2\2\2FG\3\2\2\2G\21\3\2\2\2HF\3")
+        buf.write("\2\2\2IJ\t\2\2\2J\23\3\2\2\2\n\27#*/9=BF")
         return buf.getvalue()
 
 
@@ -46,7 +48,7 @@ class BKITParser ( Parser ):
 
     sharedContextCache = PredictionContextCache()
 
-    literalNames = [ "<INVALID>", "'Var'", "<INVALID>", "'Function'", "'Parameter'", 
+    literalNames = [ "<INVALID>", "<INVALID>", "'Var'", "'Function'", "'Parameter'", 
                      "'Return'", "'Body'", "'EndBody'", "'If'", "'Then'", 
                      "'Else'", "'ElseIf'", "'EndIf'", "'For'", "'EndFor'", 
                      "'While'", "'EndWhile'", "'Break'", "'Continue'", "'Do'", 
@@ -57,7 +59,7 @@ class BKITParser ( Parser ):
                      "'>.'", "'<=.'", "'>=.'", "','", "'.'", "':'", "';'", 
                      "'('", "')'", "'['", "']'", "'{'", "'}'" ]
 
-    symbolicNames = [ "<INVALID>", "VAR", "ID", "FUNCTION", "PARAMETER", 
+    symbolicNames = [ "<INVALID>", "ID", "VAR", "FUNCTION", "PARAMETER", 
                       "RETURN", "BODY", "ENDBODY", "IF", "THEN", "ELSE", 
                       "ELSE_IF", "END_IF", "FOR", "END_FOR", "WHILE", "END_WHITE", 
                       "BREAK", "CONTINUTE", "DO", "END_DO", "TRUE", "FALSE", 
@@ -69,24 +71,27 @@ class BKITParser ( Parser ):
                       "MORE_THAN_EQUAL_FLOAT", "COMMA", "DOT", "COLON", 
                       "SEMI", "LPAREN", "RPAREN", "LSQUARE", "RSQUARE", 
                       "LCURLY", "RCURLY", "INT_LIT", "FLOAT_LIT", "BOOLEAN_LIT", 
-                      "STRING_LIT", "LITERAL", "ARRAY_LIT", "COMMENT", "WS", 
+                      "STRING_LIT", "ARRAY_LIT", "LITERAL", "COMMENT", "WS", 
                       "ERROR_CHAR", "UNCLOSE_STRING", "ILLEGAL_ESCAPE", 
                       "UNTERMINATED_COMMENT" ]
 
     RULE_program = 0
     RULE_global_var_declare = 1
     RULE_var_list = 2
-    RULE_variable_name = 3
-    RULE_scalar_var = 4
-    RULE_composite_var = 5
-    RULE_init_value = 6
+    RULE_variable = 3
+    RULE_variable_name = 4
+    RULE_scalar_var = 5
+    RULE_composite_var = 6
+    RULE_init_value = 7
+    RULE_literal = 8
 
-    ruleNames =  [ "program", "global_var_declare", "var_list", "variable_name", 
-                   "scalar_var", "composite_var", "init_value" ]
+    ruleNames =  [ "program", "global_var_declare", "var_list", "variable", 
+                   "variable_name", "scalar_var", "composite_var", "init_value", 
+                   "literal" ]
 
     EOF = Token.EOF
-    VAR=1
-    ID=2
+    ID=1
+    VAR=2
     FUNCTION=3
     PARAMETER=4
     RETURN=5
@@ -145,8 +150,8 @@ class BKITParser ( Parser ):
     FLOAT_LIT=58
     BOOLEAN_LIT=59
     STRING_LIT=60
-    LITERAL=61
-    ARRAY_LIT=62
+    ARRAY_LIT=61
+    LITERAL=62
     COMMENT=63
     WS=64
     ERROR_CHAR=65
@@ -192,19 +197,19 @@ class BKITParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 15 
+            self.state = 19 
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             while True:
-                self.state = 14
+                self.state = 18
                 self.global_var_declare()
-                self.state = 17 
+                self.state = 21 
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 if not (_la==BKITParser.VAR):
                     break
 
-            self.state = 19
+            self.state = 23
             self.match(BKITParser.EOF)
         except RecognitionException as re:
             localctx.exception = re
@@ -246,13 +251,13 @@ class BKITParser ( Parser ):
         self.enterRule(localctx, 2, self.RULE_global_var_declare)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 21
+            self.state = 25
             self.match(BKITParser.VAR)
-            self.state = 22
+            self.state = 26
             self.match(BKITParser.COLON)
-            self.state = 23
+            self.state = 27
             self.var_list()
-            self.state = 24
+            self.state = 28
             self.match(BKITParser.SEMI)
         except RecognitionException as re:
             localctx.exception = re
@@ -269,8 +274,8 @@ class BKITParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def variable_name(self):
-            return self.getTypedRuleContext(BKITParser.Variable_nameContext,0)
+        def variable(self):
+            return self.getTypedRuleContext(BKITParser.VariableContext,0)
 
 
         def ASSIGN(self):
@@ -293,17 +298,72 @@ class BKITParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 26
-            self.variable_name()
-            self.state = 29
+            self.state = 30
+            self.variable()
+            self.state = 33
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             if _la==BKITParser.ASSIGN:
-                self.state = 27
+                self.state = 31
                 self.match(BKITParser.ASSIGN)
-                self.state = 28
+                self.state = 32
                 self.init_value()
 
+
+        except RecognitionException as re:
+            localctx.exception = re
+            self._errHandler.reportError(self, re)
+            self._errHandler.recover(self, re)
+        finally:
+            self.exitRule()
+        return localctx
+
+
+    class VariableContext(ParserRuleContext):
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+            super().__init__(parent, invokingState)
+            self.parser = parser
+
+        def variable_name(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(BKITParser.Variable_nameContext)
+            else:
+                return self.getTypedRuleContext(BKITParser.Variable_nameContext,i)
+
+
+        def COMMA(self, i:int=None):
+            if i is None:
+                return self.getTokens(BKITParser.COMMA)
+            else:
+                return self.getToken(BKITParser.COMMA, i)
+
+        def getRuleIndex(self):
+            return BKITParser.RULE_variable
+
+
+
+
+    def variable(self):
+
+        localctx = BKITParser.VariableContext(self, self._ctx, self.state)
+        self.enterRule(localctx, 6, self.RULE_variable)
+        self._la = 0 # Token type
+        try:
+            self.enterOuterAlt(localctx, 1)
+            self.state = 35
+            self.variable_name()
+            self.state = 40
+            self._errHandler.sync(self)
+            _la = self._input.LA(1)
+            while _la==BKITParser.COMMA:
+                self.state = 36
+                self.match(BKITParser.COMMA)
+                self.state = 37
+                self.variable_name()
+                self.state = 42
+                self._errHandler.sync(self)
+                _la = self._input.LA(1)
 
         except RecognitionException as re:
             localctx.exception = re
@@ -320,25 +380,13 @@ class BKITParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def scalar_var(self, i:int=None):
-            if i is None:
-                return self.getTypedRuleContexts(BKITParser.Scalar_varContext)
-            else:
-                return self.getTypedRuleContext(BKITParser.Scalar_varContext,i)
+        def scalar_var(self):
+            return self.getTypedRuleContext(BKITParser.Scalar_varContext,0)
 
 
-        def composite_var(self, i:int=None):
-            if i is None:
-                return self.getTypedRuleContexts(BKITParser.Composite_varContext)
-            else:
-                return self.getTypedRuleContext(BKITParser.Composite_varContext,i)
+        def composite_var(self):
+            return self.getTypedRuleContext(BKITParser.Composite_varContext,0)
 
-
-        def COMMA(self, i:int=None):
-            if i is None:
-                return self.getTokens(BKITParser.COMMA)
-            else:
-                return self.getToken(BKITParser.COMMA, i)
 
         def getRuleIndex(self):
             return BKITParser.RULE_variable_name
@@ -349,47 +397,22 @@ class BKITParser ( Parser ):
     def variable_name(self):
 
         localctx = BKITParser.Variable_nameContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 6, self.RULE_variable_name)
-        self._la = 0 # Token type
+        self.enterRule(localctx, 8, self.RULE_variable_name)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 33
+            self.state = 45
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,2,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input,3,self._ctx)
             if la_ == 1:
-                self.state = 31
+                self.state = 43
                 self.scalar_var()
                 pass
 
             elif la_ == 2:
-                self.state = 32
+                self.state = 44
                 self.composite_var()
                 pass
 
-
-            self.state = 42
-            self._errHandler.sync(self)
-            _la = self._input.LA(1)
-            while _la==BKITParser.COMMA:
-                self.state = 35
-                self.match(BKITParser.COMMA)
-                self.state = 38
-                self._errHandler.sync(self)
-                la_ = self._interp.adaptivePredict(self._input,3,self._ctx)
-                if la_ == 1:
-                    self.state = 36
-                    self.scalar_var()
-                    pass
-
-                elif la_ == 2:
-                    self.state = 37
-                    self.composite_var()
-                    pass
-
-
-                self.state = 44
-                self._errHandler.sync(self)
-                _la = self._input.LA(1)
 
         except RecognitionException as re:
             localctx.exception = re
@@ -418,10 +441,10 @@ class BKITParser ( Parser ):
     def scalar_var(self):
 
         localctx = BKITParser.Scalar_varContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 8, self.RULE_scalar_var)
+        self.enterRule(localctx, 10, self.RULE_scalar_var)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 45
+            self.state = 47
             self.match(BKITParser.ID)
         except RecognitionException as re:
             localctx.exception = re
@@ -468,23 +491,23 @@ class BKITParser ( Parser ):
     def composite_var(self):
 
         localctx = BKITParser.Composite_varContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 10, self.RULE_composite_var)
+        self.enterRule(localctx, 12, self.RULE_composite_var)
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 47
+            self.state = 49
             self.match(BKITParser.ID)
-            self.state = 51 
+            self.state = 53 
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             while True:
-                self.state = 48
-                self.match(BKITParser.LSQUARE)
-                self.state = 49
-                self.match(BKITParser.INT_LIT)
                 self.state = 50
+                self.match(BKITParser.LSQUARE)
+                self.state = 51
+                self.match(BKITParser.INT_LIT)
+                self.state = 52
                 self.match(BKITParser.RSQUARE)
-                self.state = 53 
+                self.state = 55 
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 if not (_la==BKITParser.LSQUARE):
@@ -505,23 +528,28 @@ class BKITParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
-        def LITERAL(self, i:int=None):
-            if i is None:
-                return self.getTokens(BKITParser.LITERAL)
-            else:
-                return self.getToken(BKITParser.LITERAL, i)
+        def literal(self):
+            return self.getTypedRuleContext(BKITParser.LiteralContext,0)
 
-        def ID(self, i:int=None):
+
+        def scalar_var(self, i:int=None):
             if i is None:
-                return self.getTokens(BKITParser.ID)
+                return self.getTypedRuleContexts(BKITParser.Scalar_varContext)
             else:
-                return self.getToken(BKITParser.ID, i)
+                return self.getTypedRuleContext(BKITParser.Scalar_varContext,i)
+
 
         def COMMA(self, i:int=None):
             if i is None:
                 return self.getTokens(BKITParser.COMMA)
             else:
                 return self.getToken(BKITParser.COMMA, i)
+
+        def LITERAL(self, i:int=None):
+            if i is None:
+                return self.getTokens(BKITParser.LITERAL)
+            else:
+                return self.getToken(BKITParser.LITERAL, i)
 
         def getRuleIndex(self):
             return BKITParser.RULE_init_value
@@ -532,34 +560,98 @@ class BKITParser ( Parser ):
     def init_value(self):
 
         localctx = BKITParser.Init_valueContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 12, self.RULE_init_value)
+        self.enterRule(localctx, 14, self.RULE_init_value)
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 55
+            self.state = 59
+            self._errHandler.sync(self)
+            token = self._input.LA(1)
+            if token in [BKITParser.INT_LIT, BKITParser.FLOAT_LIT, BKITParser.BOOLEAN_LIT, BKITParser.STRING_LIT, BKITParser.ARRAY_LIT]:
+                self.state = 57
+                self.literal()
+                pass
+            elif token in [BKITParser.ID]:
+                self.state = 58
+                self.scalar_var()
+                pass
+            else:
+                raise NoViableAltException(self)
+
+            self.state = 68
+            self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if not(_la==BKITParser.ID or _la==BKITParser.LITERAL):
+            while _la==BKITParser.COMMA:
+                self.state = 61
+                self.match(BKITParser.COMMA)
+                self.state = 64
+                self._errHandler.sync(self)
+                token = self._input.LA(1)
+                if token in [BKITParser.LITERAL]:
+                    self.state = 62
+                    self.match(BKITParser.LITERAL)
+                    pass
+                elif token in [BKITParser.ID]:
+                    self.state = 63
+                    self.scalar_var()
+                    pass
+                else:
+                    raise NoViableAltException(self)
+
+                self.state = 70
+                self._errHandler.sync(self)
+                _la = self._input.LA(1)
+
+        except RecognitionException as re:
+            localctx.exception = re
+            self._errHandler.reportError(self, re)
+            self._errHandler.recover(self, re)
+        finally:
+            self.exitRule()
+        return localctx
+
+
+    class LiteralContext(ParserRuleContext):
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+            super().__init__(parent, invokingState)
+            self.parser = parser
+
+        def INT_LIT(self):
+            return self.getToken(BKITParser.INT_LIT, 0)
+
+        def ARRAY_LIT(self):
+            return self.getToken(BKITParser.ARRAY_LIT, 0)
+
+        def STRING_LIT(self):
+            return self.getToken(BKITParser.STRING_LIT, 0)
+
+        def FLOAT_LIT(self):
+            return self.getToken(BKITParser.FLOAT_LIT, 0)
+
+        def BOOLEAN_LIT(self):
+            return self.getToken(BKITParser.BOOLEAN_LIT, 0)
+
+        def getRuleIndex(self):
+            return BKITParser.RULE_literal
+
+
+
+
+    def literal(self):
+
+        localctx = BKITParser.LiteralContext(self, self._ctx, self.state)
+        self.enterRule(localctx, 16, self.RULE_literal)
+        self._la = 0 # Token type
+        try:
+            self.enterOuterAlt(localctx, 1)
+            self.state = 71
+            _la = self._input.LA(1)
+            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << BKITParser.INT_LIT) | (1 << BKITParser.FLOAT_LIT) | (1 << BKITParser.BOOLEAN_LIT) | (1 << BKITParser.STRING_LIT) | (1 << BKITParser.ARRAY_LIT))) != 0)):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
                 self.consume()
-            self.state = 60
-            self._errHandler.sync(self)
-            _la = self._input.LA(1)
-            while _la==BKITParser.COMMA:
-                self.state = 56
-                self.match(BKITParser.COMMA)
-                self.state = 57
-                _la = self._input.LA(1)
-                if not(_la==BKITParser.ID or _la==BKITParser.LITERAL):
-                    self._errHandler.recoverInline(self)
-                else:
-                    self._errHandler.reportMatch(self)
-                    self.consume()
-                self.state = 62
-                self._errHandler.sync(self)
-                _la = self._input.LA(1)
-
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
