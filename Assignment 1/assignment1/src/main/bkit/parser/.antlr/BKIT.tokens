@@ -4,7 +4,7 @@ FUNCTION=3
 PARAMETER=4
 RETURN=5
 BODY=6
-ENDBODY=7
+END_BODY=7
 IF=8
 THEN=9
 ELSE=10
@@ -34,8 +34,8 @@ AND=33
 OR=34
 ASSIGN=35
 EQUAL=36
-EQUAL_FLOAT=37
-NOT_EQUAL=38
+NOT_EQUAL=37
+NOT_EQUAL_FLOAT=38
 LESS_THAN=39
 MORE_THAN=40
 LESS_THAN_EQUAL=41
@@ -88,12 +88,12 @@ UNTERMINATED_COMMENT=68
 'True'=21
 'False'=22
 '+'=23
-'−'=24
+'-'=24
 '*'=25
 '\\'=26
 '%'=27
 '+.'=28
-'−.'=29
+'-.'=29
 '*.'=30
 '\\.'=31
 '!'=32
@@ -101,8 +101,8 @@ UNTERMINATED_COMMENT=68
 '||'=34
 '='=35
 '=='=36
-'=/='=37
-'!='=38
+'!='=37
+'=/='=38
 '<'=39
 '>'=40
 '<='=41

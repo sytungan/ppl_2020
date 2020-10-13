@@ -26,16 +26,143 @@ options{
 
 /* ==================PARSER=RULES====================== */
 /// BKIT program
-program  : (global_var_declare)+ EOF;
-/// Global variable declaration part
+program  : (global_var_declare | function_declare)* EOF;
+/// **Global variable declaration part** ///
 global_var_declare: VAR COLON var_list SEMI;
-var_list: variable (ASSIGN init_value)?;
-variable: variable_name (COMMA variable_name)*;
-variable_name: (scalar_var | composite_var);
+var_list: var_def (COMMA var_def)*;
+var_def: variable (ASSIGN init_value)?; // variable = initial-value
+variable: (scalar_var | composite_var); // 2 type scalar and composite
 scalar_var: ID;
 composite_var: ID (LSQUARE INT_LIT RSQUARE)+;
-init_value: (literal | scalar_var) (COMMA (LITERAL | scalar_var))*;
-literal: INT_LIT | ARRAY_LIT | STRING_LIT | FLOAT_LIT | BOOLEAN_LIT;
+init_value: (literal | scalar_var);
+literal // literal type
+    : INT_LIT 
+    | FLOAT_LIT 
+    | STRING_LIT 
+    | BOOLEAN_LIT
+    | ARRAY_LIT
+    ;
+/// **Function declaration part** ///
+function_declare: FUNCTION COLON ID (PARAMETER COLON parameter_list)? BODY COLON statement_list END_BODY DOT;
+parameter_list: parameter (COMMA parameter)*;
+parameter: variable; // 'variable' in Global variable declaration part
+statement_list
+    : local_var_declare* 
+        ( assignment_statement
+        | if_statement 
+        | for_statement 
+        | while_statement
+        | do_while_statement
+        | break_statement
+        | continue_statement
+        | call_statement
+        | return_statement
+        )*
+    ;
+// *Statements*
+local_var_declare: global_var_declare;
+assignment_statement: variable ASSIGN expression SEMI;
+if_statement
+    :
+        IF expression THEN statement_list
+        (ELSE_IF expression THEN statement_list)*
+        (ELSE statement_list)?
+        END_IF DOT
+    ;
+for_statement
+    :
+        FOR LPAREN scalar_var ASSIGN initExpr COMMA conditionExpr COMMA updateExpr RPAREN DO
+            statement_list
+        END_FOR DOT
+    ;
+initExpr: expression;
+conditionExpr: expression;
+updateExpr: expression;
+while_statement: WHILE expression DO statement_list END_WHITE DOT;
+do_while_statement: DO statement_list WHILE expression END_DO DOT;
+break_statement: BREAK SEMI;
+continue_statement: CONTINUTE SEMI;
+call_statement: function_call SEMI;
+return_statement: RETURN expression SEMI;
+// Expression: operators and operands
+expression //lowest
+    : exp1 relational_operator exp1 
+    | exp1
+    ;
+exp1
+    : exp1 (AND | OR) exp2 
+    | exp2
+    ;
+exp2
+    : exp2 adding exp3 
+    | exp3
+    ;
+exp3
+    : exp3 multiplying exp4 
+    | exp4
+    ;
+exp4
+    : NOT exp4 
+    | exp5
+    ;
+exp5
+    : sign exp5
+    | exp6
+    ;
+exp6
+    : exp6 index_operator
+    | exp7
+    ;
+exp7
+    : function_call
+    | exp8
+    ;
+exp8
+    : LPAREN expression RPAREN
+    | operand
+    ;
+operand
+    : literal
+    | ID
+    ;
+// Operators
+adding
+    : ADD
+    | SUB
+    | ADD_FLOAT
+    | SUB_FLOAT
+    ;
+multiplying
+    : MUL
+    | DIV
+    | MOD
+    | MUL_FLOAT
+    | DIV_FLOAT
+    ;
+relational_operator
+    : EQUAL
+    | NOT_EQUAL
+    | LESS_THAN
+    | MORE_THAN
+    | LESS_THAN_EQUAL
+    | MORE_THAN_EQUAL
+    | NOT_EQUAL_FLOAT
+    | LESS_THAN_FLOAT
+    | MORE_THAN_FLOAT
+    | LESS_THAN_EQUAL_FLOAT
+    | MORE_THAN_EQUAL_FLOAT
+    ;
+sign
+    : SUB 
+    | SUB_FLOAT
+    ;
+index_operator //6.4 Index operators
+    : (LSQUARE expression RSQUARE)+
+    ; 
+function_call // 6.5 Function call
+    : ID LPAREN argument_list RPAREN
+    ;
+argument_list: expression? (COMMA expression)*;
 /* ===================LEXER=RULES=======================*/
 
 /*--------------------Identifiers-----------------------*/
@@ -50,7 +177,7 @@ PARAMETER: 'Parameter';
 RETURN: 'Return';
 /// Scope
 BODY: 'Body';
-ENDBODY: 'EndBody';
+END_BODY: 'EndBody';
 /// If
 IF: 'If';
 THEN: 'Then';
@@ -74,12 +201,12 @@ FALSE: 'False';
 /*--------------------Operators--------------------------*/
 /// Arithmetic operators
 ADD: '+';
-SUB: '−';
+SUB: '-';
 MUL: '*';
 DIV: '\\';
 MOD: '%';
 ADD_FLOAT: '+.'; 
-SUB_FLOAT: '−.';
+SUB_FLOAT: '-.';
 MUL_FLOAT: '*.';
 DIV_FLOAT: '\\.';
 /// Logical operators
@@ -89,8 +216,8 @@ OR: '||';
 /// Equality operators
 ASSIGN: '=';
 EQUAL: '==';
-EQUAL_FLOAT: '=/=';
 NOT_EQUAL: '!=';
+NOT_EQUAL_FLOAT: '=/=';
 /// Relational operators
 LESS_THAN: '<';
 MORE_THAN: '>';
@@ -161,7 +288,13 @@ fragment ESCAPE_CHAR
 /// Array
 ARRAY_LIT: LCURLY (WS_A* (LITERAL)? WS_A* COMMA WS_A* LITERAL WS_A*)* RCURLY;
 fragment WS_A: ' ';
-LITERAL: INT_LIT | FLOAT_LIT | STRING_LIT | ARRAY_LIT | BOOLEAN_LIT;
+LITERAL
+    : INT_LIT
+    | FLOAT_LIT
+    | STRING_LIT
+    | BOOLEAN_LIT
+    | ARRAY_LIT
+    ;
 /*-------------------------------------------------------*/
 
 COMMENT: ('**' .*? '**') -> skip; // skip comment

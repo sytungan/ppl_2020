@@ -1,4 +1,8 @@
-Var: a = 5;
-Var: b[2][3] = {};
-Var: c, d = 6, e, f;
-Var: m, n[10];
+
+Function: fact
+Parameter: n
+Body:
+For (i = 0, i < 10, 2) Do
+writeln(i);
+EndFor.
+EndBody.
