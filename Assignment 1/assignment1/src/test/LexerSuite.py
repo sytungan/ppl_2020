@@ -5,7 +5,7 @@ class LexerSuite(unittest.TestCase):
       
     def test_lower_identifier(self):
         """test identifiers"""
-        self.assertTrue(TestLexer.checkLexeme("5.","""5.,<EOF>""",101))
+        self.assertTrue(TestLexer.checkLexeme("""{"abc","asd"}""","""Unclosed String: abc\n\n""",101))
 
     def test_lower_upper_id(self):
         self.assertTrue(TestLexer.checkLexeme(""" "This is a string containing tab \\t" ""","""This is a string containing tab \\t,<EOF>""",102))
@@ -23,7 +23,7 @@ class LexerSuite(unittest.TestCase):
 
     def test_unterminated_string(self):
         """test unclosed string"""
-        self.assertTrue(TestLexer.checkLexeme(""" "abc def  ""","""Unclosed String: abc def  """,106))
+        self.assertTrue(TestLexer.checkLexeme(""" "abc \n\n"  ""","""Unclosed String: abc \n""",106))
 
     def test_normal_string_with_escape(self):
         """test normal string with escape"""

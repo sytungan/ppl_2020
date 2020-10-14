@@ -305,6 +305,8 @@ WS : [ \t\r\n\f]+ -> skip ; // skip spaces, tabs, newlines
 ERROR_CHAR: .;
 UNCLOSE_STRING: '"' STRING_CHAR* ( '\n' | EOF ) {
     self.text = (self.text)[1:]
+    if self.text[-1] == '\n':
+        self.text = (self.text)[:-1]
 };
 ILLEGAL_ESCAPE: '"' STRING_CHAR* ILLEGAL_CHAR {
     self.text = (self.text)[1:]

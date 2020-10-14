@@ -451,6 +451,8 @@ class BKITLexer(Lexer):
         if actionIndex == 1:
 
                 self.text = (self.text)[1:]
+                if self.text[-1] == '\n':
+                    self.text = (self.text)[:-1]
 
      
 
