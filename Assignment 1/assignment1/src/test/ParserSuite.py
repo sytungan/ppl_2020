@@ -5,13 +5,7 @@ class ParserSuite(unittest.TestCase):
     def test_simple_program(self):
         """Simple program: int main() {} """
         input = """
-Function: fact
-Parameter: n
-Body:
-For (i = 0, i < 10, 2) Do
-writeln(i);
-EndFor.
-EndBody."""
+"""
         expect = "successful"
         self.assertTrue(TestParser.checkParser(input,expect,201))
     
@@ -23,20 +17,10 @@ EndBody."""
     def test_num_1(self):
         """Test 01"""
         input = """
-Var: x;
-Function: fact
-Parameter: n
-Body:
-If n == 0 Then
-Return 1;
-Else
-Return n * fact (n - 1);
-EndIf.
-EndBody.
-Function: main
-Body:
-x = 10;
-fact (x);
-EndBody."""
+Function: foo 
+        Parameter: n
+        Body: 
+            fact (x) + 3;
+        EndBody."""
         expect = "successful"
         self.assertTrue(TestParser.checkParser(input,expect,203))

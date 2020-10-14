@@ -252,8 +252,8 @@ INT_LIT
     | '0'[oO]OCT
     ;
 fragment DEC: NON_ZERO [0-9]*;
-fragment HEX: NON_ZERO [0-9A-F]*;
-fragment OCT: NON_ZERO [0-7]*;
+fragment HEX: [1-9A-F] [0-9A-F]*;
+fragment OCT: [1-7] [0-7]*;
 fragment NON_ZERO: [1-9];
 
 /// Float
@@ -262,7 +262,7 @@ FLOAT_LIT
     |   INT_PART EXPONENT_PART
     |   INT_PART DECIMAL_PART
     ;
-fragment INT_PART: NON_ZERO DIGIT*; 
+fragment INT_PART: DEC | '0'; 
 fragment DECIMAL_PART: '.' DIGIT*;
 fragment EXPONENT_PART: [eE] SIGN? DIGIT+;
 fragment DIGIT: [0-9];
@@ -287,8 +287,7 @@ fragment ESCAPE_CHAR
     ;
 
 /// Array
-ARRAY_LIT: LCURLY (WS_A* (LITERAL)? WS_A* COMMA WS_A* LITERAL WS_A*)* RCURLY;
-fragment WS_A: ' ';
+ARRAY_LIT: LCURLY WS_A* (LITERAL)? WS_A* (COMMA WS_A* LITERAL WS_A*)* RCURLY;
 LITERAL
     : INT_LIT
     | FLOAT_LIT
@@ -296,6 +295,8 @@ LITERAL
     | BOOLEAN_LIT
     | ARRAY_LIT
     ;
+fragment WS_A: ' ';
+
 /*-------------------------------------------------------*/
 
 COMMENT: ('**' .*? '**') -> skip; // skip comment
