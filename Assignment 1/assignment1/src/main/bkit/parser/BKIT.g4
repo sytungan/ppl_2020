@@ -287,7 +287,7 @@ fragment ESCAPE_CHAR
     ;
 
 /// Array
-ARRAY_LIT: LCURLY WS_A* (LITERAL)? WS_A* (COMMA WS_A* LITERAL WS_A*)* RCURLY;
+ARRAY_LIT: LCURLY WS_A* (LITERAL WS_A* (COMMA WS_A* LITERAL WS_A*)*)? RCURLY;
 LITERAL
     : INT_LIT
     | FLOAT_LIT
@@ -312,6 +312,6 @@ UNCLOSE_STRING: '"' STRING_CHAR* ( '\n' | EOF ) {
 ILLEGAL_ESCAPE: '"' STRING_CHAR* ILLEGAL_CHAR {
     self.text = (self.text)[1:]
 };
-fragment ILLEGAL_CHAR: '\\' ~[bfrnt'\\] | ~'\\';
+fragment ILLEGAL_CHAR: '\\' ~[bfrnt'\\] |;
 UNTERMINATED_COMMENT: '**' .*?;
 /*-------------------------------------------------------*/
