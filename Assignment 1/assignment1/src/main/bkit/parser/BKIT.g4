@@ -62,7 +62,7 @@ statement_list
     ;
 // *Statements*
 local_var_declare: global_var_declare;
-assignment_statement: variable ASSIGN expression SEMI;
+assignment_statement: (scalar_var index_operator?) ASSIGN expression SEMI;
 if_statement
     :
         IF expression THEN statement_list
@@ -306,12 +306,13 @@ WS : [ \t\r\n\f]+ -> skip ; // skip spaces, tabs, newlines
 ERROR_CHAR: .;
 UNCLOSE_STRING: '"' STRING_CHAR* ( '\n' | EOF ) {
     self.text = (self.text)[1:]
-    if self.text[-1] == '\n':
-        self.text = (self.text)[:-1]
+    if len(self.text) != 0:
+        if self.text[-1] == '\n':
+            self.text = (self.text)[:-1]
 };
 ILLEGAL_ESCAPE: '"' STRING_CHAR* ILLEGAL_CHAR {
     self.text = (self.text)[1:]
 };
-fragment ILLEGAL_CHAR: '\\' ~[bfrnt'\\] |;
+fragment ILLEGAL_CHAR: ('\\' ~[bfrnt'\\]) | '\'' ~'"';
 UNTERMINATED_COMMENT: '**' .*?;
 /*-------------------------------------------------------*/
