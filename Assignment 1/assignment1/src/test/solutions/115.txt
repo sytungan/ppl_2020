@@ -1,1 +1,1 @@
-.,e5,.,5,0,1e2,.,32,<EOF>
+Else,ElseIf,If,EndBody,EndIf,If,EndFor,For,EndWhile,While,EndDo,Do,<EOF>

@@ -27,7 +27,7 @@ options{
 
 /* ==================PARSER=RULES====================== */
 /// BKIT program
-program  : (global_var_declare | function_declare)* EOF;
+program  : (global_var_declare)* function_declare* EOF;
 /// **Global variable declaration part** ///
 global_var_declare: VAR COLON var_list SEMI;
 var_list: var_def (COMMA var_def)*;
@@ -36,13 +36,21 @@ variable: (scalar_var | composite_var); // 2 type scalar and composite
 scalar_var: ID;
 composite_var: ID (LSQUARE INT_LIT RSQUARE)+;
 init_value: (literal | scalar_var);
+
 literal // literal type
     : INT_LIT 
     | FLOAT_LIT 
     | STRING_LIT 
-    | BOOLEAN_LIT
-    | ARRAY_LIT
+    | bool_literal
+    | array_literal
     ;
+// Array literal
+array_literal: LCURLY array_element_list RCURLY;
+array_element_list
+    : array_element? (COMMA array_element)*
+    ;
+array_element: literal;
+bool_literal: TRUE | FALSE;
 /// **Function declaration part** ///
 function_declare: FUNCTION COLON ID (PARAMETER COLON parameter_list)? BODY COLON statement_list END_BODY DOT;
 parameter_list: parameter (COMMA parameter)*;
@@ -84,7 +92,7 @@ do_while_statement: DO statement_list WHILE expression END_DO DOT;
 break_statement: BREAK SEMI;
 continue_statement: CONTINUTE SEMI;
 call_statement: function_call SEMI;
-return_statement: RETURN expression SEMI;
+return_statement: RETURN expression? SEMI;
 // Expression: operators and operands
 expression //lowest
     : exp1 relational_operator exp1 
@@ -167,7 +175,7 @@ argument_list: expression? (COMMA expression)*;
 /* ===================LEXER=RULES=======================*/
 
 /*--------------------Identifiers-----------------------*/
-ID: [a-z][a-zA-Z0-9]*;
+ID: [a-z][a-zA-Z0-9_]*;
 /*------------------------------------------------------*/
 
 /*--------------------Keywords--------------------------*/
@@ -251,10 +259,9 @@ INT_LIT
     | '0'[xX]HEX
     | '0'[oO]OCT
     ;
-fragment DEC: NON_ZERO [0-9]*;
+fragment DEC: [1-9] [0-9]*;
 fragment HEX: [1-9A-F] [0-9A-F]*;
 fragment OCT: [1-7] [0-7]*;
-fragment NON_ZERO: [1-9];
 
 /// Float
 FLOAT_LIT
@@ -262,14 +269,14 @@ FLOAT_LIT
     |   INT_PART EXPONENT_PART
     |   INT_PART DECIMAL_PART
     ;
-fragment INT_PART: DEC | '0'; 
+fragment INT_PART: [0-9]+; 
 fragment DECIMAL_PART: '.' DIGIT*;
 fragment EXPONENT_PART: [eE] SIGN? DIGIT+;
 fragment DIGIT: [0-9];
 fragment SIGN: [+-];
 
-/// Boolean
-BOOLEAN_LIT: TRUE | FALSE;
+/// Boolean -> parser
+
 
 /// String
 STRING_LIT: '"' STRING_CHAR* '"' {
@@ -286,16 +293,16 @@ fragment ESCAPE_CHAR
 	| '\\\\'
     ;
 
-/// Array
-ARRAY_LIT: LCURLY WS_A* (LITERAL WS_A* (COMMA WS_A* LITERAL WS_A*)*)? RCURLY;
-LITERAL
-    : INT_LIT
-    | FLOAT_LIT
-    | STRING_LIT
-    | BOOLEAN_LIT
-    | ARRAY_LIT
-    ;
-fragment WS_A: ' ';
+/// Array -> parser
+// ARRAY_LIT: LCURLY (WS_A* LITERAL WS_A* (COMMA WS_A* LITERAL WS_A*)*)? RCURLY;
+// LITERAL
+//     : INT_LIT
+//     | FLOAT_LIT
+//     | STRING_LIT
+//     | BOOLEAN_LIT
+//     | ARRAY_LIT
+//     ;
+// fragment WS_A: ' ';
 
 /*-------------------------------------------------------*/
 

@@ -1,1 +1,1 @@
-*,*,sample,*,<EOF>
+Error Token _

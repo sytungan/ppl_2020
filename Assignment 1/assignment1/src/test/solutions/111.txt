@@ -1,1 +1,1 @@
-0,x0,0,o0F9,<EOF>
+a,=,int_of_string,(,read,(,),),;,<EOF>

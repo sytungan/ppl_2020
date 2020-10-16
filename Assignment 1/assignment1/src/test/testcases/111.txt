@@ -1,1 +1,1 @@
-0x0 0o0F9
+a = int_of_string (read ());

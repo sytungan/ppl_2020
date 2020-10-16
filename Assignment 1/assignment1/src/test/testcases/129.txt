@@ -1,1 +1,1 @@
- "thisIs'aString"  
+(foo(2+x,4.\.y)-.a[21412\2]||!True&&False&&!!c

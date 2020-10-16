@@ -1,1 +1,1 @@
-0e05,0,x00,.,12e5,<EOF>
+functionEndBody____,Var,*,For,For,\,EndIf,If,<EOF>

@@ -1,1 +1,2 @@
- "\b \f time \r \n \t \' \\"  
+**"This"+is\nmulti
+" ****"('"line/2-1'")"**"zzz" 
