@@ -45,7 +45,7 @@ class LexerSuite(unittest.TestCase):
     def test_comment4(self):
         self.assertTrue(TestLexer.checkLexeme("**___***bK_IT_____**__*** *","*,bK_IT_____,*,*,<EOF>",119))
     def test_comment5(self):
-        self.assertTrue(TestLexer.checkLexeme("**** ** **","<EOF>",120))
+        self.assertTrue(TestLexer.checkLexeme("*** * ** * * *","*,*,*,<EOF>",120))
     def test_comment6(self):
         self.assertTrue(TestLexer.checkLexeme("""** This is a
                                                  * multi-line
@@ -137,7 +137,7 @@ class LexerSuite(unittest.TestCase):
     def test_float12(self):
         self.assertTrue(TestLexer.checkLexeme("0.0E-12 -9.0E12 212E-292+921E2","0.0E-12,-,9.0E12,212E-292,+,921E2,<EOF>",160))
     def test_float13(self):
-        self.assertTrue(TestLexer.checkLexeme("144.40055 126.711561 101.395564 25.154157 200.83841 205.313014","144.40055,126.711561,101.395564,25.154157,200.83841,205.313014,<EOF>",161))
+        self.assertTrue(TestLexer.checkLexeme("144.400e55 126.711561 101.e395564 25.154157 200.83e841 205.313014","144.400e55,126.711561,101.e395564,25.154157,200.83e841,205.313014,<EOF>",161))
 
     def test_boolean1(self):
         self.assertTrue(TestLexer.checkLexeme("a == True || False","a,==,True,||,False,<EOF>",162))   

@@ -1,0 +1,8 @@
+
+        Function: test
+        Body:
+            Var: r = 2, c = 9;
+            r = r + c = 9 - r;
+            Return True;
+        EndBody.
+        

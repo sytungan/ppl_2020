@@ -1,0 +1,10 @@
+
+        Function: test
+        Body:
+            Var: x = 1;
+            While !x Do
+                Continue;
+                x = True || False;
+            EndWhile.
+        EndBody.
+        

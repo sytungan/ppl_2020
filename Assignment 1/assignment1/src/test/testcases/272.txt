@@ -1,0 +1,12 @@
+
+        Function: lcd **LCD of n**
+        Parameter: n
+        Body:
+            Var: i;
+            i = n - 1;
+            While (n % i != 0) Do
+                i = i - 1;
+            EndWhile.
+            writeln(i);
+        EndBody.
+        

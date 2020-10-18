@@ -1,0 +1,33 @@
+
+        Function: foo
+        Parameter: a[5], b
+        Body:
+        Var: i = 0;
+        While (i < 5) Do
+            a[i] = b +. 1.0;
+            i = i + 1;
+        EndWhile.
+        Return a[5];
+        EndBody.
+        Function: test
+        Parameter: arr[21][90], b, c
+        Body:
+            For (i = 0 , i < arr[20][2] , 1) Do
+                If foo(i) <= (foo(i+1)\foo(foo(i))) Then
+                    Return;
+                ElseIf foo(i\2) <= (foo(i+4)\foo(foo(4*i\2))) Then
+                    Break;
+                Else 
+                    While !False Do
+                        If (!False == True) Then print((foo(i*i+111)\foo(foo(arr[2][1]*i\2))));
+                        Else Continue;
+                        EndIf.    
+                    EndWhile.
+                EndIf.
+            EndFor.
+        EndBody.
+        Function: main
+        Body:
+            test(2293);
+        EndBody.
+        

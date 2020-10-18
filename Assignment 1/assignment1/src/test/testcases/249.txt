@@ -1,0 +1,11 @@
+
+        Function: test
+        Body:
+            Var: time, greeting;
+            time = date();
+            If time < 10 Then greeting = "Good morning";
+            ElseIf time < 20 Then greeting = "Good day";
+            Else greeting = "Good evening";
+            EndIf.
+        EndBody.
+        

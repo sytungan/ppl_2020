@@ -1,0 +1,15 @@
+
+        Function: test
+        Body:
+            Var: n = 0, s = 0;
+            Do 
+                n = n + 1;
+                Do 
+                    If n%2 == 0 Then s = s + 1;
+                    EndIf.
+                While (s < 1000) EndDo.
+                s = s + n;
+            While (s + n + 1 < max) EndDo.
+            writeln(n);
+        EndBody.
+        

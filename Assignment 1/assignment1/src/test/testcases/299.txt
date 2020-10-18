@@ -1,0 +1,28 @@
+
+        Var: c[100];
+        Function: test
+        Parameter: value
+        Body:
+            Var: count = 0;
+            Var: value_ = value;
+            If (value == 0) Then
+                Var: c[2];
+                c[0] = "0";
+                c[1] = "\n";
+            Else
+                While (value_ \ 10 != 0) Do
+                    count = count+1;
+                    value_ = value_ \ 10;
+                EndWhile.
+                For (i = count, i >= 0, -1) Do
+                    c[i] = (value % 10) + 48;
+                    value = value \. 10.;
+                EndFor.
+                c[count+1] = "\b";
+            EndIf.
+        EndBody.
+        Function: main
+        Body:
+            test(2293);
+        EndBody.
+        

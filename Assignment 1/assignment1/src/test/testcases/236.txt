@@ -1,0 +1,6 @@
+
+        Function: test
+        Body:
+            Var: x = 43.9e10, y = 542, z = 0xFF2, t = 0O221, s="ThisIsString", w = False, arr[2][1] = {{2e5},{2}}; 
+        EndBody.
+        

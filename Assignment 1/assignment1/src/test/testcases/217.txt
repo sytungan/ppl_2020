@@ -1,0 +1,8 @@
+
+        Function:  test
+        Var x[2][3] = {1, {2, 4}, {"5"}, 7.};
+        Parameter: n, c
+        Body:
+            Var h = a*b;
+        EndBody.
+        
