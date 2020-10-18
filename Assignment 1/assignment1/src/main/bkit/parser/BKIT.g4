@@ -35,7 +35,7 @@ var_def: variable (ASSIGN init_value)?; // variable = initial-value
 variable: (scalar_var | composite_var); // 2 type scalar and composite
 scalar_var: ID;
 composite_var: ID (LSQUARE INT_LIT RSQUARE)+;
-init_value: (literal | scalar_var);
+init_value: literal;
 
 literal // literal type
     : INT_LIT 

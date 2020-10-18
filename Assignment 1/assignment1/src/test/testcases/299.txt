@@ -4,7 +4,8 @@
         Parameter: value
         Body:
             Var: count = 0;
-            Var: value_ = value;
+            Var: value_;
+            value_ = value;
             If (value == 0) Then
                 Var: c[2];
                 c[0] = "0";

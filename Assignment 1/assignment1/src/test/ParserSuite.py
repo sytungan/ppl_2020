@@ -353,7 +353,7 @@ class ParserSuite(unittest.TestCase):
             Var: c = 2;
         EndBody.
         """
-        expect = "Error on line 4 col 23: ="
+        expect = "Error on line 4 col 21: y"
         self.assertTrue(TestParser.checkParser(input,expect,235))
 
     def test_var_declare_statement5(self):
@@ -1362,7 +1362,8 @@ class ParserSuite(unittest.TestCase):
         Parameter: value
         Body:
             Var: count = 0;
-            Var: value_ = value;
+            Var: value_;
+            value_ = value;
             If (value == 0) Then
                 Var: c[2];
                 c[0] = "0";
