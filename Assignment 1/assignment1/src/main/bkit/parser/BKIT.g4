@@ -313,9 +313,7 @@ WS : [ \t\r\n\f]+ -> skip ; // skip spaces, tabs, newlines
 ERROR_CHAR: .;
 UNCLOSE_STRING: '"' STRING_CHAR* ( '\n' | EOF ) {
     self.text = (self.text)[1:]
-    if len(self.text) > 0:
-        if self.text[-1] == '\n':
-            self.text = (self.text)[:-1]
+    #newline on windowOs: \r\n, linuxOs: \n, macOs > 9: \r
 };
 ILLEGAL_ESCAPE: '"' STRING_CHAR* ILLEGAL_CHAR {
     self.text = (self.text)[1:]
