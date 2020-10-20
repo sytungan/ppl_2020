@@ -28,8 +28,8 @@ class ParserSuite(unittest.TestCase):
         self.assertTrue(TestParser.checkParser(input,expect,205))
 
     def test_var_declare6(self):
-        input = """Var: s_1="'"superMan is'".", s_2="happyBirthDay";"""
-        expect = "successful"
+        input = """Var: s_1="'"superMan is'".", s_2="happyBirthDay", arr = {**"toYou"**, 12, 99.4e2};"""
+        expect = "Error on line 1 col 68: ,"
         self.assertTrue(TestParser.checkParser(input,expect,206))
 
     def test_var_declare7(self):
@@ -339,10 +339,10 @@ class ParserSuite(unittest.TestCase):
         Var: a;
         Function: test
         Body:
-            Var: z_1[2][3] = {{6572e21, 2341e+56, 0.5},{"%^DFGZ", "Rvul^%", "sin2xy"}}, a[24], c;
+            Var: z_1[2][3] = {{6572e21, 2341e+56, 0.5},{"%^DFGZ", "Rvul^%",}}, a[24], c;
         EndBody.
         """
-        expect = "successful"
+        expect = "Error on line 5 col 75: }"
         self.assertTrue(TestParser.checkParser(input,expect,234))
 
     def test_var_declare_statement4(self):

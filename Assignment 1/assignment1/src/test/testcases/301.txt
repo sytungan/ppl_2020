@@ -1,0 +1,24 @@
+
+        **This is comment**
+Function: get
+Parameter: x,y,z[10][2][30]
+Body:
+While i <=. 10 || (i > 7) Do i = i - 7 \ 3 +. 1;
+a[5] = 1-a[7+e23-main(11)];
+EndWhile.
+Continue;
+EndBody.
+Var: x[0x23],y=12e23,z;
+Function: main
+Body:
+Var: x = {1,2,{3,4}};
+For (i=1, i<10, **test comment** a\2) Do
+Break;
+If (x+1 == {2,3,{4}}) Then
+Var: h,k,n;
+Return 7 % (3 \ 000.2e7 + 10 * foo(a[2+7][2*3])) \. 2 - {1,2,{4,5}} ;
+ElseIf 1==2 Then a = !False || True + 1;
+EndIf.
+EndFor.
+EndBody.
+Var: a,b;

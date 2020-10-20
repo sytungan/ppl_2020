@@ -45,9 +45,9 @@ literal // literal type
     | array_literal
     ;
 // Array literal
-array_literal: LCURLY array_element_list RCURLY;
+array_literal: LCURLY array_element_list? RCURLY;
 array_element_list
-    : array_element? (COMMA array_element)*
+    : array_element (COMMA array_element)*
     ;
 array_element: literal;
 bool_literal: TRUE | FALSE;

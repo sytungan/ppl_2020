@@ -24,8 +24,8 @@ def serializedATN():
         buf.write("\3\4\7\4w\n\4\f\4\16\4z\13\4\3\5\3\5\3\5\5\5\177\n\5\3")
         buf.write("\6\3\6\5\6\u0083\n\6\3\7\3\7\3\b\3\b\3\b\3\b\6\b\u008b")
         buf.write("\n\b\r\b\16\b\u008c\3\t\3\t\3\n\3\n\3\n\3\n\3\n\5\n\u0096")
-        buf.write("\n\n\3\13\3\13\3\13\3\13\3\f\5\f\u009d\n\f\3\f\3\f\7\f")
-        buf.write("\u00a1\n\f\f\f\16\f\u00a4\13\f\3\r\3\r\3\16\3\16\3\17")
+        buf.write("\n\n\3\13\3\13\5\13\u009a\n\13\3\13\3\13\3\f\3\f\3\f\7")
+        buf.write("\f\u00a1\n\f\f\f\16\f\u00a4\13\f\3\r\3\r\3\16\3\16\3\17")
         buf.write("\3\17\3\17\3\17\3\17\3\17\5\17\u00b0\n\17\3\17\3\17\3")
         buf.write("\17\3\17\3\17\3\17\3\20\3\20\3\20\7\20\u00bb\n\20\f\20")
         buf.write("\16\20\u00be\13\20\3\21\3\21\3\22\7\22\u00c3\n\22\f\22")
@@ -54,7 +54,7 @@ def serializedATN():
         buf.write("\37\37\2\u018d\2c\3\2\2\2\4n\3\2\2\2\6s\3\2\2\2\b{\3\2")
         buf.write("\2\2\n\u0082\3\2\2\2\f\u0084\3\2\2\2\16\u0086\3\2\2\2")
         buf.write("\20\u008e\3\2\2\2\22\u0095\3\2\2\2\24\u0097\3\2\2\2\26")
-        buf.write("\u009c\3\2\2\2\30\u00a5\3\2\2\2\32\u00a7\3\2\2\2\34\u00a9")
+        buf.write("\u009d\3\2\2\2\30\u00a5\3\2\2\2\32\u00a7\3\2\2\2\34\u00a9")
         buf.write("\3\2\2\2\36\u00b7\3\2\2\2 \u00bf\3\2\2\2\"\u00c4\3\2\2")
         buf.write("\2$\u00d5\3\2\2\2&\u00d7\3\2\2\2(\u00df\3\2\2\2*\u00f4")
         buf.write("\3\2\2\2,\u0103\3\2\2\2.\u0105\3\2\2\2\60\u0107\3\2\2")
@@ -82,9 +82,9 @@ def serializedATN():
         buf.write("=\2\2\u0093\u0096\5\32\16\2\u0094\u0096\5\24\13\2\u0095")
         buf.write("\u0090\3\2\2\2\u0095\u0091\3\2\2\2\u0095\u0092\3\2\2\2")
         buf.write("\u0095\u0093\3\2\2\2\u0095\u0094\3\2\2\2\u0096\23\3\2")
-        buf.write("\2\2\u0097\u0098\79\2\2\u0098\u0099\5\26\f\2\u0099\u009a")
-        buf.write("\7:\2\2\u009a\25\3\2\2\2\u009b\u009d\5\30\r\2\u009c\u009b")
-        buf.write("\3\2\2\2\u009c\u009d\3\2\2\2\u009d\u00a2\3\2\2\2\u009e")
+        buf.write("\2\2\u0097\u0099\79\2\2\u0098\u009a\5\26\f\2\u0099\u0098")
+        buf.write("\3\2\2\2\u0099\u009a\3\2\2\2\u009a\u009b\3\2\2\2\u009b")
+        buf.write("\u009c\7:\2\2\u009c\25\3\2\2\2\u009d\u00a2\5\30\r\2\u009e")
         buf.write("\u009f\7\61\2\2\u009f\u00a1\5\30\r\2\u00a0\u009e\3\2\2")
         buf.write("\2\u00a1\u00a4\3\2\2\2\u00a2\u00a0\3\2\2\2\u00a2\u00a3")
         buf.write("\3\2\2\2\u00a3\27\3\2\2\2\u00a4\u00a2\3\2\2\2\u00a5\u00a6")
@@ -182,7 +182,7 @@ def serializedATN():
         buf.write("\3\2\2\2\u018b\u0190\3\2\2\2\u018c\u018d\7\61\2\2\u018d")
         buf.write("\u018f\5> \2\u018e\u018c\3\2\2\2\u018f\u0192\3\2\2\2\u0190")
         buf.write("\u018e\3\2\2\2\u0190\u0191\3\2\2\2\u0191_\3\2\2\2\u0192")
-        buf.write("\u0190\3\2\2\2!cix~\u0082\u008c\u0095\u009c\u00a2\u00af")
+        buf.write("\u0190\3\2\2\2!cix~\u0082\u008c\u0095\u0099\u00a2\u00af")
         buf.write("\u00bc\u00c4\u00d0\u00d2\u00d9\u00ea\u00ef\u0122\u012b")
         buf.write("\u0135\u0141\u014d\u0153\u0159\u0162\u0167\u016e\u0172")
         buf.write("\u0182\u018a\u0190")
@@ -901,12 +901,12 @@ class BKITParser ( Parser ):
         def LCURLY(self):
             return self.getToken(BKITParser.LCURLY, 0)
 
+        def RCURLY(self):
+            return self.getToken(BKITParser.RCURLY, 0)
+
         def array_element_list(self):
             return self.getTypedRuleContext(BKITParser.Array_element_listContext,0)
 
-
-        def RCURLY(self):
-            return self.getToken(BKITParser.RCURLY, 0)
 
         def getRuleIndex(self):
             return BKITParser.RULE_array_literal
@@ -924,13 +924,20 @@ class BKITParser ( Parser ):
 
         localctx = BKITParser.Array_literalContext(self, self._ctx, self.state)
         self.enterRule(localctx, 18, self.RULE_array_literal)
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 149
             self.match(BKITParser.LCURLY)
-            self.state = 150
-            self.array_element_list()
             self.state = 151
+            self._errHandler.sync(self)
+            _la = self._input.LA(1)
+            if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << BKITParser.TRUE) | (1 << BKITParser.FALSE) | (1 << BKITParser.LCURLY) | (1 << BKITParser.INT_LIT) | (1 << BKITParser.FLOAT_LIT) | (1 << BKITParser.STRING_LIT))) != 0):
+                self.state = 150
+                self.array_element_list()
+
+
+            self.state = 153
             self.match(BKITParser.RCURLY)
         except RecognitionException as re:
             localctx.exception = re
@@ -979,14 +986,8 @@ class BKITParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 154
-            self._errHandler.sync(self)
-            _la = self._input.LA(1)
-            if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << BKITParser.TRUE) | (1 << BKITParser.FALSE) | (1 << BKITParser.LCURLY) | (1 << BKITParser.INT_LIT) | (1 << BKITParser.FLOAT_LIT) | (1 << BKITParser.STRING_LIT))) != 0):
-                self.state = 153
-                self.array_element()
-
-
+            self.state = 155
+            self.array_element()
             self.state = 160
             self._errHandler.sync(self)
             _la = self._input.LA(1)
