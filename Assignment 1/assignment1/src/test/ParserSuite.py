@@ -119,7 +119,7 @@ class ParserSuite(unittest.TestCase):
         expect = "Error on line 3 col 19: Var"
         self.assertTrue(TestParser.checkParser(input,expect,216))
 
-    def test_function_declare6(self):
+    def test_function_declare7(self):
         input = """
         Function:  test
         Var x[2][3] = {1, {2, 4}, {"5"}, 7.};
@@ -131,7 +131,7 @@ class ParserSuite(unittest.TestCase):
         expect = "Error on line 3 col 8: Var"
         self.assertTrue(TestParser.checkParser(input,expect,217))
 
-    def test_function_declare7(self):
+    def test_function_declare8(self):
         input = """
         Function:  test___1
         Parameter: n = 2, c, d
@@ -143,19 +143,20 @@ class ParserSuite(unittest.TestCase):
         expect = "Error on line 3 col 21: ="
         self.assertTrue(TestParser.checkParser(input,expect,218))
     
-    def test_function_declare8(self):
+    def test_function_declare9(self):
         input = """
         Function: foo
         Parameter: a[5], b
         Body:
             Var: i = 0;
             Return 1;
-        EndBody.
+        EndBody
+        .
         """
         expect = "successful"
         self.assertTrue(TestParser.checkParser(input,expect,219))
     
-    def test_function_declare9(self):
+    def test_function_declare10(self):
         input = """
         Function: foo
         Parameter:
@@ -165,7 +166,7 @@ class ParserSuite(unittest.TestCase):
         expect = "Error on line 4 col 8: Body"
         self.assertTrue(TestParser.checkParser(input,expect,220))
 
-    def test_function_declare10(self):
+    def test_function_declare11(self):
         input = """
         Function: test___
         Parameter: x[10], a[2][3][2][9]
@@ -1240,11 +1241,6 @@ class ParserSuite(unittest.TestCase):
         expect = "successful"
         self.assertTrue(TestParser.checkParser(input,expect,294))
 
-    def test_wrong_miss_close(self):
-        """Miss variable"""
-        input = """Var: ;"""
-        expect = "Error on line 1 col 5: ;"
-        self.assertTrue(TestParser.checkParser(input,expect,202))
     def test_scope_error(self):
         input = """
         Var: x;
@@ -1380,16 +1376,6 @@ class ParserSuite(unittest.TestCase):
                 c[count+1] = "\\b";
             EndIf.
         EndBody.
-        Function: main
-        Body:
-            test(2293);
-        EndBody.
-        """
-        expect = "successful"
-        self.assertTrue(TestParser.checkParser(input,expect,299))
-
-    def test_full_program5(self):
-        input = """
         Function: foo
         Parameter: a[5], b
         Body:
@@ -1400,7 +1386,7 @@ class ParserSuite(unittest.TestCase):
         EndWhile.
         Return a[5];
         EndBody.
-        Function: test
+        Function: test1
         Parameter: arr[21][90], b, c
         Body:
             For (i = 0 , i < arr[20][2] , 1) Do
@@ -1423,4 +1409,10 @@ class ParserSuite(unittest.TestCase):
         EndBody.
         """
         expect = "successful"
+        self.assertTrue(TestParser.checkParser(input,expect,299))
+
+    def test_wrong_miss_close(self):
+        """Miss variable"""
+        input = """Var: ;"""
+        expect = "Error on line 1 col 5: ;"
         self.assertTrue(TestParser.checkParser(input,expect,300))

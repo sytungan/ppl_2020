@@ -1,10 +1,7 @@
 
-                    Var: **a= {a[bdbb5r]}** a[5]={{}, {{1,651,7}}};
-                    Function: kovkap__!o
-                        Parameter: op9v, s5sw, o__iksc = {65,8,1,"6nseh\n"}
-                        Body:
-                            Var: fwa6a, trUe, it={{35,892,69,5,0x1}{True, 2.0e-15}};
-                            For(,,) Continue; EndFor.
-                            Var: x;
-                        EndBody.
-                
+        Function:  test
+        Parameter: Var x = 2;
+        Body:
+            x = (x - 1)\2;
+        EndBody.
+        
