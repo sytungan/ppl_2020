@@ -1,166 +1,110 @@
-from BKITVisitor import BKITVisitor
-from BKITParser import BKITParser
-from AST import *
-from functools import reduce
+# Generated from main/bkit/parser/BKIT.g4 by ANTLR 4.8
+from antlr4 import *
+if __name__ is not None and "." in __name__:
+    from .BKITParser import BKITParser
+else:
+    from BKITParser import BKITParser
 
-from main.bkit.utils.AST import FuncDecl, VarDecl
+# This class defines a complete generic visitor for a parse tree produced by BKITParser.
 
-class ASTGeneration(BKITVisitor):
-    # program  : (global_var_declare)* function_declare* EOF;
+class BKITVisitor(ParseTreeVisitor):
+
+    # Visit a parse tree produced by BKITParser#program.
     def visitProgram(self, ctx:BKITParser.ProgramContext):
-        lstVarDecl = []
-        lstFuncDecl = []
-        if ctx.global_var_declare():
-            lstVarDecl = reduce(lambda x, y: x + self.visit(y) ,ctx.global_var_declare()[1:],self.visit(ctx.global_var_declare(0)))
-        if ctx.function_declare():
-            lstFuncDecl = reduce(lambda x, y: x + self.visit(y) ,ctx.function_declare()[1:],self.visit(ctx.function_declare(0)))
-        return Program(lstVarDecl + lstFuncDecl)
+        return self.visitChildren(ctx)
 
 
-    # global_var_declare: VAR COLON var_list SEMI;
+    # Visit a parse tree produced by BKITParser#global_var_declare.
     def visitGlobal_var_declare(self, ctx:BKITParser.Global_var_declareContext):
-        return self.visit(ctx.var_list())
+        return self.visitChildren(ctx)
 
-    # var_list: var_def (COMMA var_def)*;
+
+    # Visit a parse tree produced by BKITParser#var_list.
     def visitVar_list(self, ctx:BKITParser.Var_listContext):
-        return [self.visit(x) for x in ctx.var_def()]
+        return self.visitChildren(ctx)
 
 
-    # var_def: variable (ASSIGN init_value)?; // variable = initial-value
+    # Visit a parse tree produced by BKITParser#var_def.
     def visitVar_def(self, ctx:BKITParser.Var_defContext):
-        id = self.visit(ctx.variable())[0]
-        dimension = self.visit(ctx.variable())[1]
-        return VarDecl(Id(id), dimension, self.visit(ctx.init_value()) if ctx.init_value() else None)
+        return self.visitChildren(ctx)
 
 
-    # variable: (scalar_var | composite_var); // 2 type scalar and composite
+    # Visit a parse tree produced by BKITParser#variable.
     def visitVariable(self, ctx:BKITParser.VariableContext):
-        if ctx.scalar_var():
-            return self.visit(ctx.scalar_var())
-        else:
-            return self.visit(ctx.composite_var())
+        return self.visitChildren(ctx)
 
 
-    # scalar_var: ID;
+    # Visit a parse tree produced by BKITParser#scalar_var.
     def visitScalar_var(self, ctx:BKITParser.Scalar_varContext):
-        return (ctx.ID().getText(), [])
+        return self.visitChildren(ctx)
 
 
-    # composite_var: ID dimension+;
+    # Visit a parse tree produced by BKITParser#composite_var.
     def visitComposite_var(self, ctx:BKITParser.Composite_varContext):
-        return (ctx.ID().getText(), [self.visit(x) for x in ctx.dimension()])
+        return self.visitChildren(ctx)
 
 
-    # dimension: (LSQUARE INT_LIT RSQUARE);
+    # Visit a parse tree produced by BKITParser#dimension.
     def visitDimension(self, ctx:BKITParser.DimensionContext):
-        return int(eval(ctx.INT_LIT().getText()))
+        return self.visitChildren(ctx)
 
 
-    # init_value: literal;
+    # Visit a parse tree produced by BKITParser#init_value.
     def visitInit_value(self, ctx:BKITParser.Init_valueContext):
-        return self.visit(ctx.literal())
+        return self.visitChildren(ctx)
 
 
-    # literal // literal type
-    # : INT_LIT 
-    # | FLOAT_LIT 
-    # | STRING_LIT 
-    # | bool_literal
-    # | array_literal
-    # ;
+    # Visit a parse tree produced by BKITParser#literal.
     def visitLiteral(self, ctx:BKITParser.LiteralContext):
-        if ctx.INT_LIT():
-            return IntLiteral(int(ctx.INT_LIT().getText()))
-        elif ctx.FLOAT_LIT():
-            return FloatLiteral(float(ctx.FLOAT_LIT().getText()))
-        elif ctx.STRING_LIT():
-            return StringLiteral(ctx.STRING_LIT().getText())
-        elif ctx.bool_literal():
-            return BooleanLiteral(bool(self.visit(ctx.bool_literal())))
-        return self.visit(ctx.array_literal())
+        return self.visitChildren(ctx)
 
 
-    # array_literal: LCURLY array_element_list? RCURLY;
+    # Visit a parse tree produced by BKITParser#array_literal.
     def visitArray_literal(self, ctx:BKITParser.Array_literalContext):
-        if ctx.array_element_list():
-            return ArrayLiteral(self.visit(ctx.array_element_list()))
-        else:
-            return ArrayLiteral([])
+        return self.visitChildren(ctx)
 
 
-    # array_element_list: array_element (COMMA array_element)*;
+    # Visit a parse tree produced by BKITParser#array_element_list.
     def visitArray_element_list(self, ctx:BKITParser.Array_element_listContext):
-        return [self.visit(x) for x in ctx.array_element()]
+        return self.visitChildren(ctx)
 
 
-    # array_element: literal;
+    # Visit a parse tree produced by BKITParser#array_element.
     def visitArray_element(self, ctx:BKITParser.Array_elementContext):
-        return self.visit(ctx.literal())
+        return self.visitChildren(ctx)
 
 
-    # bool_literal: TRUE | FALSE;
+    # Visit a parse tree produced by BKITParser#bool_literal.
     def visitBool_literal(self, ctx:BKITParser.Bool_literalContext):
-        if ctx.TRUE():
-            return ctx.TRUE().getText()
-        else:
-            return ctx.FALSE().getText()
+        return self.visitChildren(ctx)
 
 
-    # function_declare: FUNCTION COLON ID (PARAMETER COLON parameter_list)? BODY COLON statement_list END_BODY DOT;
+    # Visit a parse tree produced by BKITParser#function_declare.
     def visitFunction_declare(self, ctx:BKITParser.Function_declareContext):
-        param = self.visit(ctx.parameter_list)
-        return FuncDecl(ctx.ID().getText(), param if param else [], self.visit(ctx.statement_list()))
+        return self.visitChildren(ctx)
 
 
-    # parameter_list: parameter (COMMA parameter)*;
+    # Visit a parse tree produced by BKITParser#parameter_list.
     def visitParameter_list(self, ctx:BKITParser.Parameter_listContext):
-        return [self.visit(x) for x in ctx.parameter()]
+        return self.visitChildren(ctx)
 
 
-    # parameter: variable; // 'variable' in Global variable declaration part
+    # Visit a parse tree produced by BKITParser#parameter.
     def visitParameter(self, ctx:BKITParser.ParameterContext):
-        id = self.visit(ctx.variable())[0]
-        dimension = self.visit(ctx.variable())[1]
-        return VarDecl(Id(id), dimension, None)
+        return self.visitChildren(ctx)
 
 
-    # statement_list
-    #     : local_var_declare* 
-    #     ( assignment_statement
-    #     | if_statement 
-    #     | for_statement 
-    #     | while_statement
-    #     | do_while_statement
-    #     | break_statement
-    #     | continue_statement
-    #     | call_statement
-    #     | return_statement
-    #     )*
-    # ;
-    def loadLst(self, typeLst):
-        return [self.visit(x) for x in typeLst] if typeLst else []
-
-
+    # Visit a parse tree produced by BKITParser#statement_list.
     def visitStatement_list(self, ctx:BKITParser.Statement_listContext):
-        lstVarDeclStm = self.loadLst(ctx.local_var_declare())
-        # lstAssignmentStm = [self.visit(x) for x in ctx.assignment_statement()] if ctx.assignment_statement() else []
-        # lstIfStm = self.visit(ctx.if_statement()) if ctx.if_statement() else []
-        # lstForStm = self.visit(ctx.for_statement()) if ctx.for_statement() else []
-        # lstWhileStm = self.visit(ctx.while_statement()) if ctx.while_statement() else []
-        # lstDoWhileStm = self.visit(ctx.do_while_statement()) if ctx.do_while_statement() else []
-        # lstBreakStm = self.visit(ctx.break_statement()) if ctx.break_statement() else []
-        # lstContinueStm = [self.visit(x) for x in ctx.continue_statement()] if ctx.continue_statement() else []
-        # lstCallStm = self.visit(ctx.call_statement())
-        # lstReturnStm = self.visit(ctx.return_statement())
-        return (lstVarDeclStm, [])
+        return self.visitChildren(ctx)
 
 
-    # local_var_declare: global_var_declare;
+    # Visit a parse tree produced by BKITParser#local_var_declare.
     def visitLocal_var_declare(self, ctx:BKITParser.Local_var_declareContext):
         return self.visitChildren(ctx)
 
 
-    # assignment_statement: (scalar_var index_operator?) ASSIGN expression SEMI;
+    # Visit a parse tree produced by BKITParser#assignment_statement.
     def visitAssignment_statement(self, ctx:BKITParser.Assignment_statementContext):
         return self.visitChildren(ctx)
 
@@ -303,5 +247,7 @@ class ASTGeneration(BKITVisitor):
     # Visit a parse tree produced by BKITParser#argument_list.
     def visitArgument_list(self, ctx:BKITParser.Argument_listContext):
         return self.visitChildren(ctx)
-    
 
+
+
+del BKITParser
