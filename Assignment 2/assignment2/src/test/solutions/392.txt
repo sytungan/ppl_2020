@@ -1,0 +1,1 @@
+Program([VarDecl(Id(s)),FuncDecl(Id(foo)[VarDecl(Id(s))],([][Assign(Id(s),StringLiteral(hi_1)),Return(CallExpr(Id(foo),[StringLiteral(hi)]))]))])

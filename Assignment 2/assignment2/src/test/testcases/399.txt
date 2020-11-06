@@ -1,0 +1,1 @@
+Var: s_1="'"superMan is'".", s_2="happyBirthDay", arr = {**"toYou"** 12, 99.4e2};

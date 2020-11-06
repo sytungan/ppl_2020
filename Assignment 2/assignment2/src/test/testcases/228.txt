@@ -1,0 +1,7 @@
+
+        Var: a;
+        Function: test
+        Body:
+            Return;
+        EndBody.
+        

@@ -1,1 +1,5 @@
-Var:x[12];
+Function: foo 
+        Parameter: n 
+        Body: 
+            n[3][4] = {1,2,{3,4,5}};
+        EndBody.

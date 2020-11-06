@@ -1,0 +1,1 @@
+Program([FuncDecl(Id("test"),[],([VarDecl(Id("flag"),[],BooleanLiteral(False)),VarDecl(Id("c"),[],None)],[Assign(Id("c"),UnaryOp("!",BooleanLiteral(False))),For(Id("i"),IntLiteral(0),BinaryOp("==",Id("flag"),Id("c")),IntLiteral(1),([],[Assign(Id("flag"),BooleanLiteral(True))]))]))])

@@ -1,5 +1,11 @@
-Function: foo 
-        Parameter: n 
-        Body: 
-            n = (9 + 2\2);
+
+        Var: x, y = 5e3, z;
+        Function: test
+        Body:
+            z = (x*x*x*x*x*x*x)\.(2.*.y -. 2.3e12 + 23	 + 12%2) - test();
+            x = x -. 10.;
+            If x >=. 1. Then
+                Return z;
+            EndIf.
         EndBody.
+        

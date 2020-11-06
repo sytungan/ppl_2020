@@ -1,0 +1,1 @@
+Program([VarDecl(Id(s_1),StringLiteral('"superMan is'".)),VarDecl(Id(s_2),StringLiteral(happyBirthDay)),VarDecl(Id(arr),ArrayLiteral(IntLiteral(12),FloatLiteral(9940.0)))])

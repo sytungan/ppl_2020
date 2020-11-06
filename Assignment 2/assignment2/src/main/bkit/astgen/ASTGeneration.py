@@ -2,9 +2,9 @@ from typing import BinaryIO
 from BKITVisitor import BKITVisitor
 from BKITParser import BKITParser
 from AST import *
-from functools import reduce
-
 from main.bkit.utils.AST import BinaryOp, CallExpr, FuncDecl, VarDecl
+# from test2string.ASTString import *
+from functools import reduce
 
 class ASTGeneration(BKITVisitor):
     # program  : (global_var_declare)* function_declare* EOF;
@@ -71,7 +71,7 @@ class ASTGeneration(BKITVisitor):
     # ;
     def visitLiteral(self, ctx:BKITParser.LiteralContext):
         if ctx.INT_LIT():
-            return IntLiteral(int(ctx.INT_LIT().getText()))
+            return IntLiteral(int(eval(ctx.INT_LIT().getText())))
         elif ctx.FLOAT_LIT():
             return FloatLiteral(float(ctx.FLOAT_LIT().getText()))
         elif ctx.STRING_LIT():

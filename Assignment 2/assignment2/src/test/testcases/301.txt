@@ -1,1 +1,5 @@
-Var:x =5 ;
+Function: foo 
+        Parameter: n 
+        Body: 
+            n = (9 + 2);
+        EndBody.

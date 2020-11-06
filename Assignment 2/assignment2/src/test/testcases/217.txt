@@ -1,0 +1,7 @@
+
+        Function:  test
+        Parameter: n, c
+        Body:
+            Var h = a*b;
+        EndBody.
+        

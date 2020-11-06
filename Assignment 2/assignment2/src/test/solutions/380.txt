@@ -1,0 +1,1 @@
+Program([VarDecl(Id(s),StringLiteral(DaiH0cB4ckHo4)),VarDecl(Id(x),FloatLiteral(1.22e+55)),VarDecl(Id(c),IntLiteral(61970))])

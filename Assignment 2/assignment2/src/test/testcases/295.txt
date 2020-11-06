@@ -1,0 +1,11 @@
+
+        Var: x;
+        Function: test
+        Body:
+            Body:
+                Body:
+                    print(1);
+                EndBody.
+            EndBody.
+        EndBody.
+        

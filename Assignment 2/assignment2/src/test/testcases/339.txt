@@ -1,0 +1,10 @@
+
+        Function: test
+        Body:
+            Var: flag = False, c;
+            c = !False;
+            For (i = 0, flag == c, 1) Do
+                flag = True;
+            EndFor.
+        EndBody.
+        

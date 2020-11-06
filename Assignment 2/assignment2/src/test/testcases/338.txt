@@ -1,0 +1,10 @@
+
+        Function: test
+        Parameter: n
+        Body:
+            Var: z = 0;
+            For (i = z, i <= n*n - 2*n + 1, 1) Do
+                print(i + i + i);
+            EndFor.
+        EndBody.
+        

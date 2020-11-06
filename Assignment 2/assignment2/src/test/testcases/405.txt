@@ -1,0 +1,7 @@
+
+        Var: a;
+        Function: test
+        Body:
+            Var: z_1[2][3] = {{6572e21, 2341e+56, 0.5},{"%^DFGZ", "Rvul^%",""}}, a[24], c;
+        EndBody.
+        

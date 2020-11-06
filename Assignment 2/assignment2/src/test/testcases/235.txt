@@ -1,0 +1,8 @@
+
+        Function: test
+        Body:
+            Var: x = y;
+            Var: y = z;
+            Var: c = 2;
+        EndBody.
+        

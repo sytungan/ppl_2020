@@ -1,1 +1,1 @@
-Program([FuncDecl(Id(foo)[VarDecl(Id(n))],([][For(Id(i),IntLiteral(0),BinaryOp(<,Id(i),IntLiteral(10)),IntLiteral(2),[],[CallStmt(Id(writeln),[Id(i),IntLiteral(1)])])]))])
+Program([FuncDecl(Id(test)[],([VarDecl(Id(x),IntLiteral(1))][While(UnaryOp(!,Id(x)),[],[Assign(Id(x),BinaryOp(||,BooleanLiteral(true),BooleanLiteral(false))),Continue()])]))])

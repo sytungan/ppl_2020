@@ -1,0 +1,10 @@
+
+        Var: s;
+        Function: square
+        Body:
+            Var: h; **height of hcn**
+            **Some 
+            thing**
+            Return h*h; 
+        EndBody.
+        

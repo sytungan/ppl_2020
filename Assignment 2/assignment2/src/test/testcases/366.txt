@@ -1,0 +1,14 @@
+
+        Function: test
+        Body:
+            Var: math=10, literature=6, english=8, avg, raise;
+            avg = (math + literature + english);
+            If avg < 3 Then raise = "Hoc lai";
+            ElseIf avg < 4 Then raise = "Yeu";
+            ElseIf avg <. 6.5 Then raise = "TB";
+            ElseIf avg <. 8. Then raise = "Kha";
+            ElseIf avg <. 9. Then raise =  "Gioi";
+            Else raise = "Xuat sac";
+            EndIf.
+        EndBody.
+        

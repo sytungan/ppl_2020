@@ -1,0 +1,1 @@
+Program([FuncDecl(Id("test"),[],([VarDecl(Id("a"),[100],None),VarDecl(Id("x"),[3,4],None)],[Assign(Id("x"),ArrayLiteral([ArrayLiteral([ArrayLiteral([IntLiteral(12),IntLiteral(1)]),ArrayLiteral([FloatLiteral(12.0),FloatLiteral(12000.0)])]),ArrayLiteral([IntLiteral(23)]),ArrayLiteral([IntLiteral(13),IntLiteral(32)])]))]))])

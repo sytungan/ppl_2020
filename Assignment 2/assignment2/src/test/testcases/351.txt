@@ -1,0 +1,7 @@
+
+        Function: test 
+        Body:
+            Var: arr[2][3] = {"Hi",{"it-desert-theme='"false'""},{"it-player-ads","OK","404"}}; 
+            e =  10e2;
+        EndBody.
+        

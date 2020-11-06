@@ -1,0 +1,12 @@
+
+        Function: test
+        Body:
+            Var: a[2][3][4][5];
+            Do 
+                a = 2.e59;
+                e = 0.e69;
+                Break;
+            While True EndDo.
+            writeln(a -. e);
+        EndBody.
+        

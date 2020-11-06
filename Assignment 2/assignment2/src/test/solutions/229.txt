@@ -1,0 +1,1 @@
+Program([VarDecl(Id("s"),[],None),FuncDecl(Id("square"),[],([VarDecl(Id("h"),[],None)],[Return(BinaryOp("*",Id("h"),Id("h")))]))])

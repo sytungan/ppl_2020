@@ -1,0 +1,1 @@
+Program([VarDecl(Id(arr),[10]),VarDecl(Id(c),[99,3,2]),VarDecl(Id(arr2),[0])])

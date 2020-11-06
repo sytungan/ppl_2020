@@ -1,0 +1,24 @@
+
+        Var: s = "ppL2020";
+        Function: adventure
+        Parameter: nEvents
+        Body:
+            For (i = 0, i < nEvents, 1) Do
+                fibonacci(float_to_int(i*.25e5-.2.+(2*fibonacci(2 + 1 + i)\.2e54)*2) + i%2);
+                If i == nEvents Then Break;
+                EndIf.
+            EndFor.
+        EndBody.
+        Function: fibonacci
+        Body:
+            Var: n;
+            If (n == 1) || (n == 2) Then
+                Return 1;
+            EndIf.
+            Return fibonacci(n - 1) + fibonacci(n - 2);
+        EndBody.
+        Function: main
+        Body:
+            adventure(1023);
+        EndBody.
+        

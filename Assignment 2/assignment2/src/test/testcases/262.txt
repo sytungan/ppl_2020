@@ -1,0 +1,11 @@
+
+        Function: test
+        Body:
+            Var: arr[10][10];
+            For (i = 0, i < 10, 1) Do  
+                For (j = 0, j < 10, 1) Do
+                    arr[i][j] = 0;
+                EndFor.
+            EndFor.
+        EndBody.
+        

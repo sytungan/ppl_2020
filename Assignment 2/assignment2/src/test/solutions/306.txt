@@ -1,1 +1,1 @@
-Program([VarDecl(Id(b),BooleanLiteral(true)),VarDecl(Id(c),BooleanLiteral(false))])
+Program([FuncDecl(Id(test)[],([VarDecl(Id(a),[100]),VarDecl(Id(x),[3,4])][Assign(Id(x),ArrayLiteral(ArrayLiteral(ArrayLiteral(IntLiteral(12),IntLiteral(1)),ArrayLiteral(FloatLiteral(12.0),FloatLiteral(12000.0))),ArrayLiteral(IntLiteral(23)),ArrayLiteral(IntLiteral(13),IntLiteral(32))))]))])
