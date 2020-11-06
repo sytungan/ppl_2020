@@ -37,14 +37,14 @@ class ASTGeneration(BKITVisitor):
     # variable: (scalar_var | composite_var); // 2 type scalar and composite
     def visitVariable(self, ctx:BKITParser.VariableContext):
         if ctx.scalar_var():
-            return self.visit(ctx.scalar_var())
+            return (self.visit(ctx.scalar_var()),[])
         else:
             return self.visit(ctx.composite_var())
 
 
     # scalar_var: ID;
     def visitScalar_var(self, ctx:BKITParser.Scalar_varContext):
-        return (ctx.ID().getText(), [])
+        return ctx.ID().getText()
 
 
     # composite_var: ID dimension+;
@@ -123,9 +123,9 @@ class ASTGeneration(BKITVisitor):
 
     # parameter: variable; // 'variable' in Global variable declaration part
     def visitParameter(self, ctx:BKITParser.ParameterContext):
-        id = self.visit(ctx.variable())[0]
+        identify = self.visit(ctx.variable())[0]
         dimension = self.visit(ctx.variable())[1]
-        return VarDecl(Id(id), dimension, None)
+        return VarDecl(Id(identify), dimension, None)
 
 
     # statement_list
@@ -171,7 +171,7 @@ class ASTGeneration(BKITVisitor):
     # assignment_statement: (scalar_var | exp7 index_operator) ASSIGN expression SEMI;
     def visitAssignment_statement(self, ctx:BKITParser.Assignment_statementContext):
         if ctx.scalar_var():
-            lhs = Id(self.visit(ctx.scalar_var())[0])
+            lhs = Id(self.visit(ctx.scalar_var()))
         else:
             lhs = ArrayCell(self.visit(ctx.exp7()), self.visit(ctx.index_operator()))
         expr = self.visit(ctx.expression())
@@ -197,54 +197,68 @@ class ASTGeneration(BKITVisitor):
         return If(lstIfThenStm, lstElseStm)
 
 
-    # Visit a parse tree produced by BKITParser#for_statement.
+    # for_statement
+    # :
+    #     FOR LPAREN scalar_var ASSIGN initExpr COMMA conditionExpr COMMA updateExpr RPAREN DO
+    #         statement_list
+    #     END_FOR DOT
+    # ;
     def visitFor_statement(self, ctx:BKITParser.For_statementContext):
-        return self.visitChildren(ctx)
+        identify = Id(self.visit(ctx.scalar_var()))
+        init = self.visit(ctx.initExpr())
+        condition = self.visit(ctx.conditionExpr())
+        update =self.visit(ctx.updateExpr())
+        stm = self.visit(ctx.statement_list())
+        return For(identify, init, condition, update, stm)
 
 
-    # Visit a parse tree produced by BKITParser#initExpr.
+    # initExpr: expression;
     def visitInitExpr(self, ctx:BKITParser.InitExprContext):
-        return self.visitChildren(ctx)
+        return self.visit(ctx.expression())
 
 
-    # Visit a parse tree produced by BKITParser#conditionExpr.
+    # conditionExpr: expression;
     def visitConditionExpr(self, ctx:BKITParser.ConditionExprContext):
-        return self.visitChildren(ctx)
+        return self.visit(ctx.expression())
 
-
-    # Visit a parse tree produced by BKITParser#updateExpr.
+    # updateExpr: expression;
     def visitUpdateExpr(self, ctx:BKITParser.UpdateExprContext):
-        return self.visitChildren(ctx)
+        return self.visit(ctx.expression())
 
 
-    # Visit a parse tree produced by BKITParser#while_statement.
+    # while_statement: WHILE expression DO statement_list END_WHITE DOT;
     def visitWhile_statement(self, ctx:BKITParser.While_statementContext):
-        return self.visitChildren(ctx)
+        return While(self.visit(ctx.expression()), self.visit(ctx.statement_list()))
 
 
-    # Visit a parse tree produced by BKITParser#do_while_statement.
+    # do_while_statement: DO statement_list WHILE expression END_DO DOT;
     def visitDo_while_statement(self, ctx:BKITParser.Do_while_statementContext):
-        return self.visitChildren(ctx)
+        return Dowhile(self.visit(ctx.statement_list()), self.visit(ctx.expression()))
 
 
-    # Visit a parse tree produced by BKITParser#break_statement.
+    # break_statement: BREAK SEMI;
     def visitBreak_statement(self, ctx:BKITParser.Break_statementContext):
-        return self.visitChildren(ctx)
+        return Break()
 
 
-    # Visit a parse tree produced by BKITParser#continue_statement.
+    # continue_statement: CONTINUTE SEMI;
     def visitContinue_statement(self, ctx:BKITParser.Continue_statementContext):
-        return self.visitChildren(ctx)
+        return Continue()
 
 
-    # Visit a parse tree produced by BKITParser#call_statement.
+    # call_statement: function_call SEMI;
     def visitCall_statement(self, ctx:BKITParser.Call_statementContext):
-        return self.visitChildren(ctx)
+        identify = self.visit(ctx.function_call())[0]
+        param = self.visit(ctx.function_call())[1]
+        return CallStmt(identify, param)
 
 
-    # Visit a parse tree produced by BKITParser#return_statement.
+    # return_statement: RETURN expression? SEMI;
     def visitReturn_statement(self, ctx:BKITParser.Return_statementContext):
-        return self.visitChildren(ctx)
+        if ctx.expression():
+            return Return(self.visit(ctx.expression()))
+        else:
+            return Return(None)
 
 
     # expression //lowest
@@ -356,7 +370,9 @@ class ASTGeneration(BKITVisitor):
         if ctx.exp8():
             return self.visit(ctx.exp8())
         else:
-            return self.visit(ctx.function_call())
+            identify = self.visit(ctx.function_call())[0]
+            param = self.visit(ctx.function_call())[1]
+            return CallExpr(identify, param)
 
 
     # exp8
@@ -478,7 +494,7 @@ class ASTGeneration(BKITVisitor):
     # : ID LPAREN argument_list RPAREN
     # ;
     def visitFunction_call(self, ctx:BKITParser.Function_callContext):
-        return CallExpr(Id(ctx.ID().getText()), self.visit(ctx.argument_list()))
+        return (Id(ctx.ID().getText()), self.visit(ctx.argument_list()))
 
 
     # argument_list: expression? (COMMA expression)*;

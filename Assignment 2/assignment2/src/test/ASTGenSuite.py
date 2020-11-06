@@ -125,3 +125,72 @@ class ASTGenSuite(unittest.TestCase):
         EndBody."""
         expect = Program([FuncDecl(Id("foo"),[],([],[If([(BooleanLiteral(True),[],[Assign(Id("x"),IntLiteral(3))])],([],[Assign(Id("x"),IntLiteral(2))]))]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,313))
+
+    def test_for_statement(self):
+        input = """Function: foo 
+        Parameter: n
+        Body: 
+        For (i = 0, i < 10, 2) Do
+            writeln(i,1);
+        EndFor.
+        EndBody."""
+        expect = Program([FuncDecl(Id("foo"),[VarDecl(Id("n"),[],None)],([],[For(Id("i"),IntLiteral(0),BinaryOp("<",Id("i"),IntLiteral(10)),IntLiteral(2),([],[CallStmt(Id("writeln"),[Id("i"),IntLiteral(1)])]))]))])
+        self.assertTrue(TestAST.checkASTGen(input,expect,323))
+    
+    def test_for_statement1(self):
+        input = """Function: foo 
+        Parameter: n
+        Body: 
+        For (i = 6*9,True, i-1) Do
+            Var:x=5;
+            a=3;
+        EndFor.
+        EndBody."""
+
+        expect = Program([FuncDecl(Id("foo"),[VarDecl(Id("n"),[],None)],([],[For(Id("i"),BinaryOp("*",IntLiteral(6),IntLiteral(9)),BooleanLiteral(True),BinaryOp("-",Id("i"),IntLiteral(1)),([VarDecl(Id("x"),[],IntLiteral(5))],[Assign(Id("a"),IntLiteral(3))]))]))])
+        self.assertTrue(TestAST.checkASTGen(input,expect,324))
+    
+    def test_while_statement(self):
+        input = """Function: foo 
+        Parameter: n
+        Body: 
+            While i < 5 Do
+                a = b +. 1.0;
+            EndWhile.
+        EndBody."""
+        expect = Program([FuncDecl(Id("foo"),[VarDecl(Id("n"),[],None)],([],[While(BinaryOp("<",Id("i"),IntLiteral(5)),([],[Assign(Id("a"),BinaryOp("+.",Id("b"),FloatLiteral(1.0)))]))]))])
+        self.assertTrue(TestAST.checkASTGen(input,expect,324))
+
+    def test_break_statement(self):
+        input = """Function: foo 
+        Body: 
+            Break;
+        EndBody."""
+        expect = Program([FuncDecl(Id("foo"),[],([],[Break()]))])
+        self.assertTrue(TestAST.checkASTGen(input,expect,325))
+
+    def test_continue_statement(self):
+        input = """Function: foo 
+        Body: 
+            Continue;
+        EndBody."""
+
+        expect = Program([FuncDecl(Id("foo"),[],([],[Continue()]))])
+        self.assertTrue(TestAST.checkASTGen(input,expect,326))
+
+    def test_return_statement1(self):
+        input = """Function: foo 
+        Body: 
+            Return;
+        EndBody."""
+
+        expect = Program([FuncDecl(Id("foo"),[],([],[Return(None)]))])
+        self.assertTrue(TestAST.checkASTGen(input,expect,327))
+
+    def test_return_statement2(self):
+        input = """Function: foo 
+        Body: 
+            Return x + 2;
+        EndBody."""
+        expect = Program([FuncDecl(Id("foo"),[],([],[Return(BinaryOp("+",Id("x"),IntLiteral(2)))]))])
+        self.assertTrue(TestAST.checkASTGen(input,expect,328))
