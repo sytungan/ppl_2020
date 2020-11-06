@@ -102,12 +102,26 @@ class ASTGenSuite(unittest.TestCase):
     def test_if_statement1(self):
         input = """Function: foo 
         Body:
-            Var: a;
-            Var: x;
-            Var: y;
-            x = 1;
-            y = 2;
-            z = 3;
+            If True Then
+                Var: a;
+                Var: x;
+                Var: y;
+                x = 1;
+                y = 2;
+                z = 3;
+            EndIf.
         EndBody."""
-        expect = Program([FuncDecl(Id("foo"),[],([VarDecl(Id("a"),[],None)],[Assign(Id("a"),CallExpr(Id("foo"),[IntLiteral(2),BinaryOp("*",IntLiteral(2),IntLiteral(3))]))]))])
+        expect = Program([FuncDecl(Id("foo"),[],([],[If([(BooleanLiteral(True),[VarDecl(Id("a"),[],None),VarDecl(Id("x"),[],None),VarDecl(Id("y"),[],None)],[Assign(Id("x"),IntLiteral(1)),Assign(Id("y"),IntLiteral(2)),Assign(Id("z"),IntLiteral(3))])],())]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,312))
+
+    def test_if_statement2(self):
+        input = """Function: foo 
+        Body:
+            If True Then
+                x = 3;
+            Else 
+                x = 2;
+            EndIf.
+        EndBody."""
+        expect = Program([FuncDecl(Id("foo"),[],([],[If([(BooleanLiteral(True),[],[Assign(Id("x"),IntLiteral(3))])],([],[Assign(Id("x"),IntLiteral(2))]))]))])
+        self.assertTrue(TestAST.checkASTGen(input,expect,313))

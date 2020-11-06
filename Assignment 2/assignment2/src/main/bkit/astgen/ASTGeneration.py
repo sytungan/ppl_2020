@@ -186,18 +186,15 @@ class ASTGeneration(BKITVisitor):
     #     END_IF DOT
     # ;
     def visitIf_statement(self, ctx:BKITParser.If_statementContext):
-        lstVarDecl = []
-        if ctx.statement_list(): # local_var_declare() is a list of list
-            lstVarDecl = reduce(lambda x, y: x + self.visit(x)[0], ctx.statement_list()[1:],self.visit(ctx.statement_list(0))[0])
+        lstVarDecl = [self.visit(x)[0] for x in ctx.statement_list()]
         lstStm = [self.visit(x)[1] for x in ctx.statement_list()]
-        print(lstVarDecl)
-        print(lstStm)
-        # lstExpr = self.visit(ctx.expression())
-        # lstIfThenStm = 
-        # if ctx.ELSE():
-        #     lstElseStm = self.visit(ctx.statement_list()[-1])
-        # else:
-        #     lstElseStm = []
+        lstExpr = [self.visit(x) for x in ctx.expression()]
+        lstIfThenStm = list(zip(lstExpr, lstVarDecl, lstStm))
+        if ctx.ELSE():
+            lstElseStm = self.visit(ctx.statement_list()[-1])
+        else:
+            lstElseStm = ()
+        return If(lstIfThenStm, lstElseStm)
 
 
     # Visit a parse tree produced by BKITParser#for_statement.
