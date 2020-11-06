@@ -1,0 +1,4 @@
+Function: foo 
+        Body:
+            x = y[3];
+        EndBody.

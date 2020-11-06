@@ -1,19 +1,20 @@
+from typing import BinaryIO
 from BKITVisitor import BKITVisitor
 from BKITParser import BKITParser
 from AST import *
 from functools import reduce
 
-from main.bkit.utils.AST import FuncDecl, VarDecl
+from main.bkit.utils.AST import BinaryOp, CallExpr, FuncDecl, VarDecl
 
 class ASTGeneration(BKITVisitor):
     # program  : (global_var_declare)* function_declare* EOF;
     def visitProgram(self, ctx:BKITParser.ProgramContext):
         lstVarDecl = []
         lstFuncDecl = []
-        if ctx.global_var_declare():
+        if ctx.global_var_declare(): # global_var_declare() is a list of list
             lstVarDecl = reduce(lambda x, y: x + self.visit(y) ,ctx.global_var_declare()[1:],self.visit(ctx.global_var_declare(0)))
         if ctx.function_declare():
-            lstFuncDecl = reduce(lambda x, y: x + self.visit(y) ,ctx.function_declare()[1:],self.visit(ctx.function_declare(0)))
+            lstFuncDecl = [self.visit(x) for x in ctx.function_declare()]
         return Program(lstVarDecl + lstFuncDecl)
 
 
@@ -28,9 +29,9 @@ class ASTGeneration(BKITVisitor):
 
     # var_def: variable (ASSIGN init_value)?; // variable = initial-value
     def visitVar_def(self, ctx:BKITParser.Var_defContext):
-        id = self.visit(ctx.variable())[0]
+        identify = self.visit(ctx.variable())[0]
         dimension = self.visit(ctx.variable())[1]
-        return VarDecl(Id(id), dimension, self.visit(ctx.init_value()) if ctx.init_value() else None)
+        return VarDecl(Id(identify), dimension, self.visit(ctx.init_value()) if ctx.init_value() else None)
 
 
     # variable: (scalar_var | composite_var); // 2 type scalar and composite
@@ -76,7 +77,7 @@ class ASTGeneration(BKITVisitor):
         elif ctx.STRING_LIT():
             return StringLiteral(ctx.STRING_LIT().getText())
         elif ctx.bool_literal():
-            return BooleanLiteral(bool(self.visit(ctx.bool_literal())))
+            return BooleanLiteral(self.visit(ctx.bool_literal()))
         return self.visit(ctx.array_literal())
 
 
@@ -101,15 +102,18 @@ class ASTGeneration(BKITVisitor):
     # bool_literal: TRUE | FALSE;
     def visitBool_literal(self, ctx:BKITParser.Bool_literalContext):
         if ctx.TRUE():
-            return ctx.TRUE().getText()
+            return True
         else:
-            return ctx.FALSE().getText()
+            return False
 
 
     # function_declare: FUNCTION COLON ID (PARAMETER COLON parameter_list)? BODY COLON statement_list END_BODY DOT;
     def visitFunction_declare(self, ctx:BKITParser.Function_declareContext):
-        param = self.visit(ctx.parameter_list)
-        return FuncDecl(ctx.ID().getText(), param if param else [], self.visit(ctx.statement_list()))
+        if ctx.parameter_list():
+            param = self.visit(ctx.parameter_list())
+        else:
+            param = []
+        return FuncDecl(Id(ctx.ID().getText()), param, self.visit(ctx.statement_list()))
 
 
     # parameter_list: parameter (COMMA parameter)*;
@@ -142,32 +146,58 @@ class ASTGeneration(BKITVisitor):
 
 
     def visitStatement_list(self, ctx:BKITParser.Statement_listContext):
-        lstVarDeclStm = self.loadLst(ctx.local_var_declare())
-        # lstAssignmentStm = [self.visit(x) for x in ctx.assignment_statement()] if ctx.assignment_statement() else []
-        # lstIfStm = self.visit(ctx.if_statement()) if ctx.if_statement() else []
-        # lstForStm = self.visit(ctx.for_statement()) if ctx.for_statement() else []
-        # lstWhileStm = self.visit(ctx.while_statement()) if ctx.while_statement() else []
-        # lstDoWhileStm = self.visit(ctx.do_while_statement()) if ctx.do_while_statement() else []
-        # lstBreakStm = self.visit(ctx.break_statement()) if ctx.break_statement() else []
-        # lstContinueStm = [self.visit(x) for x in ctx.continue_statement()] if ctx.continue_statement() else []
-        # lstCallStm = self.visit(ctx.call_statement())
-        # lstReturnStm = self.visit(ctx.return_statement())
-        return (lstVarDeclStm, [])
+        # VarDeclare statements
+        lstVarDeclStm = []
+        if ctx.local_var_declare(): # local_var_declare() is a list of list
+            lstVarDeclStm = reduce(lambda x, y: x + self.visit(y) ,ctx.local_var_declare()[1:],self.visit(ctx.local_var_declare(0)))
+        # And statements rest
+        lstAssignmentStm = self.loadLst(ctx.assignment_statement())
+        lstIfStm = self.loadLst(ctx.if_statement())
+        lstForStm = self.loadLst(ctx.for_statement())
+        lstWhileStm = self.loadLst(ctx.while_statement())
+        lstDoWhileStm = self.loadLst(ctx.do_while_statement())
+        lstBreakStm = self.loadLst(ctx.break_statement())
+        lstContinueStm = self.loadLst(ctx.continue_statement())
+        lstCallStm = self.loadLst(ctx.call_statement())
+        lstReturnStm = self.loadLst(ctx.return_statement())
+        return (lstVarDeclStm, lstAssignmentStm + lstIfStm + lstForStm + lstWhileStm + lstDoWhileStm + lstBreakStm + lstContinueStm + lstCallStm + lstReturnStm)
 
 
     # local_var_declare: global_var_declare;
     def visitLocal_var_declare(self, ctx:BKITParser.Local_var_declareContext):
-        return self.visitChildren(ctx)
+        return self.visit(ctx.global_var_declare())
 
 
-    # assignment_statement: (scalar_var index_operator?) ASSIGN expression SEMI;
+    # assignment_statement: (scalar_var | exp7 index_operator) ASSIGN expression SEMI;
     def visitAssignment_statement(self, ctx:BKITParser.Assignment_statementContext):
-        return self.visitChildren(ctx)
+        if ctx.scalar_var():
+            lhs = Id(self.visit(ctx.scalar_var())[0])
+        else:
+            lhs = ArrayCell(self.visit(ctx.exp7()), self.visit(ctx.index_operator()))
+        expr = self.visit(ctx.expression())
+        return Assign(lhs, expr)
 
 
-    # Visit a parse tree produced by BKITParser#if_statement.
+    # if_statement
+    # :
+    #     IF expression THEN statement_list
+    #     (ELSE_IF expression THEN statement_list)*
+    #     (ELSE statement_list)?
+    #     END_IF DOT
+    # ;
     def visitIf_statement(self, ctx:BKITParser.If_statementContext):
-        return self.visitChildren(ctx)
+        lstVarDecl = []
+        if ctx.statement_list(): # local_var_declare() is a list of list
+            lstVarDecl = reduce(lambda x, y: x + self.visit(x)[0], ctx.statement_list()[1:],self.visit(ctx.statement_list(0))[0])
+        lstStm = [self.visit(x)[1] for x in ctx.statement_list()]
+        print(lstVarDecl)
+        print(lstStm)
+        # lstExpr = self.visit(ctx.expression())
+        # lstIfThenStm = 
+        # if ctx.ELSE():
+        #     lstElseStm = self.visit(ctx.statement_list()[-1])
+        # else:
+        #     lstElseStm = []
 
 
     # Visit a parse tree produced by BKITParser#for_statement.
@@ -220,88 +250,245 @@ class ASTGeneration(BKITVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by BKITParser#expression.
+    # expression //lowest
+    # : exp1 relational_operator exp1 
+    # | exp1
+    # ;
     def visitExpression(self, ctx:BKITParser.ExpressionContext):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount() == 3:
+            return BinaryOp(
+                self.visit(ctx.relational_operator()), \
+                self.visit(ctx.exp1(0)), \
+                self.visit(ctx.exp1(1))
+            )
+        else:
+            return self.visit(ctx.exp1(0))
 
 
-    # Visit a parse tree produced by BKITParser#exp1.
+    # exp1
+    # : exp1 (AND | OR) exp2 
+    # | exp2
+    # ;
     def visitExp1(self, ctx:BKITParser.Exp1Context):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount() == 3:
+            return BinaryOp(
+                ctx.AND().getText() if ctx.AND() else ctx.OR().getText(), \
+                self.visit(ctx.exp1()), \
+                self.visit(ctx.exp2())
+            )    
+        else:
+            return self.visit(ctx.exp2())
 
 
-    # Visit a parse tree produced by BKITParser#exp2.
+    # exp2
+    # : exp2 adding exp3 
+    # | exp3
+    # ;
     def visitExp2(self, ctx:BKITParser.Exp2Context):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount() == 3:
+            return BinaryOp(
+                self.visit(ctx.adding()), \
+                self.visit(ctx.exp2()), \
+                self.visit(ctx.exp3())
+            )   
+        else:
+            return self.visit(ctx.exp3())
 
 
-    # Visit a parse tree produced by BKITParser#exp3.
+    # exp3
+    # : exp3 multiplying exp4 
+    # | exp4
+    # ;
     def visitExp3(self, ctx:BKITParser.Exp3Context):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount() == 3:
+            return BinaryOp(
+                self.visit(ctx.multiplying()), \
+                self.visit(ctx.exp3()), \
+                self.visit(ctx.exp4())
+            ) 
+        else:
+            return self.visit(ctx.exp4())
 
-
-    # Visit a parse tree produced by BKITParser#exp4.
+    # exp4
+    # : NOT exp4 
+    # | exp5
+    # ;
     def visitExp4(self, ctx:BKITParser.Exp4Context):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount() == 2:
+            return UnaryOp(
+                ctx.NOT().getText(), \
+                self.visit(ctx.exp4())
+            )
+        else:
+            return self.visit(ctx.exp5())
 
 
-    # Visit a parse tree produced by BKITParser#exp5.
+    # exp5
+    # : sign exp5
+    # | exp6
+    # ;
     def visitExp5(self, ctx:BKITParser.Exp5Context):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount() == 2:
+            return UnaryOp(
+                self.visit(ctx.sign()), \
+                self.visit(ctx.exp5()) \
+            )
+        else:
+            return self.visit(ctx.exp6())
 
 
-    # Visit a parse tree produced by BKITParser#exp6.
+    # exp6
+    # : exp6 index_operator
+    # | exp7
+    # ;
     def visitExp6(self, ctx:BKITParser.Exp6Context):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount() == 2:
+            return UnaryOp(
+                self.visit(ctx.index_operator()), \
+                self.visit(ctx.exp6())
+            )   
+        else:
+            return self.visit(ctx.exp7())
 
 
-    # Visit a parse tree produced by BKITParser#exp7.
+    # exp7
+    # : function_call
+    # | exp8
+    # ;
     def visitExp7(self, ctx:BKITParser.Exp7Context):
-        return self.visitChildren(ctx)
+        if ctx.exp8():
+            return self.visit(ctx.exp8())
+        else:
+            return self.visit(ctx.function_call())
 
 
-    # Visit a parse tree produced by BKITParser#exp8.
+    # exp8
+    # : LPAREN expression RPAREN
+    # | operand
+    # ;
     def visitExp8(self, ctx:BKITParser.Exp8Context):
-        return self.visitChildren(ctx)
+        if ctx.getChildCount() == 3:
+            return self.visit(ctx.expression())
+        else:
+            return self.visit(ctx.operand())
 
 
-    # Visit a parse tree produced by BKITParser#operand.
+    # operand
+    # : literal
+    # | ID
+    # ;
     def visitOperand(self, ctx:BKITParser.OperandContext):
-        return self.visitChildren(ctx)
+        if ctx.literal():
+            return self.visit(ctx.literal())
+        else:
+            return Id(ctx.ID().getText())
 
 
-    # Visit a parse tree produced by BKITParser#adding.
+    # adding
+    # : ADD
+    # | SUB
+    # | ADD_FLOAT
+    # | SUB_FLOAT
+    # ;
     def visitAdding(self, ctx:BKITParser.AddingContext):
-        return self.visitChildren(ctx)
+        if ctx.ADD():
+            return ctx.ADD().getText()
+        elif ctx.SUB():
+            return ctx.SUB().getText()
+        elif ctx.ADD_FLOAT():
+            return ctx.ADD_FLOAT().getText()
+        else:
+            return ctx.SUB_FLOAT().getText()
 
-
-    # Visit a parse tree produced by BKITParser#multiplying.
+    # multiplying
+    # : MUL
+    # | DIV
+    # | MOD
+    # | MUL_FLOAT
+    # | DIV_FLOAT
+    # ;
     def visitMultiplying(self, ctx:BKITParser.MultiplyingContext):
-        return self.visitChildren(ctx)
+        if ctx.MUL():
+            return ctx.MUL().getText()
+        elif ctx.DIV():
+            return ctx.DIV().getText()
+        elif ctx.MOD():
+            return ctx.MOD().getText()
+        elif ctx.MUL_FLOAT():
+            return ctx.MUL_FLOAT().getText()
+        else:
+            return ctx.DIV_FLOAT().getText()
 
 
-    # Visit a parse tree produced by BKITParser#relational_operator.
+
+    # relational_operator
+    # : EQUAL
+    # | NOT_EQUAL
+    # | LESS_THAN
+    # | MORE_THAN
+    # | LESS_THAN_EQUAL
+    # | MORE_THAN_EQUAL
+    # | NOT_EQUAL_FLOAT
+    # | LESS_THAN_FLOAT
+    # | MORE_THAN_FLOAT
+    # | LESS_THAN_EQUAL_FLOAT
+    # | MORE_THAN_EQUAL_FLOAT
+    # ;
     def visitRelational_operator(self, ctx:BKITParser.Relational_operatorContext):
-        return self.visitChildren(ctx)
+        if ctx.EQUAL():
+            return ctx.EQUAL().getText()
+        elif ctx.NOT_EQUAL():
+            return ctx.NOT_EQUAL().getText()
+        elif ctx.LESS_THAN():
+            return ctx.LESS_THAN().getText()
+        elif ctx.MORE_THAN():
+            return ctx.MORE_THAN().getText()
+        elif ctx.LESS_THAN_FLOAT():
+            return ctx.LESS_THAN_FLOAT().getText()
+        elif ctx.MORE_THAN_FLOAT():
+            return ctx.MORE_THAN_FLOAT().getText()
+        elif ctx.NOT_EQUAL_FLOAT():
+            return ctx.NOT_EQUAL_FLOAT().getText()
+        elif ctx.LESS_THAN_EQUAL():
+            return ctx.LESS_THAN_EQUAL().getText()
+        elif ctx.MORE_THAN_EQUAL():
+            return ctx.MORE_THAN_EQUAL().getText()
+        elif ctx.LESS_THAN_EQUAL_FLOAT():
+            return ctx.LESS_THAN_EQUAL_FLOAT().getText()
+        else:
+            return ctx.MORE_THAN_EQUAL_FLOAT().getText()
 
 
-    # Visit a parse tree produced by BKITParser#sign.
+    # sign
+    # : SUB 
+    # | SUB_FLOAT
+    # ;
     def visitSign(self, ctx:BKITParser.SignContext):
-        return self.visitChildren(ctx)
+        if ctx.SUB():
+            return ctx.SUB().getText()
+        else:
+            return ctx.SUB_FLOAT().getText()
 
 
-    # Visit a parse tree produced by BKITParser#index_operator.
+    # index_operator //6.4 Index operators
+    # : (LSQUARE expression RSQUARE)+
+    # ; 
     def visitIndex_operator(self, ctx:BKITParser.Index_operatorContext):
-        return self.visitChildren(ctx)
+        return [self.visit(x) for x in ctx.expression()] 
 
 
-    # Visit a parse tree produced by BKITParser#function_call.
+    # function_call // 6.5 Function call
+    # : ID LPAREN argument_list RPAREN
+    # ;
     def visitFunction_call(self, ctx:BKITParser.Function_callContext):
-        return self.visitChildren(ctx)
+        return CallExpr(Id(ctx.ID().getText()), self.visit(ctx.argument_list()))
 
 
-    # Visit a parse tree produced by BKITParser#argument_list.
+    # argument_list: expression? (COMMA expression)*;
     def visitArgument_list(self, ctx:BKITParser.Argument_listContext):
-        return self.visitChildren(ctx)
+        if ctx.expression():
+            return [self.visit(x) for x in ctx.expression()]
+        else: 
+            return []
     
 

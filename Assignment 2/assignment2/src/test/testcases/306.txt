@@ -1,1 +1,1 @@
-Var: x[5] = {1,2,"h",2.e56,""}, y = 12.;
+Var: b = True, c = False;

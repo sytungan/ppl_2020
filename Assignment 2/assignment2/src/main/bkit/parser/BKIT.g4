@@ -71,7 +71,7 @@ statement_list
     ;
 // *Statements*
 local_var_declare: global_var_declare;
-assignment_statement: (scalar_var index_operator?) ASSIGN expression SEMI;
+assignment_statement: (scalar_var | exp7 index_operator) ASSIGN expression SEMI;
 if_statement
     :
         IF expression THEN statement_list
