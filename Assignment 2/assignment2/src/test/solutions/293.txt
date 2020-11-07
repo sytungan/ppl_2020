@@ -1,1 +1,0 @@
-Program([FuncDecl(Id("test"),[],([],[Return(BinaryOp("+.",IntLiteral(1),BinaryOp("\.",FloatLiteral(4e+25),FloatLiteral(2.0))))]))])

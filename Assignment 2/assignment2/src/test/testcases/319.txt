@@ -1,9 +1,11 @@
 
         Function: test
         Body:
-            foo();
+            x = foo(2) - 2 \ 3 + 4;
+            test();
         EndBody.
         Function: foo
+        Parameter: n
         Body:
         EndBody.
         

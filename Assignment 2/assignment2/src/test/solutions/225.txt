@@ -1,1 +1,0 @@
-Program([VarDecl(Id("simp_l_3"),[],None),FuncDecl(Id("test"),[VarDecl(Id("a"),[],None),VarDecl(Id("b"),[],None)],([],[CallStmt(Id("print"),[Id("a")]),CallStmt(Id("print"),[Id("b")])]))])

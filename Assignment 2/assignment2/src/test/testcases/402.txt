@@ -1,2 +1,7 @@
-Var: arr[2][3][5] = {{"string", "s!@#$"}, {{542.10e21, 2., 9e5}}, {{1023, 1024, 2098}, {0x2141, 0xF912}}};
-                
+Function: foo 
+        Parameter: n
+        Body: 
+            While i < 5 Do
+                a = b +. 1.0;
+            EndWhile.
+        EndBody.

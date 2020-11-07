@@ -1,7 +1,5 @@
-
-        Function: test
-        Body:
-            For (i = 0, True, 1) Do
-            EndFor.
+Function: foo 
+        Parameter: n 
+        Body: 
+            Var: x[12]={12};
         EndBody.
-        

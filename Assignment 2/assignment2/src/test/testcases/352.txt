@@ -1,7 +1,11 @@
 
-        Function: test 
+        Function: test
         Body:
-            Var: x = 10, a[10]; 
-            x = x + 1;
+            Var: i = 21;
+            If i == 10 Then 
+            ElseIf i == 15 Then
+            ElseIf i == 20 Then
+            Else
+            EndIf.
         EndBody.
         

@@ -1,7 +1,0 @@
-
-        Function: test
-        Body:
-            For (i = 0, True, 1) Do
-            EndFor.
-        EndBody.
-        

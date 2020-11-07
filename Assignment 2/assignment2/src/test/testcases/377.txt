@@ -1,9 +1,1 @@
-
-        Function: hello
-        Parameter: str
-        Body:
-            Var: x = 2;
-            hello(str);
-            hello(x);
-        EndBody.
-        
+Var:x[0x13];

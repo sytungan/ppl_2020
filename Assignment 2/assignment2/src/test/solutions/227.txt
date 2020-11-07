@@ -1,1 +1,0 @@
-Program([VarDecl(Id("a__Rr1"),[2,2],ArrayLiteral([ArrayLiteral([FloatLiteral(90.0),FloatLiteral(100000.0)]),ArrayLiteral([IntLiteral(22),IntLiteral(212)])])),FuncDecl(Id("test"),[VarDecl(Id("c"),[1],None)],([],[Assign(ArrayCell(Id("c"),[IntLiteral(0)]),BinaryOp("-",IntLiteral(1),IntLiteral(1))),Return(IntLiteral(2))]))])

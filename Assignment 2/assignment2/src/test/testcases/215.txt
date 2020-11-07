@@ -1,7 +1,0 @@
-
-        Function: hi
-        Body:
-            Var s = "hi_hi";
-            s = "nice";
-        EndBody.
-        

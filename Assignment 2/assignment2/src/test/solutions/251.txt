@@ -1,1 +1,0 @@
-Program([FuncDecl(Id("test"),[],([VarDecl(Id("num"),[],IntLiteral(10))],[If([(BinaryOp(">",Id("num"),IntLiteral(0)),[],[CallStmt(Id("print"),[StringLiteral("Positive number")])])],([],[If([(BinaryOp("==",Id("num"),IntLiteral(0)),[],[CallStmt(Id("print"),[StringLiteral("Zero")])])],([],[CallStmt(Id("print"),[StringLiteral("Negative number")])]))]))]))])

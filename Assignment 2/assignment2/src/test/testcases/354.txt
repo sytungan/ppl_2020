@@ -1,7 +1,11 @@
-
-        Function: hi
+Function: foo 
         Body:
-            Var: s = "hi_hi";
-            s = "nice";
+            If True Then
+                Var: a;
+                Var: x;
+                Var: y;
+                x = 1;
+                y = 2;
+                z = 3;
+            EndIf.
         EndBody.
-        

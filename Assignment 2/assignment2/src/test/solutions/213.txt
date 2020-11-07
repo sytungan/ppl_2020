@@ -1,1 +1,0 @@
-Program([FuncDecl(Id("test"),[],([VarDecl(Id("x"),[],IntLiteral(10)),VarDecl(Id("a"),[10],None)],[Assign(Id("x"),BinaryOp("+",Id("x"),IntLiteral(1)))]))])

@@ -1,1 +1,0 @@
-Program([VarDecl(Id("arr"),[10],None),VarDecl(Id("c"),[99,3,2],None),VarDecl(Id("arr2"),[0],None)])

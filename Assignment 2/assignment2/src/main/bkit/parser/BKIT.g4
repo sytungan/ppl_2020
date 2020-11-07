@@ -57,19 +57,20 @@ function_declare: FUNCTION COLON ID (PARAMETER COLON parameter_list)? BODY COLON
 parameter_list: parameter (COMMA parameter)*;
 parameter: variable; // 'variable' in Global variable declaration part
 statement_list
-    : local_var_declare* 
-        ( assignment_statement
-        | if_statement 
-        | for_statement 
-        | while_statement
-        | do_while_statement
-        | break_statement
-        | continue_statement
-        | call_statement
-        | return_statement
-        )*
+    : local_var_declare* statement*
     ;
 // *Statements*
+statement
+    : assignment_statement
+    | if_statement 
+    | for_statement 
+    | while_statement
+    | do_while_statement
+    | break_statement
+    | continue_statement
+    | call_statement
+    | return_statement
+    ;
 local_var_declare: global_var_declare;
 assignment_statement: (scalar_var | exp7 index_operator) ASSIGN expression SEMI;
 if_statement

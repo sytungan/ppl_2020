@@ -1,9 +1,0 @@
-
-        Function: test
-        Body:
-            Var: athos = 500, pothos = 900, jerry, tom = 200;
-            If (pothos - athos) < 400 Then jerry = pothos - tom;
-            Else jerry = athos - tom;
-            EndIf.
-        EndBody.
-        

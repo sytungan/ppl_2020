@@ -1,9 +1,0 @@
-
-        Var: s = 0;
-        Function: test
-        Parameter: count
-        Body:
-            s = s + 3 - 15 \.-.2.;
-            t = 2.e5 <=. 2.5 || (0xF21 >= 0XFF) && (0o124 < 0O171);
-        EndBody.
-        

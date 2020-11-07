@@ -1,1 +1,1 @@
-Program([VarDecl(Id(x),[1,13,16],IntLiteral(5))])
+Program([VarDecl(Id(a)),FuncDecl(Id(test)[],([][Return()]))])

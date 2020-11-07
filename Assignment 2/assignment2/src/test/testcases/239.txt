@@ -1,9 +1,0 @@
-
-        Function: test
-        Body:
-            Var: r = 2, c = 9;
-            r = r + c;
-            r = 9 - r;
-            Return True;
-        EndBody.
-        

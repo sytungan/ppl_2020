@@ -1,11 +1,8 @@
-Function: foo 
+
+        Function: test
         Body:
-            If True Then
-                Var: a;
-                Var: x;
-                Var: y;
-                x = 1;
-                y = 2;
-                z = 3;
+            Var: abc = 1, cde = 2, efg = 3;
+            If abc + cde == efg Then Else efg = 3;
             EndIf.
         EndBody.
+        

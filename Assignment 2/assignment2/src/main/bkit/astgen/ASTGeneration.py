@@ -3,7 +3,7 @@ from BKITVisitor import BKITVisitor
 from BKITParser import BKITParser
 from AST import *
 from main.bkit.utils.AST import BinaryOp, CallExpr, FuncDecl, VarDecl
-# from test2string.ASTString import *
+#from test2string.ASTString import *
 from functools import reduce
 
 class ASTGeneration(BKITVisitor):
@@ -129,38 +129,50 @@ class ASTGeneration(BKITVisitor):
 
 
     # statement_list
-    #     : local_var_declare* 
-    #     ( assignment_statement
-    #     | if_statement 
-    #     | for_statement 
-    #     | while_statement
-    #     | do_while_statement
-    #     | break_statement
-    #     | continue_statement
-    #     | call_statement
-    #     | return_statement
-    #     )*
+    # : local_var_declare* statement*
     # ;
-    def loadLst(self, typeLst):
-        return [self.visit(x) for x in typeLst] if typeLst else []
-
-
     def visitStatement_list(self, ctx:BKITParser.Statement_listContext):
         # VarDeclare statements
         lstVarDeclStm = []
         if ctx.local_var_declare(): # local_var_declare() is a list of list
             lstVarDeclStm = reduce(lambda x, y: x + self.visit(y) ,ctx.local_var_declare()[1:],self.visit(ctx.local_var_declare(0)))
         # And statements rest
-        lstAssignmentStm = self.loadLst(ctx.assignment_statement())
-        lstIfStm = self.loadLst(ctx.if_statement())
-        lstForStm = self.loadLst(ctx.for_statement())
-        lstWhileStm = self.loadLst(ctx.while_statement())
-        lstDoWhileStm = self.loadLst(ctx.do_while_statement())
-        lstBreakStm = self.loadLst(ctx.break_statement())
-        lstContinueStm = self.loadLst(ctx.continue_statement())
-        lstCallStm = self.loadLst(ctx.call_statement())
-        lstReturnStm = self.loadLst(ctx.return_statement())
-        return (lstVarDeclStm, lstAssignmentStm + lstIfStm + lstForStm + lstWhileStm + lstDoWhileStm + lstBreakStm + lstContinueStm + lstCallStm + lstReturnStm)
+        lstStm = []
+        if ctx.statement():
+            lstStm = [self.visit(x) for x in ctx.statement()]
+        return (lstVarDeclStm, lstStm)
+    
+    
+    # statement
+    # : assignment_statement
+    # | if_statement 
+    # | for_statement 
+    # | while_statement
+    # | do_while_statement
+    # | break_statement
+    # | continue_statement
+    # | call_statement
+    # | return_statement
+    # ;
+    def visitStatement(self, ctx:BKITParser.StatementContext):
+        if ctx.assignment_statement():
+            return self.visit(ctx.assignment_statement())
+        elif ctx.if_statement():
+            return self.visit(ctx.if_statement())
+        elif ctx.for_statement():
+            return self.visit(ctx.for_statement())
+        elif ctx.while_statement():
+            return self.visit(ctx.while_statement())
+        elif ctx.do_while_statement():
+            return self.visit(ctx.do_while_statement())
+        elif ctx.break_statement():
+            return self.visit(ctx.break_statement())
+        elif ctx.continue_statement():
+            return self.visit(ctx.continue_statement())
+        elif ctx.call_statement():
+            return self.visit(ctx.call_statement())
+        else:
+            return self.visit(ctx.return_statement())
 
 
     # local_var_declare: global_var_declare;

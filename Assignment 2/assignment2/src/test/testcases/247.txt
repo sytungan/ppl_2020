@@ -1,8 +1,0 @@
-
-        Function: test
-        Body:
-            Var: x;
-            If 2<=3 Then x = 3;
-            EndIf.
-        EndBody.
-        

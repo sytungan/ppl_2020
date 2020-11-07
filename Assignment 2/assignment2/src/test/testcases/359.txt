@@ -1,11 +1,12 @@
 
         Function: test
         Body:
-            Var: i = 21;
-            If i == 10 Then 
-            ElseIf i == 15 Then
-            ElseIf i == 20 Then
-            Else
+            Var: num = 10;
+            If num > 0 Then print("Positive number");
+            Else 
+                If num == 0 Then print("Zero");
+                Else print("Negative number");
+                EndIf.
             EndIf.
         EndBody.
         

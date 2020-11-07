@@ -1,2 +1,10 @@
-Var: s="DaiH0cB4ckHo4", x= 12.2e54, c=0xF212;
-                
+
+        Function: test
+        Body:
+            Var: x = 0;
+            While i < 10 Do
+                writeln(i);
+                i = i + 1;
+            EndWhile.
+        EndBody.
+        

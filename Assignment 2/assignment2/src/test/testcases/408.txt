@@ -1,12 +1,12 @@
 
-        Function: test
+        Function: lcd **LCD of n**
         Parameter: n
         Body:
-            Var: i = 0;
-            While 1 Do
-                i = i + 1;
-                If (i == 10) Then write("OK");
-                EndIf.
+            Var: i;
+            i = n - 1;
+            While (n % i != 0) Do
+                i = i - 1;
             EndWhile.
+            writeln(i);
         EndBody.
         

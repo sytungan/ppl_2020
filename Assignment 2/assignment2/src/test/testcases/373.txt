@@ -1,4 +1,1 @@
-Function: foo 
-        Body: 
-            Return x + 2;
-        EndBody.
+Var:x[12];

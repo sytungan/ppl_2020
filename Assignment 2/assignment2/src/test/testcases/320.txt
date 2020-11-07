@@ -1,11 +1,12 @@
 
         Function: test
         Body:
-            x = foo(2) - 2 \ 3 + 4;
-            test();
+            foo(True, "!@$C#hc%", 12. \. 921.9e5 * 32e1);
+            foo(3,2,1);
+            foo(2021, "BKit", 2020e125);
         EndBody.
         Function: foo
-        Parameter: n
+        Parameter: n, c, t
         Body:
         EndBody.
         

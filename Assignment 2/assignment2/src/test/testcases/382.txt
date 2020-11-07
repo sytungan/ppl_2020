@@ -1,1 +1,7 @@
-Var:x[1][13][16]=5;
+
+        Var: a;
+        Function: test
+        Body:
+            Return;
+        EndBody.
+        

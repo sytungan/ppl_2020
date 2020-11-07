@@ -2,8 +2,9 @@
         Function: test
         Body:
             Var: x = 1;
-            Do 
+            While !x Do
                 Continue;
-            While !x EndDo.
+                x = True || False;
+            EndWhile.
         EndBody.
         

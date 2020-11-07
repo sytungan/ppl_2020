@@ -1,1 +1,1 @@
-Program([FuncDecl(Id(test___1)[VarDecl(Id(a)),VarDecl(Id(b)),VarDecl(Id(c)),VarDecl(Id(d))],([VarDecl(Id(c),IntLiteral(5))][]))])
+Program([FuncDecl(Id(foo)[],([][If(BooleanLiteral(true),[],[])ElseIf(BooleanLiteral(true),[],[Assign(Id(x),IntLiteral(2))])]))])

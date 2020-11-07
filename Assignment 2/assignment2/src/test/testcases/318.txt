@@ -1,11 +1,9 @@
 
         Function: test
         Body:
-            foo (2 + x, 4. \. y);
+            foo();
         EndBody.
         Function: foo
-        Parameter: a, b
         Body:
-            writeln(a+.b);
         EndBody.
         

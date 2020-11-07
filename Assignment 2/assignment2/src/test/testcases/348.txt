@@ -1,7 +1,7 @@
 
-        Function: test
-        Parameter: n
-        Body: 
-            n = n+1;
+        Function: hi
+        Body:
+            Var: s = "hi_hi";
+            s = "nice";
         EndBody.
         

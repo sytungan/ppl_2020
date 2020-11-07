@@ -1,9 +1,0 @@
-
-        Var: s;
-        Function: foo
-        Parameter: s
-        Body:
-            s = "hi_1";
-            Return foo("hi");
-        EndBody.
-        

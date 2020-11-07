@@ -1,1 +1,0 @@
-Program([VarDecl(Id("a"),[],None),FuncDecl(Id("test"),[],([],[Return(None)]))])

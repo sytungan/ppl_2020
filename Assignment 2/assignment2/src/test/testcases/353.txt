@@ -1,5 +1,11 @@
-
-        Function: test 
-        Body:
+Function: foo 
+        Parameter: n
+        Body: 
+            If n == 0 Then
+                If n!=0 Then
+                    If n!=0 Then
+                        a=5;
+                    EndIf.
+                EndIf.
+            EndIf.
         EndBody.
-        

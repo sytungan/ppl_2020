@@ -1,7 +1,12 @@
 
-        Var: a;
         Function: test
         Body:
-            Var: z_1[2][3] = {{6572e21, 2341e+56, 0.5},{"%^DFGZ", "Rvul^%",""}}, a[24], c;
+            Var: x = False, t = 100, a;
+            While (!x || t == 2) Do
+                x = True;
+                a = x;
+                x = a;
+                t = t - 1;
+            EndWhile.
         EndBody.
         

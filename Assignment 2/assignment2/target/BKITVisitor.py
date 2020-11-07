@@ -99,6 +99,11 @@ class BKITVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by BKITParser#statement.
+    def visitStatement(self, ctx:BKITParser.StatementContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by BKITParser#local_var_declare.
     def visitLocal_var_declare(self, ctx:BKITParser.Local_var_declareContext):
         return self.visitChildren(ctx)

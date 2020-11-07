@@ -1,8 +1,7 @@
-
-        Function:  test___1
-        Parameter: a, b, c, d
+Function: foo 
         Body:
-            Var: c = 5;
-            
+            If True Then
+            ElseIf True Then
+                x = 2;
+            EndIf.
         EndBody.
-        

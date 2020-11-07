@@ -1,8 +1,0 @@
-
-        Var: x;
-        Function: main
-        Body:
-        x = 10;
-        fact (x);
-        EndBody.
-        

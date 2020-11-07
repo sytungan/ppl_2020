@@ -1,11 +1,10 @@
 
         Function: test
-        Parameter: n
         Body:
-            Var: x;   
-            For (i = 0, i < sqrt(n)*2, 1) Do
-                x = i + n;
-                writeln(x);
+            Var: flag = False, c;
+            c = !False;
+            For (i = 0, flag == c, 1) Do
+                flag = True;
             EndFor.
         EndBody.
         

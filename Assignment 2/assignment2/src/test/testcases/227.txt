@@ -1,9 +1,0 @@
-
-        Var: a__Rr1[2][2] = {{0.9e2,10.e4},{22,212}};
-        Function: test
-        Parameter: c[1]
-        Body:
-            c[0] = 1-1;
-            Return 2;
-        EndBody.
-        

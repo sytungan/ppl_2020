@@ -1,1 +1,1 @@
-Program([FuncDecl(Id(test)[],([VarDecl(Id(x),IntLiteral(1))][Dowhile([],[Continue()],UnaryOp(!,Id(x)))]))])
+Program([FuncDecl(Id(test)[],([VarDecl(Id(x),IntLiteral(1))][While(UnaryOp(!,Id(x)),[],[Continue(),Assign(Id(x),BinaryOp(||,BooleanLiteral(true),BooleanLiteral(false)))])]))])

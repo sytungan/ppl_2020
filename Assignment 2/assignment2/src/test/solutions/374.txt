@@ -1,1 +1,1 @@
-Program([FuncDecl(Id(sum)[VarDecl(Id(n))],([][If(BinaryOp(==,Id(n),IntLiteral(0)),[],[Return(IntLiteral(0))]),Return(BinaryOp(+,Id(n),CallExpr(Id(sum),[BinaryOp(-,Id(n),IntLiteral(1))])))]))])
+Program([VarDecl(Id(x),[1,13,16],IntLiteral(5))])

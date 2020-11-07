@@ -1,15 +1,19 @@
 
         Function: test
         Body:
-            Var: n = 0, s = 0;
+            Var: i, j, k, l;
             Do 
-                n = n + 1;
-                Do 
-                    If n%2 == 0 Then s = s + 1;
-                    EndIf.
-                While (s < 1000) EndDo.
-                s = s + n;
-            While (s + n + 1 < max) EndDo.
+                i = i + 1;
+                While (j < 100) Do
+                    Do
+                        k = k + 1;
+                        While (l < 100) Do
+                            l = l + 2;
+                        EndWhile.
+                    While (k < 100) EndDo.
+                    j = j + 3;
+                EndWhile.
+            While (i + j + k + l < foo(2)) EndDo.
             writeln(n);
         EndBody.
         

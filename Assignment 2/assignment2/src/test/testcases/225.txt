@@ -1,9 +1,0 @@
-
-        Var: simp_l_3;
-        Function: test
-        Parameter: a, b
-        Body:
-            print(a);
-            print(b);
-        EndBody.
-        

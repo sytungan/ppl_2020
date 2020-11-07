@@ -1,7 +1,6 @@
-Function: foo 
+
+        Function: test
         Body:
-            If True Then
-            ElseIf True Then
-                x = 2;
-            EndIf.
+            Return True;
         EndBody.
+        
