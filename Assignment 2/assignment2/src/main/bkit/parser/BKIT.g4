@@ -72,7 +72,7 @@ statement
     | return_statement
     ;
 local_var_declare: global_var_declare;
-assignment_statement: (scalar_var | exp7 index_operator) ASSIGN expression SEMI;
+assignment_statement: (scalar_var | exp6) ASSIGN expression SEMI;
 if_statement
     :
         IF expression THEN statement_list

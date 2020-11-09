@@ -2,8 +2,8 @@ from typing import BinaryIO
 from BKITVisitor import BKITVisitor
 from BKITParser import BKITParser
 from AST import *
-from main.bkit.utils.AST import BinaryOp, CallExpr, FuncDecl, VarDecl
-#from test2string.ASTString import *
+from main.bkit.utils.AST import ArrayCell, BinaryOp, CallExpr, FuncDecl, VarDecl
+# from test2string.ASTString import *
 from functools import reduce
 
 class ASTGeneration(BKITVisitor):
@@ -180,12 +180,12 @@ class ASTGeneration(BKITVisitor):
         return self.visit(ctx.global_var_declare())
 
 
-    # assignment_statement: (scalar_var | exp7 index_operator) ASSIGN expression SEMI;
+    # assignment_statement: (scalar_var | exp6) ASSIGN expression SEMI;
     def visitAssignment_statement(self, ctx:BKITParser.Assignment_statementContext):
         if ctx.scalar_var():
             lhs = Id(self.visit(ctx.scalar_var()))
         else:
-            lhs = ArrayCell(self.visit(ctx.exp7()), self.visit(ctx.index_operator()))
+            lhs = self.visit(ctx.exp6())
         expr = self.visit(ctx.expression())
         return Assign(lhs, expr)
 
@@ -366,9 +366,9 @@ class ASTGeneration(BKITVisitor):
     # ;
     def visitExp6(self, ctx:BKITParser.Exp6Context):
         if ctx.getChildCount() == 2:
-            return UnaryOp(
-                self.visit(ctx.index_operator()), \
-                self.visit(ctx.exp6())
+            return ArrayCell(
+                self.visit(ctx.exp6()), \
+                self.visit(ctx.index_operator())
             )   
         else:
             return self.visit(ctx.exp7())
