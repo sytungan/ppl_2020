@@ -3,7 +3,7 @@
         Body:
             Var: r = 3.14, t;
             r = r*r == (2*3);
-            t =  True;
-            t = !t == !(r && False || 2-2); 
+            t[1] =  True;
+            test(t[1],t[0][2])[3][12] = !t == !(r && False || 2-2); 
         EndBody.
         

@@ -1,12 +1,11 @@
 
         Function: test
-        Parameter: n
         Body:
-            Var: i = 0;
-            While 1 Do
-                i = i + 1;
-                If (i == 10) Then write("OK");
-                EndIf.
-            EndWhile.
+            Var: arr[10][10];
+            For (i = 0, i < 10, 1) Do  
+                For (j = 0, j < 10, 1) Do
+                    arr[i][j] = 0;
+                EndFor.
+            EndFor.
         EndBody.
         

@@ -1,1 +1,1 @@
-Program([FuncDecl(Id(test)[],([][Return(BooleanLiteral(true))]))])
+Program([VarDecl(Id(x),IntLiteral(5))])

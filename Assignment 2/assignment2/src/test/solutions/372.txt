@@ -1,1 +1,1 @@
-Program([VarDecl(Id(s),StringLiteral(DaiH0cB4ckHo4)),VarDecl(Id(x),FloatLiteral(1.22e+55)),VarDecl(Id(c),IntLiteral(61970))])
+Program([VarDecl(Id(simp_2_3)),FuncDecl(Id(test)[VarDecl(Id(a)),VarDecl(Id(b)),VarDecl(Id(d)),VarDecl(Id(e)),VarDecl(Id(f)),VarDecl(Id(g)),VarDecl(Id(h)),VarDecl(Id(j),[1000]),VarDecl(Id(k),[2000])],([][Assign(Id(a),BinaryOp(+.,Id(b),Id(d))),Assign(Id(g),BinaryOp(||,BinaryOp(&&,Id(h),Id(f)),BooleanLiteral(true))),Return(Id(a))]))])

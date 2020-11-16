@@ -1,8 +1,12 @@
-Function: foo 
+
+        Function: test
         Body:
-            If True Then
-                x = 3;
+            Var: num = 10;
+            If num > 0 Then print("Positive number");
             Else 
-                x = 2;
+                If num == 0 Then print("Zero");
+                Else print("Negative number");
+                EndIf.
             EndIf.
         EndBody.
+        

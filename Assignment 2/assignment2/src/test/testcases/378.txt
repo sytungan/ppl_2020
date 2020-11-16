@@ -1,9 +1,2 @@
-
-        Var: simp_l_3;
-        Function: test
-        Parameter: a, b
-        Body:
-            print(a);
-            print(b);
-        EndBody.
-        
+Var: arr = {1,2}, a[10][22], e=40e5, c, d, f=20;
+                

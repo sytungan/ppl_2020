@@ -1,1 +1,1 @@
-Program([FuncDecl(Id(test)[VarDecl(Id(n))],([VarDecl(Id(flag),IntLiteral(0))][Dowhile([],[If(BinaryOp(&&,BinaryOp(!=,Id(n),IntLiteral(2)),BinaryOp(==,BinaryOp(%,Id(n),Id(i)),IntLiteral(0))),[],[Assign(Id(flag),IntLiteral(1))]),Assign(Id(i),BinaryOp(+,Id(i),IntLiteral(1)))],BinaryOp(<=,Id(i),CallExpr(Id(sqrt),[Id(n)]))),CallStmt(Id(print),[Id(i)])]))])
+Program([FuncDecl(Id(test)[],([VarDecl(Id(flag),IntLiteral(0))][Dowhile([],[While(UnaryOp(!,Id(flag)),[],[])],Id(flag))]))])

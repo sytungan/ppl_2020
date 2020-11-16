@@ -1,4 +1,1 @@
-Function: foo 
-        Body: 
-            Return x + 2;
-        EndBody.
+Var: s___091 = {"abc",{"zyz"}}, arr[1][2]= {{{{"H","hihi",123}}}};

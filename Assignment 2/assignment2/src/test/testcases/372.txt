@@ -1,1 +1,10 @@
-Var: s="DaiH0cB4ckHo4", x= 12.2e54, c=0xF212;
+
+        Var: simp_2_3;
+        Function: test
+        Parameter: a, b, d, e, f, g, h, j[1000], k[2000]
+        Body:
+            a = b +. d;
+            g = h && f || True;
+            Return a;
+        EndBody.
+        

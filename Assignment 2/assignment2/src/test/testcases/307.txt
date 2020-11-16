@@ -2,7 +2,7 @@
         Function: test
         Body:
             Var: r = 2, c = 9;
-            r = r + c;
+            foo(r,c)[1] = r + c;
             r = 9 - r;
             Return True;
         EndBody.

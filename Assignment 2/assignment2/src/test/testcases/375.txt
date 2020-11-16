@@ -1,1 +1,10 @@
-Var: arr[5][6] = {1,2}, y[1];
+
+        Var: s;
+        Function: square
+        Body:
+            Var: h; **height of hcn**
+            **Some 
+            thing**
+            Return h*h; 
+        EndBody.
+        

@@ -1,9 +1,11 @@
-
-        Function: foo
-        Parameter: a[5], b
+Function: foo 
         Body:
-            Var: i = 0;
-            Return 1;
-        EndBody
-        .
-        
+            If True Then
+                Var: a;
+                Var: x;
+                Var: y;
+                x = 1;
+                y = 2;
+                z = 3;
+            EndIf.
+        EndBody.

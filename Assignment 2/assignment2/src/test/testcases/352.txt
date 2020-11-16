@@ -1,11 +1,7 @@
-
-        Function: test
+Function: foo 
         Body:
-            Var: i = 21;
-            If i == 10 Then 
-            ElseIf i == 15 Then
-            ElseIf i == 20 Then
-            Else
+            If True Then
+            ElseIf True Then
+                x = 2;
             EndIf.
         EndBody.
-        

@@ -1,6 +1,12 @@
 
-        Function: test
+        Function: lcd **LCD of n**
+        Parameter: n
         Body:
-            Var: x = 43.9e10, y = 542, z = 0xFF2, t = 0O221, s="ThisIsString", w = False, arr[2][1] = {{2e5},{2}}; 
+            Var: i;
+            i = n - 1;
+            While (n % i != 0) Do
+                i = i - 1;
+            EndWhile.
+            writeln(i);
         EndBody.
         

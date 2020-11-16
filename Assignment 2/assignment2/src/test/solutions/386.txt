@@ -1,1 +1,1 @@
-Program([VarDecl(Id(arr),ArrayLiteral(IntLiteral(1),IntLiteral(2))),VarDecl(Id(a),[10,22]),VarDecl(Id(e),FloatLiteral(4000000.0)),VarDecl(Id(c)),VarDecl(Id(d)),VarDecl(Id(f),IntLiteral(20))])
+Program([VarDecl(Id(arr),[2,3,5],ArrayLiteral(ArrayLiteral(StringLiteral(string),StringLiteral(s!@#$)),ArrayLiteral(ArrayLiteral(FloatLiteral(5.421e+23),FloatLiteral(2.0),FloatLiteral(900000.0))),ArrayLiteral(ArrayLiteral(IntLiteral(1023),IntLiteral(1024),IntLiteral(2098)),ArrayLiteral(IntLiteral(8513),IntLiteral(63762)))))])

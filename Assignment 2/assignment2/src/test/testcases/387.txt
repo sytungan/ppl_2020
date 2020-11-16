@@ -1,1 +1,7 @@
-Var: b[2][3] = {{2,3,4},{4,5,6}};
+
+        Var: a;
+        Function: test
+        Body:
+            Var: a_ = 10., b = 5., c3 = 9;
+        EndBody.
+        

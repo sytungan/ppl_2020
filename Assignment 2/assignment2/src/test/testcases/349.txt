@@ -1,8 +1,11 @@
-
-        Function:  test___1
-        Parameter: a, b, c, d
-        Body:
-            Var: c = 5;
-            
+Function: foo 
+        Parameter: n
+        Body: 
+            If n == 0 Then
+                If n!=0 Then
+                    If n!=0 Then
+                        a=5;
+                    EndIf.
+                EndIf.
+            EndIf.
         EndBody.
-        

@@ -1,1 +1,1 @@
-Program([VarDecl(Id(a)),FuncDecl(Id(test)[],([][Return()]))])
+Program([VarDecl(Id(s),StringLiteral(happyBirthDay))])

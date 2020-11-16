@@ -1,1 +1,7 @@
-Var: s="happyBirthDay";
+
+        Function: test
+        Body:
+            While True Do
+            EndWhile.
+        EndBody.
+        

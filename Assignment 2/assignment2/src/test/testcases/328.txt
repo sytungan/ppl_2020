@@ -1,19 +1,14 @@
 
         Function: test
+        Parameter: n
         Body:
-            Var: i, j, k, l;
-            Do 
+            Var: flag = 0;
+            Do
+                If (n!=2) && (n%i==0) Then
+                    flag=1;
+                EndIf.
                 i = i + 1;
-                While (j < 100) Do
-                    Do
-                        k = k + 1;
-                        While (l < 100) Do
-                            l = l + 2;
-                        EndWhile.
-                    While (k < 100) EndDo.
-                    j = j + 3;
-                EndWhile.
-            While (i + j + k + l < foo(2)) EndDo.
-            writeln(n);
+            While i<=sqrt(n) EndDo.
+            print(i);
         EndBody.
         

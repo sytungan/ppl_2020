@@ -1,1 +1,1 @@
-Program([VarDecl(Id(simp_l_3)),FuncDecl(Id(test)[VarDecl(Id(a)),VarDecl(Id(b))],([][CallStmt(Id(print),[Id(a)]),CallStmt(Id(print),[Id(b)])]))])
+Program([VarDecl(Id(arr),ArrayLiteral(IntLiteral(1),IntLiteral(2))),VarDecl(Id(a),[10,22]),VarDecl(Id(e),FloatLiteral(4000000.0)),VarDecl(Id(c)),VarDecl(Id(d)),VarDecl(Id(f),IntLiteral(20))])

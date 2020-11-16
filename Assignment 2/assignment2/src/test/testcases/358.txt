@@ -1,11 +1,9 @@
 
-        Function: test
+        Function: sum
+        Parameter: n
         Body:
-            Var: time, greeting;
-            time = date();
-            If time < 10 Then greeting = "Good morning";
-            ElseIf time < 20 Then greeting = "Good day";
-            Else greeting = "Good evening";
+            If (n == 0) Then Return 0;
             EndIf.
+            Return n + sum(n - 1);
         EndBody.
         

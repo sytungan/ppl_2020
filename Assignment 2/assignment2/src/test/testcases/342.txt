@@ -1,7 +1,5 @@
-
-        Function: test
-        Parameter: n
+Function: foo 
+        Parameter: n 
         Body: 
-            n = n+1;
+            Var: x[12]={12};
         EndBody.
-        

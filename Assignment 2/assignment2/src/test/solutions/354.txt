@@ -1,1 +1,1 @@
-Program([FuncDecl(Id(foo)[],([][If(BooleanLiteral(true),[VarDecl(Id(a)),VarDecl(Id(x)),VarDecl(Id(y))],[Assign(Id(x),IntLiteral(1)),Assign(Id(y),IntLiteral(2)),Assign(Id(z),IntLiteral(3))])]))])
+Program([FuncDecl(Id(test)[],([VarDecl(Id(time)),VarDecl(Id(greeting))][Assign(Id(time),CallExpr(Id(date),[])),If(BinaryOp(<,Id(time),IntLiteral(10)),[],[Assign(Id(greeting),StringLiteral(Good morning))])ElseIf(BinaryOp(<,Id(time),IntLiteral(20)),[],[Assign(Id(greeting),StringLiteral(Good day))])Else([],[Assign(Id(greeting),StringLiteral(Good evening))])]))])

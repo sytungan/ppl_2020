@@ -1,8 +1,8 @@
-
-        Function: test
+Function: foo 
         Body:
-            Var: x;
-            If 2<=3 Then x = 3;
+            If True Then
+                x = 3;
+            Else 
+                x = 2;
             EndIf.
         EndBody.
-        

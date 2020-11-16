@@ -3,8 +3,8 @@ from BKITVisitor import BKITVisitor
 from BKITParser import BKITParser
 from AST import *
 from main.bkit.utils.AST import ArrayCell, BinaryOp, CallExpr, FuncDecl, VarDecl
-# from test2string.ASTString import *
 from functools import reduce
+# from test2string.ASTString import *
 
 class ASTGeneration(BKITVisitor):
     # program  : (global_var_declare)* function_declare* EOF;
@@ -205,7 +205,7 @@ class ASTGeneration(BKITVisitor):
         if ctx.ELSE():
             lstElseStm = self.visit(ctx.statement_list()[-1])
         else:
-            lstElseStm = ()
+            lstElseStm = ([],[])
         return If(lstIfThenStm, lstElseStm)
 
 
@@ -416,14 +416,7 @@ class ASTGeneration(BKITVisitor):
     # | SUB_FLOAT
     # ;
     def visitAdding(self, ctx:BKITParser.AddingContext):
-        if ctx.ADD():
-            return ctx.ADD().getText()
-        elif ctx.SUB():
-            return ctx.SUB().getText()
-        elif ctx.ADD_FLOAT():
-            return ctx.ADD_FLOAT().getText()
-        else:
-            return ctx.SUB_FLOAT().getText()
+        return ctx.getChild(0).getText()
 
     # multiplying
     # : MUL
@@ -433,17 +426,7 @@ class ASTGeneration(BKITVisitor):
     # | DIV_FLOAT
     # ;
     def visitMultiplying(self, ctx:BKITParser.MultiplyingContext):
-        if ctx.MUL():
-            return ctx.MUL().getText()
-        elif ctx.DIV():
-            return ctx.DIV().getText()
-        elif ctx.MOD():
-            return ctx.MOD().getText()
-        elif ctx.MUL_FLOAT():
-            return ctx.MUL_FLOAT().getText()
-        else:
-            return ctx.DIV_FLOAT().getText()
-
+        return ctx.getChild(0).getText()
 
 
     # relational_operator
@@ -460,28 +443,7 @@ class ASTGeneration(BKITVisitor):
     # | MORE_THAN_EQUAL_FLOAT
     # ;
     def visitRelational_operator(self, ctx:BKITParser.Relational_operatorContext):
-        if ctx.EQUAL():
-            return ctx.EQUAL().getText()
-        elif ctx.NOT_EQUAL():
-            return ctx.NOT_EQUAL().getText()
-        elif ctx.LESS_THAN():
-            return ctx.LESS_THAN().getText()
-        elif ctx.MORE_THAN():
-            return ctx.MORE_THAN().getText()
-        elif ctx.LESS_THAN_FLOAT():
-            return ctx.LESS_THAN_FLOAT().getText()
-        elif ctx.MORE_THAN_FLOAT():
-            return ctx.MORE_THAN_FLOAT().getText()
-        elif ctx.NOT_EQUAL_FLOAT():
-            return ctx.NOT_EQUAL_FLOAT().getText()
-        elif ctx.LESS_THAN_EQUAL():
-            return ctx.LESS_THAN_EQUAL().getText()
-        elif ctx.MORE_THAN_EQUAL():
-            return ctx.MORE_THAN_EQUAL().getText()
-        elif ctx.LESS_THAN_EQUAL_FLOAT():
-            return ctx.LESS_THAN_EQUAL_FLOAT().getText()
-        else:
-            return ctx.MORE_THAN_EQUAL_FLOAT().getText()
+        return ctx.getChild(0).getText()
 
 
     # sign
@@ -506,14 +468,12 @@ class ASTGeneration(BKITVisitor):
     # : ID LPAREN argument_list RPAREN
     # ;
     def visitFunction_call(self, ctx:BKITParser.Function_callContext):
-        return (Id(ctx.ID().getText()), self.visit(ctx.argument_list()))
+        return (Id(ctx.ID().getText()), self.visit(ctx.argument_list()) if ctx.argument_list() else [])
 
 
-    # argument_list: expression? (COMMA expression)*;
+    # argument_list: expression (COMMA expression)*;
     def visitArgument_list(self, ctx:BKITParser.Argument_listContext):
-        if ctx.expression():
-            return [self.visit(x) for x in ctx.expression()]
-        else: 
-            return []
+        return [self.visit(x) for x in ctx.expression()]
+
     
 

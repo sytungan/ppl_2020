@@ -1,7 +1,1 @@
-
-        Var: a;
-        Function: test
-        Body:
-            Return;
-        EndBody.
-        
+Var: s="happyBirthDay";

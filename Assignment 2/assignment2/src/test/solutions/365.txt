@@ -1,1 +1,1 @@
-Program([FuncDecl(Id(foo)[],([][Return(BinaryOp(+,Id(x),IntLiteral(2)))]))])
+Program([VarDecl(Id(s___091),ArrayLiteral(StringLiteral(abc),ArrayLiteral(StringLiteral(zyz)))),VarDecl(Id(arr),[1,2],ArrayLiteral(ArrayLiteral(ArrayLiteral(ArrayLiteral(StringLiteral(H),StringLiteral(hihi),IntLiteral(123))))))])

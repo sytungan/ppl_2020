@@ -3,7 +3,7 @@
         Function: test
         Parameter: count
         Body:
-            s = s + 3 - 15 \.-.2.;
+            s[1][2][4] = foo(s)[test(foo(3,test(1),test(foo()))+0XFF)] + 3 - 15 \.-.2.;
             t = 2.e5 <=. 2.5 || (0xF21 >= 0XFF) && (0o124 < 0O171);
         EndBody.
         

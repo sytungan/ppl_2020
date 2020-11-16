@@ -1,11 +1,9 @@
-Function: foo 
-        Parameter: n
-        Body: 
-            If n == 0 Then
-                If n!=0 Then
-                    If n!=0 Then
-                        a=5;
-                    EndIf.
-                EndIf.
+
+        Function: test
+        Body:
+            Var: athos = 500, pothos = 900, jerry, tom = 200;
+            If (pothos - athos) < 400 Then jerry = pothos - tom;
+            Else jerry = athos - tom;
             EndIf.
         EndBody.
+        

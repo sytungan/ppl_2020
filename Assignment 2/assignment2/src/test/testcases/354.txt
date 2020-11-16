@@ -1,11 +1,11 @@
-Function: foo 
+
+        Function: test
         Body:
-            If True Then
-                Var: a;
-                Var: x;
-                Var: y;
-                x = 1;
-                y = 2;
-                z = 3;
+            Var: time, greeting;
+            time = date();
+            If time < 10 Then greeting = "Good morning";
+            ElseIf time < 20 Then greeting = "Good day";
+            Else greeting = "Good evening";
             EndIf.
         EndBody.
+        

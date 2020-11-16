@@ -1,10 +1,27 @@
 
         Function: test
         Body:
-            Var: flag = 0;
             Do
-                While !flag Do
-                EndWhile.
-            While flag EndDo.
+                Do
+                    Do
+                    While (True) EndDo.
+                        Do
+                        While (True) EndDo.
+                        Do
+                            Do
+                                Do
+                                    Do
+                                    While (True) EndDo.
+                                While (True) EndDo.
+                            While (True) EndDo.
+                        While (True) EndDo.
+                    Do
+                        Do
+                        While (True) EndDo.
+                    While (True) EndDo.
+                    Do
+                    While (True) EndDo.
+                While (True) EndDo.
+            While (True) EndDo.
         EndBody.
         

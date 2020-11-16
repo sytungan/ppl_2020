@@ -1,7 +1,21 @@
 
-        Var: a;
         Function: test
+        Parameter: m, n, o, p
         Body:
-            Var: a_ = 10., b = 5., c3 = 9;
+            Var: x;
+            While (m <= 2) Do
+                While (n >= 1) Do
+                    While (o <= n) Do
+                        o = o - 1;
+                        While (p <= 2) Do
+                            p = p + 1;
+                        EndWhile.
+                    EndWhile.
+                    x = True;
+                    n = n - 1;
+                EndWhile.
+                x = m * n * p * o;
+                m = m + 1;
+            EndWhile.
         EndBody.
         

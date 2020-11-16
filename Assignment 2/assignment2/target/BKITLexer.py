@@ -414,7 +414,9 @@ class BKITLexer(Lexer):
         if actionIndex == 1:
 
                 self.text = (self.text)[1:]
-                #newline on windowOs: \r\n, linuxOs: \n, macOs > 9: \r
+                if len(self.text) > 0:
+                    if self.text[-1] == '\n':
+                        self.text = (self.text)[:-1]
 
      
 

@@ -1,1 +1,1 @@
-Program([VarDecl(Id(x)),FuncDecl(Id(main)[],([][Assign(Id(x),IntLiteral(10)),CallStmt(Id(fact),[Id(x)])]))])
+Program([VarDecl(Id(arr),[5,6],ArrayLiteral(IntLiteral(1),IntLiteral(2))),VarDecl(Id(y),[1])])
