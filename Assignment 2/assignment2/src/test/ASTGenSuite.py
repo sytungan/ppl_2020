@@ -1,7 +1,6 @@
 import unittest
 from TestUtils import TestAST
 from AST import *
-from main.bkit.utils.AST import ArrayLiteral, BooleanLiteral, FloatLiteral, IntLiteral, Program, StringLiteral
 # from test2string.Test2String import TestAST
 #from test2string.ASTString import *
 

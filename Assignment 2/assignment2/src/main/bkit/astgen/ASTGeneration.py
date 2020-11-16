@@ -2,7 +2,6 @@ from typing import BinaryIO
 from BKITVisitor import BKITVisitor
 from BKITParser import BKITParser
 from AST import *
-from main.bkit.utils.AST import ArrayCell, BinaryOp, CallExpr, FuncDecl, VarDecl
 from functools import reduce
 # from test2string.ASTString import *
 
