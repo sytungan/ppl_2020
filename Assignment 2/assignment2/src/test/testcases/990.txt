@@ -1,9 +1,0 @@
-Var: a,b,c;
-Function: main
-Body:
-foo(arg1, "???", foo(nothing), {"\n", {1,2.e2,123e1,"nothing"}});
-printLn();
-print(arg);
-printStrLn(arg);
-read();
-EndBody.
