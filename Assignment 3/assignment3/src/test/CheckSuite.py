@@ -7,10 +7,12 @@ class CheckSuite(unittest.TestCase):
 
     def test_undeclared_function(self):
         """Simple program: main"""
-        input = """Function: main
-                   Body: 
-                        foo();
-                   EndBody."""
+        input = """
+                Function: foo
+                Parameter: x
+                Body:
+                    x = 3;
+                EndBody."""
         expect = str(Undeclared(Function(),"foo"))
         self.assertTrue(TestChecker.test(input,expect,400))
 
