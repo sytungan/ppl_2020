@@ -29,6 +29,8 @@ class VoidType(Type):
     pass
 class Unknown(Type):
     pass
+class NotInfer(Type):
+    pass
 
 @dataclass
 class ArrayType(Type):
@@ -98,9 +100,9 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
             if type(x.mtype) == MType:
                 if x.name == key:
                     if type(x.mtype.restype) == ArrayType:
-                        x.mtype.restype.eletype = key
+                        x.mtype.restype.eletype = value
                     else:
-                        x.mtype.restype = key
+                        x.mtype.restype = value
 
             elif type(x.mtype) == ArrayType:
                 if x.name == key:
@@ -133,11 +135,11 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
                     return mtype.restype
                 return mtype.restype.eletype
             return mtype.restype
-        else:
-            if type(mtype) == ArrayType:
+        elif type(mtype) == ArrayType:
                 if arrayTypeFlag:
                     return mtype
                 return mtype.eletype
+        else:       
             return mtype
 
     def traverseFunc(self, ast, o):
@@ -174,11 +176,16 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
                 for i in range(len(x.mtype.intype)):
                     if type(x.mtype.intype[i]) == Unknown:
                         x.mtype.intype[i] = lstParamType[i]
+                    elif type(x.mtype.intype[i]) == ArrayType:
+                        if type(x.mtype.intype[i].eletype) == Unknown:
+                            x.mtype.intype[i] = lstParamType[i]
+
+
 
     # decl : List[Decl]
     def visitProgram(self, ast, o):
         innerEnv = [] + []
-        programEnv = reduce(lambda env, ele: [self.visit(ele, env)] + env if isinstance(ele, VarDecl) else [self.traverseFunc(ele, env)] + env, ast.decl, innerEnv)
+        programEnv = reduce(lambda env, ele: env + [self.visit(ele, env)] if isinstance(ele, VarDecl) else env + [self.traverseFunc(ele, env)], ast.decl, innerEnv)
         # Compile all functions in program
         [self.visit(x, programEnv) for x in ast.decl if isinstance(x, FuncDecl)]
         # Check entry point ==> function 'main'
@@ -192,28 +199,29 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
         varName = ast.variable.name
         if self.matchNameInEnv('all', varName, o):
             raise Redeclared(Variable(), varName)
-
         if ast.varDimen:
             typeInit = ArrayType(ast.varDimen, self.visit(ast.varInit, o) if ast.varInit else Unknown())
         else:
             typeInit = self.visit(ast.varInit, o) if ast.varInit else Unknown()
-
         return Symbol(varName, typeInit)
     
     # name: Id
     # param: List[VarDecl]
     # body: Tuple[List[VarDecl],List[Stmt]]
     def visitFuncDecl(self, ast, o):
+        funcName = ast.name.name
         lstParam = reduce(lambda env, ele: env + [self.visit(ele, env)]  \
         if not self.matchNameInEnv('all', ele.variable.name, env) \
             else self.raise_(Redeclared(Parameter(), ele.variable.name)) ,\
                 ast.param, [])
-
-        lstVarDecl = reduce(lambda env, ele: [self.visit(ele, env)] + env, ast.body[0], [])
-        innerEnv = lstParam + lstVarDecl
+        lstParamTypeInEnv = self.lookup(funcName, o, lambda x: x.name).mtype.intype
+        for i in range(len(lstParam)):
+            lstParam[i].mtype = lstParamTypeInEnv[i]
+        innerEnv = reduce(lambda env, ele: env + [self.visit(ele, env)], ast.body[0], lstParam)
         funcEnv = self.createNewEnv(o, innerEnv)
+        # Move enclose function to end of env
+        funcEnv.append(funcEnv.pop(funcEnv.index(self.lookup(funcName, funcEnv, lambda x: x.name))))
         [self.visit(x, funcEnv) for x in ast.body[1]]
-
         self.updateOldEnv(lstParam, [], funcEnv) # Update param with func env
         lstParamType = [x.mtype for x in lstParam]
         self.updateParamInEnv(ast.name.name, lstParamType, o)
@@ -223,87 +231,70 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
     # left:Expr
     # right:Expr
     def visitBinaryOp(self, ast, o):
-        left = self.visit(ast.left, o)
-        right = self.visit(ast.right, o)
-
         if ast.op in ['+','-','*','\\','%']:
-            if type(left) == Unknown:
-                left = IntType()
-                self.updateTypeInEnv(self.getNameOfAst(ast.left), IntType, o)
-            if type(right) == Unknown:
-                right = IntType()
-                self.updateTypeInEnv(self.getNameOfAst(ast.right), IntType, o)
-            if type(left) != IntType or type(right) != IntType:
+            if type(self.visit(ast.left, o)) == Unknown:
+                self.updateTypeInEnv(self.getNameOfAst(ast.left), IntType(), o)
+            if type(self.visit(ast.right, o)) == Unknown:
+                self.updateTypeInEnv(self.getNameOfAst(ast.right), IntType(), o)
+            if type(self.visit(ast.left, o)) != IntType or type(self.visit(ast.right, o)) != IntType:
                 raise TypeMismatchInExpression(ast)
             return IntType()
 
         elif ast.op in ['+.','-.','*.','\\.']:
-            if type(left) == Unknown:
-                left = FloatType()
-                self.updateTypeInEnv(self.getNameOfAst(ast.left), FloatType, o)
-            if type(right) == Unknown:
-                right = FloatType()
-                self.updateTypeInEnv(self.getNameOfAst(ast.right), FloatType, o)
-            if type(left) != FloatType or type(right) != FloatType:
+            if type(self.visit(ast.left, o)) == Unknown:
+                self.updateTypeInEnv(self.getNameOfAst(ast.left), FloatType(), o)
+            if type(self.visit(ast.right, o)) == Unknown:
+                self.updateTypeInEnv(self.getNameOfAst(ast.right), FloatType(), o)
+            if type(self.visit(ast.left, o)) != FloatType or type(self.visit(ast.right, o)) != FloatType:
                 raise TypeMismatchInExpression(ast)
             return FloatType()
 
         elif ast.op in ['&&','||']:
-            if type(left) == Unknown:
-                left = BoolType()
-                self.updateTypeInEnv(self.getNameOfAst(ast.left), BoolType, o)
-            if type(right) == Unknown:
-                right = BoolType()
-                self.updateTypeInEnv(self.getNameOfAst(ast.right), BoolType, o)
-            if type(left) != BoolType or type(right) != BoolType:
+            if type(self.visit(ast.left, o)) == Unknown:
+                self.updateTypeInEnv(self.getNameOfAst(ast.left), BoolType(), o)
+            if type(self.visit(ast.right, o)) == Unknown:
+                self.updateTypeInEnv(self.getNameOfAst(ast.right), BoolType(), o)
+            if type(self.visit(ast.left, o)) != BoolType or type(self.visit(ast.right, o)) != BoolType:
                 raise TypeMismatchInExpression(ast)
             return BoolType()
 
         elif ast.op in ['==','!=','<','>','<=','>=']:
-            if type(left) == Unknown:
-                left = IntType()
-                self.updateTypeInEnv(self.getNameOfAst(ast.left), IntType, o)
-            if type(right) == Unknown:
-                right = IntType()
-                self.updateTypeInEnv(self.getNameOfAst(ast.right), IntType, o)
-            if type(left) != IntType or type(right) != IntType:
+            if type(self.visit(ast.left, o)) == Unknown:
+                self.updateTypeInEnv(self.getNameOfAst(ast.left), IntType(), o)
+            if type(self.visit(ast.right, o)) == Unknown:
+                self.updateTypeInEnv(self.getNameOfAst(ast.right), IntType(), o)
+            if type(self.visit(ast.left, o)) != IntType or type(self.visit(ast.right, o)) != IntType:
                 raise TypeMismatchInExpression(ast)
             return BoolType()
 
         elif ast.op in ['=/=','<.','>.','<=.','>=.']:
-            if type(left) == Unknown:
-                left = FloatType()
-                self.updateTypeInEnv(self.getNameOfAst(ast.left), FloatType, o)
-            if type(right) == Unknown:
-                right = FloatType()
-                self.updateTypeInEnv(self.getNameOfAst(ast.right), FloatType, o)
-            if type(left) != FloatType or type(right) != FloatType:
+            if type(self.visit(ast.left, o)) == Unknown:
+                self.updateTypeInEnv(self.getNameOfAst(ast.left), FloatType(), o)
+            if type(self.visit(ast.right, o)) == Unknown:
+                self.updateTypeInEnv(self.getNameOfAst(ast.right), FloatType(), o)
+            if type(self.visit(ast.left, o)) != FloatType or type(self.visit(ast.right, o)) != FloatType:
                 raise TypeMismatchInExpression(ast)
             return BoolType()
     
     # op:str
     # body:Expr    
     def visitUnaryOp(self, ast, o):
-        body = ast.body
         if ast.op == '-':
-            if type(body) == Unknown:
-                body = IntType()
-                self.updateTypeInEnv(self.getNameOfAst(ast.body), IntType, o)
-            if type(body) != IntType:
+            if type(self.visit(ast.body, o)) == Unknown:
+                self.updateTypeInEnv(self.getNameOfAst(ast.body), IntType(), o)
+            if type(self.visit(ast.body, o)) != IntType:
                 raise TypeMismatchInExpression(ast)
             return IntType()
         elif ast.op == '-.':
-            if type(body) == Unknown:
-                body = FloatType()
-                self.updateTypeInEnv(self.getNameOfAst(ast.body), FloatType, o)
-            if type(body) != FloatType:
+            if type(self.visit(ast.body, o)) == Unknown:
+                self.updateTypeInEnv(self.getNameOfAst(ast.body), FloatType(), o)
+            if type(self.visit(ast.body, o)) != FloatType:
                 raise TypeMismatchInExpression(ast)
             return FloatType()
         elif ast.op == '!':
-            if type(body) == Unknown:
-                body = BoolType()
-                self.updateTypeInEnv(self.getNameOfAst(ast.body), FloatType, o)
-            if type(body) != BoolType:
+            if type(self.visit(ast.body, o)) == Unknown:
+                self.updateTypeInEnv(self.getNameOfAst(ast.body), FloatType(), o)
+            if type(self.visit(ast.body, o)) != BoolType:
                 raise TypeMismatchInExpression(ast)
             return BoolType()
     
@@ -312,57 +303,111 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
     def visitCallExpr(self, ast, o):
         funcName = ast.method.name
         if not self.matchNameInEnv('func', funcName, o):
-            return Undeclared(Function(), funcName)
-
+            raise Undeclared(Function(), funcName)
         lstArg = [self.visit(ele, o) for ele in ast.param]
-        lstParam = [type(ele) for ele in self.lookup(funcName, o, lambda x: x.name).mtype.intype]
+        lstParam = self.lookup(funcName, o, lambda x: x.name).mtype.intype
 
         if len(lstArg) != len(lstParam):
             raise TypeMismatchInExpression(ast)
         for i in range(len(lstArg)):
-            if type(lstParam[i]) == Unknown() and type(lstArg[i]) != Unknown:
+            if type(lstArg[i]) not in [Unknown, ArrayType] and type(lstParam[i]) == Unknown:
                 lstParam[i] = lstArg[i]
-            elif type(lstArg[i]) == Unknown and type(lstParam[i]) != Unknown():
+            elif type(lstParam[i]) not in [Unknown, ArrayType] and type(lstArg[i]) == Unknown:
                 lstArg[i] = lstParam[i]
                 self.updateTypeInEnv(self.getNameOfAst(ast.param[i]), lstParam[i], o)
-            else:
+            elif type(lstArg[i]) == Unknown and type(lstParam[i]) == Unknown:
                 raise TypeCannotBeInferred(ast)
-        self.updateParamInEnv(funcName, lstParam, o)
+
+            if type(lstArg[i]) == NotInfer or type(lstParam[i]) == NotInfer:
+                raise TypeCannotBeInferred(ast)
+            if (type(lstArg[i]) == ArrayType and type(lstParam[i]) == ArrayType):
+                if lstArg[i].dimen == lstParam[i].dimen:
+                    if type(lstArg[i].eletype) == Unknown and type(lstParam[i].eletype) == Unknown:
+                        raise TypeCannotBeInferred(ast)
+                    elif type(lstArg[i].eletype) == Unknown and type(lstParam[i].eletype) != Unknown:
+                        lstArg[i]= lstParam[i]
+                        self.updateTypeInEnv(self.getNameOfAst(ast.param[i]), lstParam[i].eletype, o)
+                    elif type(lstParam[i].eletype) == Unknown and type(lstArg[i].eletype) != Unknown:
+                        lstParam[i] = lstArg[i]
+                    elif type(lstArg[i].eletype) != type(lstParam[i].eletype):
+                        raise TypeMismatchInStatement(ast)
+                else:
+                    raise TypeMismatchInStatement(ast)
         
+            elif type(lstArg[i]) != type(lstParam[i]):
+                raise TypeMismatchInStatement(ast)
+        self.updateParamInEnv(funcName, lstParam, o)
         return self.getTypeInEnv(funcName, o, True)
     
     # name : str
     def visitId(self, ast, o):
         varName = ast.name
         if not self.matchNameInEnv('var', varName, o):
-            return Undeclared(Variable(), varName)
+            raise Undeclared(Identifier(), varName)
         return self.getTypeInEnv(varName, o, True)
     
     # arr:Expr
     # idx:List[Expr]
     def visitArrayCell(self, ast, o):
-        return self.visit(ast.arr, o).eletype
+        for x in ast.idx:
+            if type(self.visit(x, o)) != IntType:
+                raise TypeMismatchInExpression(ast)
+        return self.visit(ast.arr, o).eletype if type(self.visit(ast.arr, o)) == ArrayType else NotInfer()
     
     # lhs: LHS
     # rhs: Expr    
     def visitAssign(self, ast, o):
         lhs = self.visit(ast.lhs, o)
         rhs = self.visit(ast.rhs, o)
+        if type(lhs) == VoidType or type(rhs) == VoidType:
+            raise TypeMismatchInStatement(ast)
         if type(lhs) == Unknown and type(rhs) == Unknown:
-            raise(TypeCannotBeInferred(ast))
-        if type(lhs) == Unknown:
+            raise TypeCannotBeInferred(ast)
+        elif type(lhs) == Unknown and type(rhs) not in [Unknown, ArrayType]:
             lhs = rhs
             self.updateTypeInEnv(self.getNameOfAst(ast.lhs), rhs, o)
-        elif type(rhs) == Unknown:
+        elif type(rhs) == Unknown and type(lhs) not in [Unknown, ArrayType]:
             rhs = lhs
             self.updateTypeInEnv(self.getNameOfAst(ast.rhs), lhs, o)
-        if type(self.visit(ast.lhs, o)) != type(self.visit(ast.lhs, o)):
+        elif type(lhs) == NotInfer or type(rhs) == NotInfer:
+            raise TypeCannotBeInferred(ast)
+        elif (type(lhs) == ArrayType and type(rhs) == ArrayType):
+            if lhs.dimen == rhs.dimen:
+                if type(lhs.eletype) == Unknown and type(rhs.eletype) == Unknown:
+                    raise TypeCannotBeInferred(ast)
+                elif type(lhs.eletype) == Unknown and type(rhs.eletype) != Unknown:
+                    lhs = rhs
+                    self.updateTypeInEnv(self.getNameOfAst(ast.lhs), rhs.eletype, o)
+                elif type(rhs.eletype) == Unknown and type(lhs.eletype) != Unknown:
+                    rhs = lhs
+                    self.updateTypeInEnv(self.getNameOfAst(ast.rhs), lhs.eletype, o)
+                elif type(lhs.eletype) != type(rhs.eletype):
+                    raise TypeMismatchInStatement(ast)
+            else:
+                raise TypeMismatchInStatement(ast)
+        elif type(lhs) != type(rhs):
             raise TypeMismatchInStatement(ast)
     
     # ifthenStmt:List[Tuple[Expr,List[VarDecl],List[Stmt]]]
     # elseStmt:Tuple[List[VarDecl],List[Stmt]]
     def visitIf(self, ast, o):
-        return None
+        for ifThenStm in ast.ifthenStmt:
+            exp = self.visit(ifThenStm[0], o)
+            if type(exp) == Unknown:
+                self.updateTypeInEnv(self.getNameOfAst(ifThenStm[0]), BoolType(), o)
+            elif type(exp) == NotInfer:
+                raise TypeMismatchInStatement(ast)
+            elif type(self.visit(ifThenStm[0], o)) != BoolType:
+                raise TypeMismatchInStatement(ast)
+            innerEnv = reduce(lambda env, ele: env + [self.visit(ele, env)], ifThenStm[1], [])
+            ifThenEnv = self.createNewEnv(o, innerEnv)
+            [self.visit(x, ifThenEnv) for x in ifThenStm[2]]
+            self.updateOldEnv(o, innerEnv, ifThenEnv)
+        if ast.elseStmt:
+            innerEnv = reduce(lambda env, ele: env + [self.visit(ele, env)], ast.elseStmt[0], [])
+            elseEnv = self.createNewEnv(o, innerEnv)
+            [self.visit(x, elseEnv) for x in ast.elseStmt[1]]
+            self.updateOldEnv(o, innerEnv, elseEnv)
 
     # idx1: Id
     # expr1:Expr
@@ -370,7 +415,35 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
     # expr3:Expr
     # loop: Tuple[List[VarDecl],List[Stmt]]    
     def visitFor(self, ast, o):
-        return None
+        # Infer and check for idx1 and expr1
+        if type(self.visit(ast.idx1, o)) == Unknown:
+            self.updateTypeInEnv(self.getNameOfAst(ast.idx1), IntType(), o)
+        elif type(self.visit(ast.idx1, o)) == NotInfer:
+            raise TypeCannotBeInferred(ast)
+        if type(self.visit(ast.expr1, o)) == Unknown:
+            self.updateTypeInEnv(self.getNameOfAst(ast.expr1), IntType(), o)
+        elif type(self.visit(ast.expr1, o)) == NotInfer:
+            raise TypeCannotBeInferred(ast)
+        if type(self.visit(ast.idx1), o) != IntType or type(self.visit(ast.expr1, o)) != IntType:
+            raise TypeMismatchInStatement(ast)
+        # Infer and check for expr2
+        if type(self.visit(ast.expr2, o)) == Unknown:
+            self.updateTypeInEnv(self.getNameOfAst(ast.idx1), BoolType(), o)
+        elif type(self.visit(ast.expr2, o)) == NotInfer:
+            raise TypeCannotBeInferred(ast)
+        elif type(self.visit(ast.expr2, o)) != BoolType: 
+            raise TypeMismatchInStatement(ast)
+        # Infer and check for expr3
+        if type(self.visit(ast.expr3, o)) == Unknown:
+            self.updateTypeInEnv(self.getNameOfAst(ast.idx1), IntType(), o)
+        elif type(self.visit(ast.expr3, o)) == NotInfer:
+            raise TypeCannotBeInferred(ast)
+        elif type(self.visit(ast.expr3, o)) != IntType: 
+            raise TypeMismatchInStatement(ast) 
+        innerEnv = reduce(lambda env, ele: env + [self.visit(ele, env)], ast.loop[0], [])
+        whileDoEnv = self.createNewEnv(o, innerEnv)
+        [self.visit(x, whileDoEnv) for x in ast.loop[1]]
+        self.updateOldEnv(o, innerEnv, whileDoEnv)
     
     def visitContinue(self, ast, o):
         return None
@@ -380,27 +453,94 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
     
     # expr:Expr
     def visitReturn(self, ast, o):
+        # Enclose function at end of env
         if ast.expr:
-            return self.visit(expr, o)
-        return VoidType()
+            retType = self.visit(ast.expr, o)
+        else:
+            retType = VoidType()
+        if type(o[-1].mtype.restype) == Unknown:
+            self.updateTypeInEnv(o[-1].name, retType, o)
+        elif type(o[-1].mtype.restype) == ArrayType and type(retType) == ArrayType:
+            if not (o[-1].restype.mtype.dimen == retType.dimen and o[-1].mtype.restype.eletype == retType.eletype):
+                raise TypeMismatchInStatement(ast)
+        elif type(o[-1].mtype.restype) != type(retType):
+            raise TypeMismatchInStatement(ast)
     
     # sl:Tuple[List[VarDecl],List[Stmt]]
     # exp: Expr
     def visitDowhile(self, ast, o):
-        return None
+        innerEnv = reduce(lambda env, ele: env + [self.visit(ele, env)], ast.sl[0], [])
+        doWhileEnv = self.createNewEnv(o, innerEnv)
+        [self.visit(x, doWhileEnv) for x in ast.sl[1]]
+        exp = self.visit(ast.exp, o)
+        if type(exp) == Unknown:
+            self.updateTypeInEnv(self.getNameOfAst(ast.exp), BoolType(), o)
+        elif type(exp) == NotInfer:
+            raise TypeCannotBeInferred(ast)
+        elif type(exp) != BoolType:
+            raise TypeMismatchInStatement(ast)
+        self.updateOldEnv(o, innerEnv, doWhileEnv)
 
     # exp: Expr
     # sl:Tuple[List[VarDecl],List[Stmt]]
     def visitWhile(self, ast, o):
-        return None
+        exp = self.visit(ast.exp, o)
+        if type(exp) == Unknown:
+            self.updateTypeInEnv(self.getNameOfAst(ast.exp), BoolType(), o)
+        elif type(exp) == NotInfer:
+            raise TypeCannotBeInferred(ast)
+        elif type(exp) != BoolType:
+            raise TypeMismatchInStatement(ast)
+        innerEnv = reduce(lambda env, ele: env + [self.visit(ele, env)], ast.sl[0], [])
+        whileDoEnv = self.createNewEnv(o, innerEnv)
+        [self.visit(x, whileDoEnv) for x in ast.sl[1]]
+        self.updateOldEnv(o, innerEnv, whileDoEnv)
 
     # method:Id
     # param:List[Expr]
     def visitCallStmt(self, ast, o):
         funcName = ast.method.name
         if not self.matchNameInEnv('func', funcName, o):
-            return Undeclared(Function(), funcName)
-        return self.getTypeInEnv(funcName, o, True)
+            raise Undeclared(Function(), funcName)
+        retType = self.getTypeInEnv(funcName, o, True)
+        if type(retType) == Unknown:
+            self.updateTypeInEnv(funcName, VoidType(), o)
+        elif type(retType) != VoidType:
+            raise TypeMismatchInStatement(ast)
+        lstArg = [self.visit(ele, o) for ele in ast.param]
+        lstParam = [ele for ele in self.lookup(funcName, o, lambda x: x.name).mtype.intype]
+
+        if len(lstArg) != len(lstParam):
+            raise TypeMismatchInStatement(ast)
+        for i in range(len(lstArg)):
+            if type(lstArg[i]) not in [Unknown, ArrayType] and type(lstParam[i]) == Unknown:
+                lstParam[i] = lstArg[i]
+            elif type(lstParam[i]) not in [Unknown, ArrayType] and type(lstArg[i]) == Unknown:
+                lstArg[i] = lstParam[i]
+                self.updateTypeInEnv(self.getNameOfAst(ast.param[i]), lstParam[i], o)
+            elif type(lstArg[i]) == Unknown and type(lstParam[i]) == Unknown:
+                raise TypeCannotBeInferred(ast)
+
+            if type(lstArg[i]) == NotInfer or type(lstParam[i]) == NotInfer:
+                raise TypeCannotBeInferred(ast)
+
+            if (type(lstArg[i]) == ArrayType and type(lstParam[i]) == ArrayType):
+                if lstArg[i].dimen == lstParam[i].dimen:
+                    if type(lstArg[i].eletype) == Unknown and type(lstParam[i].eletype) == Unknown:
+                        raise TypeCannotBeInferred(ast)
+                    elif type(lstArg[i].eletype) == Unknown and type(lstParam[i].eletype) != Unknown:
+                        lstArg[i]= lstParam[i]
+                        self.updateTypeInEnv(self.getNameOfAst(ast.param[i]), lstParam[i].eletype, o)
+                    elif type(lstParam[i].eletype) == Unknown and type(lstArg[i].eletype) != Unknown:
+                        lstParam[i] = lstArg[i]
+                    elif type(lstArg[i].eletype) != type(lstParam[i].eletype):
+                        raise TypeMismatchInStatement(ast)
+                else:
+                    raise TypeMismatchInStatement(ast)
+                
+            elif type(lstArg[i]) != type(lstParam[i]):
+                raise TypeMismatchInStatement(ast)
+        self.updateParamInEnv(funcName, lstParam, o)
     
     # value:int
     def visitIntLiteral(self, ast, o):
