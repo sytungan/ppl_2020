@@ -1,1 +1,1 @@
-Type Cannot Be Inferred: Assign(Id(a),CallExpr(Id(foo),[]))
+Type Cannot Be Inferred: Assign(ArrayCell(CallExpr(Id(foo),[]),[IntLiteral(1)]),IntLiteral(1))

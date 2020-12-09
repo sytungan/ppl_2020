@@ -95,21 +95,21 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
                     return True
             return False
     
-    def updateTypeInEnv(self, key, value, env):
+    def updateTypeInEnv(self, key, value, env, arrayTypeFlag = False):
         for x in env:
-            if type(x.mtype) == MType:
-                if x.name == key:
-                    if type(x.mtype.restype) == ArrayType:
+            if x.name == key:
+                if type(x.mtype) == MType:        
+                    if arrayTypeFlag:
+                        x.mtype.restype = value
+                    elif type(x.mtype.restype) == ArrayType:
                         x.mtype.restype.eletype = value
                     else:
                         x.mtype.restype = value
-
-            elif type(x.mtype) == ArrayType:
-                if x.name == key:
+                    
+                elif type(x.mtype) == ArrayType:
                     x.mtype.eletype = value
 
-            else:
-                if x.name == key:
+                else:
                     x.mtype = value
 
     def createNewEnv(self, envOuter, envInner):
@@ -200,7 +200,7 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
         if self.matchNameInEnv('all', varName, o):
             raise Redeclared(Variable(), varName)
         if ast.varDimen:
-            typeInit = ArrayType(ast.varDimen, self.visit(ast.varInit, o) if ast.varInit else Unknown())
+            typeInit = ArrayType(ast.varDimen, self.visit(ast.varInit, o).eletype if ast.varInit else Unknown())
         else:
             typeInit = self.visit(ast.varInit, o) if ast.varInit else Unknown()
         return Symbol(varName, typeInit)
@@ -231,6 +231,8 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
     # left:Expr
     # right:Expr
     def visitBinaryOp(self, ast, o):
+        if type(ast.left) == NotInfer or type(ast.right):
+            return NotInfer()
         if ast.op in ['+','-','*','\\','%']:
             if type(self.visit(ast.left, o)) == Unknown:
                 self.updateTypeInEnv(self.getNameOfAst(ast.left), IntType(), o)
@@ -279,6 +281,8 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
     # op:str
     # body:Expr    
     def visitUnaryOp(self, ast, o):
+        if type(ast.body) == NotInfer:
+            return NotInfer()
         if ast.op == '-':
             if type(self.visit(ast.body, o)) == Unknown:
                 self.updateTypeInEnv(self.getNameOfAst(ast.body), IntType(), o)
@@ -310,17 +314,21 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
         if len(lstArg) != len(lstParam):
             raise TypeMismatchInExpression(ast)
         for i in range(len(lstArg)):
-            if type(lstArg[i]) not in [Unknown, ArrayType] and type(lstParam[i]) == Unknown:
+            if type(lstArg[i]) == NotInfer or type(lstParam[i]) == NotInfer:
+                return NotInfer()
+            elif type(lstArg[i]) == Unknown and isinstance(ast.param[i], CallExpr) and type(lstParam[i]) == ArrayType:
+                if lstParam[i].dimen and type(lstParam[i].eletype) != Unknown:
+                    self.updateTypeInEnv(self.getNameOfAst(ast.param[i]), rhs, True)
+                else:
+                    raise TypeCannotBeInferred(ast)
+            elif type(lstArg[i]) not in [Unknown, ArrayType] and type(lstParam[i]) == Unknown:
                 lstParam[i] = lstArg[i]
             elif type(lstParam[i]) not in [Unknown, ArrayType] and type(lstArg[i]) == Unknown:
                 lstArg[i] = lstParam[i]
                 self.updateTypeInEnv(self.getNameOfAst(ast.param[i]), lstParam[i], o)
             elif type(lstArg[i]) == Unknown and type(lstParam[i]) == Unknown:
                 raise TypeCannotBeInferred(ast)
-
-            if type(lstArg[i]) == NotInfer or type(lstParam[i]) == NotInfer:
-                raise TypeCannotBeInferred(ast)
-            if (type(lstArg[i]) == ArrayType and type(lstParam[i]) == ArrayType):
+            elif (type(lstArg[i]) == ArrayType and type(lstParam[i]) == ArrayType):
                 if lstArg[i].dimen == lstParam[i].dimen:
                     if type(lstArg[i].eletype) == Unknown and type(lstParam[i].eletype) == Unknown:
                         raise TypeCannotBeInferred(ast)
@@ -349,28 +357,47 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
     # arr:Expr
     # idx:List[Expr]
     def visitArrayCell(self, ast, o):
+        if not ast.idx:
+            raise TypeMismatchInExpression(ast)
         for x in ast.idx:
             if type(self.visit(x, o)) != IntType:
                 raise TypeMismatchInExpression(ast)
-        return self.visit(ast.arr, o).eletype if type(self.visit(ast.arr, o)) == ArrayType else NotInfer()
+        
+        if type(self.visit(ast.arr, o)) == ArrayType:
+            return self.visit(ast.arr, o).eletype  
+        elif type(self.visit(ast.arr, o)) in [Unknown, NotInfer]:
+            if isinstance(ast.arr. CallExpr):
+                return NotInfer()
+            else: # If it's Id
+                raise TypeMismatchInExpression(ast)
     
     # lhs: LHS
     # rhs: Expr    
     def visitAssign(self, ast, o):
         lhs = self.visit(ast.lhs, o)
         rhs = self.visit(ast.rhs, o)
-        if type(lhs) == VoidType or type(rhs) == VoidType:
-            raise TypeMismatchInStatement(ast)
-        if type(lhs) == Unknown and type(rhs) == Unknown:
+        if type(lhs) == NotInfer or type(rhs) == NotInfer:
             raise TypeCannotBeInferred(ast)
+        elif type(lhs) == VoidType or type(rhs) == VoidType:
+            raise TypeMismatchInStatement(ast)
+        elif type(lhs) == Unknown and type(rhs) == Unknown:
+            raise TypeCannotBeInferred(ast)
+        elif type(lhs) == Unknown and isinstance(ast.lhs, CallExpr) and type(rhs) == ArrayType:
+            if rhs.dimen and type(rhs.eletype) != Unknown:
+                self.updateTypeInEnv(self.getNameOfAst(ast.lhs), rhs, True)
+            else:
+                raise TypeCannotBeInferred(ast)
+        elif type(rhs) == Unknown and isinstance(ast.rhs, CallExpr) and type(lhs) == ArrayType:
+            if lhs.dimen and type(lhs.eletype) != Unknown:
+                self.updateTypeInEnv(self.getNameOfAst(ast.rhs), lhs, o, True)
+            else:
+                raise TypeCannotBeInferred(ast)
         elif type(lhs) == Unknown and type(rhs) not in [Unknown, ArrayType]:
             lhs = rhs
             self.updateTypeInEnv(self.getNameOfAst(ast.lhs), rhs, o)
         elif type(rhs) == Unknown and type(lhs) not in [Unknown, ArrayType]:
             rhs = lhs
             self.updateTypeInEnv(self.getNameOfAst(ast.rhs), lhs, o)
-        elif type(lhs) == NotInfer or type(rhs) == NotInfer:
-            raise TypeCannotBeInferred(ast)
         elif (type(lhs) == ArrayType and type(rhs) == ArrayType):
             if lhs.dimen == rhs.dimen:
                 if type(lhs.eletype) == Unknown and type(rhs.eletype) == Unknown:
@@ -396,7 +423,7 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
             if type(exp) == Unknown:
                 self.updateTypeInEnv(self.getNameOfAst(ifThenStm[0]), BoolType(), o)
             elif type(exp) == NotInfer:
-                raise TypeMismatchInStatement(ast)
+                raise TypeCannotBeInferred(ast)
             elif type(self.visit(ifThenStm[0], o)) != BoolType:
                 raise TypeMismatchInStatement(ast)
             innerEnv = reduce(lambda env, ele: env + [self.visit(ele, env)], ifThenStm[1], [])
@@ -415,29 +442,24 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
     # expr3:Expr
     # loop: Tuple[List[VarDecl],List[Stmt]]    
     def visitFor(self, ast, o):
+        if NotInfer in [type(self.visit(ast.idx1, o)), type(self.visit(ast.expr1, o)), type(self.visit(ast.expr2, o)), type(self.visit(ast.expr3, o))]:
+            raise TypeCannotBeInferred(ast)
         # Infer and check for idx1 and expr1
         if type(self.visit(ast.idx1, o)) == Unknown:
             self.updateTypeInEnv(self.getNameOfAst(ast.idx1), IntType(), o)
-        elif type(self.visit(ast.idx1, o)) == NotInfer:
-            raise TypeCannotBeInferred(ast)
         if type(self.visit(ast.expr1, o)) == Unknown:
             self.updateTypeInEnv(self.getNameOfAst(ast.expr1), IntType(), o)
-        elif type(self.visit(ast.expr1, o)) == NotInfer:
-            raise TypeCannotBeInferred(ast)
-        if type(self.visit(ast.idx1), o) != IntType or type(self.visit(ast.expr1, o)) != IntType:
+
+        if type(self.visit(ast.idx1, o)) != IntType or type(self.visit(ast.expr1, o)) != IntType:
             raise TypeMismatchInStatement(ast)
         # Infer and check for expr2
         if type(self.visit(ast.expr2, o)) == Unknown:
             self.updateTypeInEnv(self.getNameOfAst(ast.idx1), BoolType(), o)
-        elif type(self.visit(ast.expr2, o)) == NotInfer:
-            raise TypeCannotBeInferred(ast)
         elif type(self.visit(ast.expr2, o)) != BoolType: 
             raise TypeMismatchInStatement(ast)
         # Infer and check for expr3
         if type(self.visit(ast.expr3, o)) == Unknown:
             self.updateTypeInEnv(self.getNameOfAst(ast.idx1), IntType(), o)
-        elif type(self.visit(ast.expr3, o)) == NotInfer:
-            raise TypeCannotBeInferred(ast)
         elif type(self.visit(ast.expr3, o)) != IntType: 
             raise TypeMismatchInStatement(ast) 
         innerEnv = reduce(lambda env, ele: env + [self.visit(ele, env)], ast.loop[0], [])
@@ -513,18 +535,21 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
         if len(lstArg) != len(lstParam):
             raise TypeMismatchInStatement(ast)
         for i in range(len(lstArg)):
-            if type(lstArg[i]) not in [Unknown, ArrayType] and type(lstParam[i]) == Unknown:
+            if type(lstArg[i]) == NotInfer or type(lstParam[i]) == NotInfer:
+                raise TypeCannotBeInferred(ast)
+            elif type(lstArg[i]) == Unknown and type(lstParam[i]) == Unknown:
+                raise TypeCannotBeInferred(ast)
+            elif type(lstArg[i]) == Unknown and isinstance(ast.param[i], CallExpr) and type(lstParam[i]) == ArrayType:
+                if lstParam[i].dimen and type(lstParam[i].eletype) != Unknown:
+                    self.updateTypeInEnv(self.getNameOfAst(ast.param[i]), rhs, True)
+                else:
+                    raise TypeCannotBeInferred(ast)
+            elif type(lstArg[i]) not in [Unknown, ArrayType] and type(lstParam[i]) == Unknown:
                 lstParam[i] = lstArg[i]
             elif type(lstParam[i]) not in [Unknown, ArrayType] and type(lstArg[i]) == Unknown:
                 lstArg[i] = lstParam[i]
                 self.updateTypeInEnv(self.getNameOfAst(ast.param[i]), lstParam[i], o)
-            elif type(lstArg[i]) == Unknown and type(lstParam[i]) == Unknown:
-                raise TypeCannotBeInferred(ast)
-
-            if type(lstArg[i]) == NotInfer or type(lstParam[i]) == NotInfer:
-                raise TypeCannotBeInferred(ast)
-
-            if (type(lstArg[i]) == ArrayType and type(lstParam[i]) == ArrayType):
+            elif (type(lstArg[i]) == ArrayType and type(lstParam[i]) == ArrayType):
                 if lstArg[i].dimen == lstParam[i].dimen:
                     if type(lstArg[i].eletype) == Unknown and type(lstParam[i].eletype) == Unknown:
                         raise TypeCannotBeInferred(ast)
@@ -560,4 +585,13 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
 
     # value:List[Literal]
     def visitArrayLiteral(self, ast, o):
-        return self.visit(ast.value[0], ast) if ast.value else Unknown()
+        dimen = []
+        ele = ast.value
+        astEle = ast.value
+        while isinstance(ele, list):
+            dimen += [len(ele)]
+            astEle = ele
+            ele = ele[0].value if ele else None
+        else:
+            eleType = self.visit(astEle[0], o) if ast.value and astEle else Unknown()
+            return ArrayType(dimen, eleType) if dimen else ArrayType([0], eleType)
