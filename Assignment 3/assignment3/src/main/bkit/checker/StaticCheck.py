@@ -107,9 +107,19 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
                         x.mtype.restype = value
                     
                 elif type(x.mtype) == ArrayType:
-                    x.mtype.eletype = value
+                    if isinstance(env[-1].mtype, MType):
+                        for i in range(len(env[-1].mtype.intype)):
+                            if id(env[-1].mtype.intype[i]) == id(x.mtype):
+                                x.mtype.eletype = value
+                                env[-1].mtype.intype[i] = x.mtype
+                    else:
+                        x.mtype.eletype = value
 
                 else:
+                    if isinstance(env[-1].mtype, MType):
+                        for i in range(len(env[-1].mtype.intype)):
+                            if id(env[-1].mtype.intype[i]) == id(x.mtype):
+                                env[-1].mtype.intype[i] = value
                     x.mtype = value
 
     def createNewEnv(self, envOuter, envInner):
@@ -122,6 +132,9 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
     def updateOldEnv(self, envOld, envExcept, envNew):
         for x in envOld:
             if self.matchNameInEnv('all', x.name, envNew):
+                if type(x.mtype) == MType and not self.matchNameInEnv('all', x.name, envExcept):
+                    print(self.lookup(x.name, envNew, lambda ele: ele.name).mtype.intype)
+                    x.mtype.intype = self.lookup(x.name, envNew, lambda ele: ele.name).mtype.intype
                 if type(self.getTypeInEnv(x.name, envOld, False)) == Unknown and not self.matchNameInEnv('all', x.name, envExcept):
                     typeInEnvNew = self.getTypeInEnv(x.name ,envNew, False)
                     self.updateTypeInEnv(x.name, typeInEnvNew, envOld)
@@ -222,9 +235,9 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
         # Move enclose function to end of env
         funcEnv.append(funcEnv.pop(funcEnv.index(self.lookup(funcName, funcEnv, lambda x: x.name))))
         [self.visit(x, funcEnv) for x in ast.body[1]]
-        self.updateOldEnv(lstParam, [], funcEnv) # Update param with func env
-        lstParamType = [x.mtype for x in lstParam]
-        self.updateParamInEnv(ast.name.name, lstParamType, o)
+        # self.updateOldEnv(lstParam, [], funcEnv) # Update param with func env
+        # lstParamType = [x.mtype for x in lstParam]
+        # self.updateParamInEnv(ast.name.name, lstParamType, o)
         self.updateOldEnv(o, innerEnv, funcEnv)
     
     # op:str
@@ -320,18 +333,18 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
                 if lstParam[i].dimen and type(lstParam[i].eletype) != Unknown:
                     self.updateTypeInEnv(self.getNameOfAst(ast.param[i]), rhs, True)
                 else:
-                    raise TypeCannotBeInferred(ast)
+                    return  NotInfer()
             elif type(lstArg[i]) not in [Unknown, ArrayType] and type(lstParam[i]) == Unknown:
                 lstParam[i] = lstArg[i]
             elif type(lstParam[i]) not in [Unknown, ArrayType] and type(lstArg[i]) == Unknown:
                 lstArg[i] = lstParam[i]
                 self.updateTypeInEnv(self.getNameOfAst(ast.param[i]), lstParam[i], o)
             elif type(lstArg[i]) == Unknown and type(lstParam[i]) == Unknown:
-                raise TypeCannotBeInferred(ast)
+                return NotInfer()
             elif (type(lstArg[i]) == ArrayType and type(lstParam[i]) == ArrayType):
                 if lstArg[i].dimen == lstParam[i].dimen:
                     if type(lstArg[i].eletype) == Unknown and type(lstParam[i].eletype) == Unknown:
-                        raise TypeCannotBeInferred(ast)
+                        return NotInfer()
                     elif type(lstArg[i].eletype) == Unknown and type(lstParam[i].eletype) != Unknown:
                         lstArg[i]= lstParam[i]
                         self.updateTypeInEnv(self.getNameOfAst(ast.param[i]), lstParam[i].eletype, o)

@@ -1,15 +1,12 @@
 
-        Var: x[5];
-        Var: y[5];
-        Function: main
-        Body:
-            x = {1.5,2.5,3.5,4.5,5.};
-            y = {1,2,3,4,5};
-            y = {1,2,3,4,6};
-            y = foo();
-            x = foo();
-        EndBody.
+        Var: x;
+        Function: main 
+            Parameter: x[5]
+            Body:
+                x = {1.,2.,3.,4.,5.}
+            EndBody.
         Function: foo
-        Body:
-        EndBody.
+            Body:
+                x = 2;
+            EndBody.
         
