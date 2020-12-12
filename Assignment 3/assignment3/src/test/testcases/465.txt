@@ -1,0 +1,11 @@
+
+        Function: main
+        Parameter: x1[5], x2
+        Body:
+            Var: x, y;
+            x =  x + main({1.,2.,3.,4.,5.} , 2) + x2;
+            x2 = 1;
+            x1[1] = 1;
+            Return 0;
+        EndBody.
+                   

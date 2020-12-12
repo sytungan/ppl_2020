@@ -1,3 +1,1 @@
-Type Mismatch In Statement: Assign(ArrayCell(Id(abc),[IntLiteral(1)]),FloatLiteral(1.5))
-Program([
-FuncDecl("main",[],VoidType(),[If(BoolLiteral("true"),CallStmt(Id("putInt"),[IntLiteral(10)]),CallStmt(Id("putInt"),[IntLiteral(20)]))])])
+Undeclared Function: foo

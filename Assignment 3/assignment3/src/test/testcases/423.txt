@@ -1,0 +1,11 @@
+
+        Var: p1, p2, p3;
+        Function: main
+        Parameter: main
+        Body:
+        EndBody.
+        Function: foo
+        Parameter: main, foo, p1, p1
+        Body:
+        EndBody.
+                   

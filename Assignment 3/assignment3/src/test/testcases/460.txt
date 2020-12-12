@@ -1,0 +1,16 @@
+
+        Var: abc[10][10];
+        Function: main
+        Body:
+            Var: x[3][10];
+            abc[foo(5)][x[1][2]] = 9;
+            x[1][1] = abc[2][2];
+            x = abc;
+            Return 0;
+        EndBody.
+        Function: foo
+        Parameter: x
+        Body:
+            Return 1;
+        EndBody.
+                   

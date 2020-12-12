@@ -1,0 +1,22 @@
+
+        Var: x[2][3] = {{3.,4.,2.51},{12e2,12e1,6e5}};
+        Function: main
+        Parameter: s1, s2
+        Body:
+            main(1., True);
+            x = foo(s1, s2);
+            Return;
+        EndBody.
+        Function: foo
+        Parameter: s1, s2
+        Body:
+            Var: y[2][3];
+            If True Then
+                Return y;
+            ElseIf False Then
+                Return x;
+            Else
+                Return foo(x,2);
+            EndIf.
+        EndBody.
+        

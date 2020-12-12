@@ -1,0 +1,18 @@
+
+        Function: foo
+        Body:
+            Var: x[5][5][10];
+            x[1][2][4] = "BK";
+            Return x;
+        EndBody.
+        Function: main
+        Body:
+            Var: x, y, z[5][5][10], t[5][5][10];
+            x = foo()[1][2][4];
+            y = int_of_string(x);
+            z = foo();
+            t[int_of_string(x)][y][y + int_of_string(x)] = 2;
+            t = foo();
+            Return 0;
+        EndBody.
+                   

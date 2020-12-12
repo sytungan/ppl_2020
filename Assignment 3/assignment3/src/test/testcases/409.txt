@@ -1,12 +1,14 @@
 
-                Function: foo
-                Parameter: x
-                Body:
-                EndBody.
-                Function: main
-                Body:
-                    Var: x, y = 0.5;
-                    x = 1. +. foo(1);
-                    y = foo(2.5) -. 1.;
-                EndBody.
-            
+        Function: main
+        Parameter: main
+        Body:
+            Var: foo = 2;
+            While False Do
+                main(foo);
+            EndWhile.
+            Return 0;
+        EndBody.
+        Function: foo
+        Body:
+        EndBody.
+                   

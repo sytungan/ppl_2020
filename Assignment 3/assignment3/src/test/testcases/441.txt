@@ -1,0 +1,24 @@
+
+        Function: main
+        Parameter: arg1[3], arg2[20], arg3
+        Body:
+            Var: x[3] = {1,2,3};
+            arg1[1] = 2;
+            arg2[3] = 10;
+            x = main(x, arg2, arg1[1] == arg2[3]);
+            foo(arg3);
+            Return x;
+        EndBody.
+        Function: foo
+        Parameter: arg
+        Body:
+            Var: x[3], y[20], z;
+            z = 2 + x[1] + main(x, y, arg)[2];
+            foo2()[1] = 2;
+            Return;
+        EndBody.
+        Function: foo2
+        Body:
+            Return {1,2};
+        EndBody.
+                   

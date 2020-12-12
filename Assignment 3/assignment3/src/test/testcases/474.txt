@@ -1,0 +1,11 @@
+
+        Function: main
+        Parameter: x
+        Body:
+            Var: z, y;
+            z = 1 + main(-(2 + main(2)));
+            z = y + x;
+            y = -(y\z) + -x + float_to_int(main(1));
+            Return 0;
+        EndBody.
+                   

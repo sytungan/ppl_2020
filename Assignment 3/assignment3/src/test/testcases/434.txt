@@ -1,0 +1,10 @@
+
+        Var: arr[5][2];
+        Function: main
+        Parameter: x[5][2], c
+        Body:
+            Var: str = "canBe";
+            c = str;
+            x = arr;
+        EndBody.
+                   

@@ -1,0 +1,11 @@
+
+        Var: x[10][20];
+        Function: main
+        Body:
+            Var: x;
+            If True Then
+                x[2][3] = True;
+            EndIf.
+            Return 0;
+        EndBody.
+                   

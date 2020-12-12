@@ -1,4 +1,14 @@
-Function: main 
-                    Body:
-                        printStrLn(read(4));
-                    EndBody.
+
+        Var: arr[100][100], x1, x2;
+        Function: main
+        Body:
+            Var: arr = 2;
+            x1 = arr;
+            x2 = x1;
+            If True Then
+                Var: x = 2, x2 = 0.5, z = 0;
+            EndIf.
+            x2 = x;
+            Return 0;
+        EndBody.
+                   

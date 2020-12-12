@@ -1,0 +1,15 @@
+
+        Function: main
+        Parameter: x
+        Body:
+            Var: arr[10][10];
+            Var: i, j;
+            For (i = 0, i < 10, 1) Do  
+                For (j = 0, j < 10, 1) Do
+                    arr[i][j] = 0;
+                EndFor.
+            EndFor.
+            x = -.arr[2][2];
+            Return 0;
+        EndBody.
+        

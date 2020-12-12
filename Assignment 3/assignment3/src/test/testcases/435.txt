@@ -1,0 +1,20 @@
+
+        Var: abc;
+        Var: y;
+        Function: main
+        Parameter: x[5][4], y
+        Body:
+            Var: z, t=2;
+            abc = "someThing";
+            x[1][1] = 10;
+            x[2][2] = x[1][1];
+            y = x[t][t];
+            Return 0;
+        EndBody.
+        Function: foo
+        Body:
+            Var: x, z;
+            x = abc;
+            y = z;
+        EndBody.
+                   

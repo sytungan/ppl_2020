@@ -1,0 +1,11 @@
+
+        Function: main
+        Body:
+            Var: x;
+            x = (2 == 0);
+            If x Then
+            ElseIf !x Then
+            ElseIf 2 Then
+            EndIf.
+        EndBody.
+                   

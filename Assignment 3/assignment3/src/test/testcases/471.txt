@@ -1,0 +1,10 @@
+
+        Function: main
+        Body:
+            Var: x[3], y, z, t;
+            x[2] = 2. +. y +. z;
+            x[1] = 1. +. y \. 3.;
+            t = x[1] \ 2;
+            Return 0;
+        EndBody.
+                   

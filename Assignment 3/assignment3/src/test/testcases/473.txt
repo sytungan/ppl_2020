@@ -1,0 +1,11 @@
+
+        Function: main
+        Parameter: x
+        Body:
+            Var: a, b, c;
+            main(a +. 3. -. 2. *. 2.);
+            b = x;
+            c = (a \. 3.51242) * (b + 2); 
+            Return 0;
+        EndBody.
+                   

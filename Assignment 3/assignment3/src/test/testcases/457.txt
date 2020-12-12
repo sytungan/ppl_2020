@@ -1,0 +1,16 @@
+
+        Function: foo
+        Body:
+            Return 1.0;
+        EndBody.
+        Function: main
+        Body:
+            Var: flag;
+            Do
+                While !flag Do
+                    While foo() Do
+                    EndWhile.
+                EndWhile.
+            While flag EndDo.
+        EndBody.
+                   

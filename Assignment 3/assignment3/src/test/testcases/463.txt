@@ -1,0 +1,13 @@
+
+        Function: main
+        Body:
+            Var: x;
+            x = foo() + x;
+            foo();
+            Return 0;
+        EndBody.
+        Function: foo
+        Body:
+            print("hi");
+        EndBody.
+                   

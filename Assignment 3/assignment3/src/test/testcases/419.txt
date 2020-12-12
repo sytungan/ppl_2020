@@ -1,7 +1,8 @@
 
-        Var:foo;
+        Var: a, b, c, d;
         Function: main
-        Parameter: n
-                   Body: 
-                        foo();
-                   EndBody.
+        Body:
+            Var: a, b, c, d;
+            Var: d = 2;
+        EndBody.
+                   

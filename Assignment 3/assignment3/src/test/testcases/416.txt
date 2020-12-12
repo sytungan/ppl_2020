@@ -1,4 +1,6 @@
-Function: main  
-                   Body:
-                        printStrLn();
-                    EndBody.
+
+        Var: a = 2, a;
+        Function: main
+        Body:
+        EndBody.
+                   

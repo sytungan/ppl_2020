@@ -1,0 +1,1 @@
+Type Mismatch In Statement: Assign(ArrayCell(Id(arr),[BinaryOp(*,IntLiteral(1),Id(y)),BinaryOp(*,IntLiteral(2),Id(z))]),BinaryOp(+.,Id(x),CallExpr(Id(main),[CallExpr(Id(float_of_string),[ArrayCell(Id(arr),[IntLiteral(2),IntLiteral(1)])]),IntLiteral(3),IntLiteral(2)])))

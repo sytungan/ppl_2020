@@ -1,0 +1,1 @@
+Type Cannot Be Inferred: If(BooleanLiteral(true),[VarDecl(Id(x),IntLiteral(3))],[])ElseIf(BooleanLiteral(false),[VarDecl(Id(y)),VarDecl(Id(z),IntLiteral(3))],[])Else([],[])

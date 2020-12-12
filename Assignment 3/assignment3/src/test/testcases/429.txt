@@ -1,0 +1,14 @@
+
+        Function: main
+        Body:
+            Var: foo = 2;
+            Var: x = 4;
+        EndBody.
+        Function: foo
+        Parameter: main
+        Body:
+        EndBody.
+        Function: read
+        Body:
+        EndBody.
+                   

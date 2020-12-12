@@ -1,0 +1,13 @@
+
+        Function: main
+        Body:
+            Var: x;
+            foo(True, x, False);
+            Return 0;
+        EndBody.
+        Function: foo
+        Parameter: p1, p2, p3
+        Body:
+            Return;
+        EndBody.
+                   

@@ -1,0 +1,15 @@
+
+        Var: abc[5];
+        Var: boo[2] = {True, False};
+        Function: main
+        Body:
+            Var: x[5] = {1,2,3,4,5};
+            While (boo[1]) Do
+                Return x;
+            EndWhile.
+            If (boo[0]) Then
+                Return abc;
+            EndIf.
+            Return 0;
+        EndBody.
+                   

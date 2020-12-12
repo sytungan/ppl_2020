@@ -1,0 +1,17 @@
+
+        Var: a[2];
+        Function: main
+        Body:
+            Var: x;
+            If a[1] Then
+                While a[0] Do
+                    If !x Then
+                        If main() Then
+                            If a Then
+                            EndIf.
+                        EndIf.
+                    EndIf.
+                EndWhile.
+            EndIf.
+        EndBody.
+                   

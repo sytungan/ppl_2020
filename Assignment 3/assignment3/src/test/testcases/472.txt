@@ -1,0 +1,12 @@
+
+        Function: main
+        Parameter: x, y
+        Body:
+            Var: a, b, c, d, e;
+            main(a =/= b, int_of_float(a) + int_of_float(b));
+            c = bool_of_string("true");
+            e = !c && c || d && !x || (y >. 12e5);
+            
+            Return 0;
+        EndBody.
+                   

@@ -1,0 +1,11 @@
+
+        Function: main
+        Parameter: a, b, c
+        Body:
+            Var: x[5][10], y[2][4];
+            y[1][2] = 2.5;
+            y[1][1] = c;
+            x[3][9] = a;
+            Return 0;
+        EndBody.
+                   

@@ -1,0 +1,14 @@
+
+        Function: main
+        Body:
+            Var: x, y;
+            x = 2. \. foo(1., 2.);
+            y = foo(x, x, x) +. 2.;
+            Return 0;
+        EndBody.
+        Function: foo
+        Parameter: x, y
+        Body:
+            Return float_to_int(1);
+        EndBody.
+                   

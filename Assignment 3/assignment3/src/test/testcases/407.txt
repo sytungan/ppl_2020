@@ -1,12 +1,14 @@
 
-        Function: foroke
-        Body:
-            Var: i;
-            For (i = 0, i < 10, 2) Do
-                i =i + 1;
-            EndFor.
-            Return;
-        EndBody.
         Function: main
+        Parameter: foo1[2], foo2
+        Body:
+            Var: foo3;
+            If True Then
+                Var: foo4;
+                foo3 = nwf() + foo4 + foo2();
+            EndIf.
+        EndBody.
+        Function: nwf
         Body:
         EndBody.
+                   

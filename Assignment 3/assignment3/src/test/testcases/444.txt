@@ -1,0 +1,13 @@
+
+        Function: main
+        Body:
+            Var: x;
+            If True Then
+                Var: s;
+                print(s);
+            Else 
+                Var: x;
+            EndIf.
+            Return;
+        EndBody.
+                   

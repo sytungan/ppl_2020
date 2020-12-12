@@ -1,0 +1,10 @@
+
+        Function: main
+        Body:
+            Var: x;
+            If True Then
+                Var: x, y;
+            EndIf.
+            Return;
+        EndBody.
+                   

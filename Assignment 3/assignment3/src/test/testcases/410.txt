@@ -1,12 +1,19 @@
 
-                Function: foo
-                Parameter: x
-                Body:
-                EndBody.
-                Function: main
-                Body:
-                    Var: x, y = 0.5;
-                    foo(x);
-                    y = foo(x);
-                EndBody.
-            
+        Function: main
+        Parameter: x
+        Body:
+            f_o_o();
+            main(1);
+        EndBody.
+        Function: f_o_o
+        Body:
+            main(2);
+            f_o_o();
+            Do
+                Var: f_o_o;
+                main(3);
+                f_o_o();
+            While True
+            EndDo.
+        EndBody.
+                   

@@ -1,1 +1,1 @@
-Type Mismatch In Statement: Assign(Id(a),Id(c))
+Undeclared Identifier: foo

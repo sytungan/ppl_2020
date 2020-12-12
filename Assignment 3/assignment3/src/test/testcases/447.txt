@@ -1,0 +1,12 @@
+
+        Function: main
+        Parameter: arg
+        Body:
+            Var: x;
+            Do
+                Var: str;
+            While x   
+            EndDo.
+            Return;
+        EndBody.
+                   

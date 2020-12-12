@@ -1,1 +1,7 @@
-Program([FuncDecl(Id(main)[VarDecl(Id(x))],([][CallStmt(Id(printStrLn),[])]))])
+
+        Var: a, b, c, d;
+        Var: arr[10], abc, arr = 1.;
+        Function: main
+        Body:
+        EndBody.
+                   

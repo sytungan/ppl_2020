@@ -1,0 +1,1 @@
+Type Cannot Be Inferred: While(BooleanLiteral(true),[VarDecl(Id(x))],[])

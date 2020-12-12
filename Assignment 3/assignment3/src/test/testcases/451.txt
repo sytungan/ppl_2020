@@ -1,0 +1,8 @@
+
+        Var: x;
+        Function: main
+        Parameter: x, y
+        Body:
+            Return main(1,main(x, True));
+        EndBody.
+                   

@@ -1,15 +1,17 @@
 
-                Function: foo
-                Parameter: x
-                Body:
-                    Var: a[5]={1,2,3,4};
-                    Return a;
-                EndBody.
-                Function: main
-                Body:
-                    Var: a[5]={1,2,3,4};
-                    Var: b[4];
-                    Var: c;
-                    a[5]=b;
-                EndBody.
-            
+        Function: foo
+        Parameter: w
+        Body:
+            Var: t;
+            Return 1;
+        EndBody.
+        Function: main
+        Parameter: x, y, z
+        Body:
+            Var: t = 2;
+            x = 1;
+            y = -2;
+            z = t;
+            t = w;
+        EndBody.
+                   

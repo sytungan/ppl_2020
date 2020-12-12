@@ -1,0 +1,8 @@
+
+        Var: arr[2][3];
+        Function: main
+        Parameter: x
+        Body:
+            arr[1][2] = x + main(2.0);
+        EndBody.
+        

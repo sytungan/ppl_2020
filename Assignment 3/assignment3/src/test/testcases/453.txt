@@ -1,0 +1,13 @@
+
+        Var: a = 10;
+        Function: main
+        Body:
+            Var: x;
+            If x Then
+                While x Do
+                    If 5 - a Then
+                    EndIf.
+                EndWhile.
+            EndIf.
+        EndBody.
+                   

@@ -1,0 +1,11 @@
+
+        Function: main
+        Body:
+            Var: x[5];
+            If True Then
+                While True Do
+                    Return x;
+                EndWhile.
+            EndIf.
+        EndBody.
+                   

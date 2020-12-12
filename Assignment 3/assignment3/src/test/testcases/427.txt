@@ -1,0 +1,11 @@
+
+        Var: foo[123][1];
+        Function: main
+        Parameter: m
+        Body:
+        EndBody.
+        Function: foo
+        Parameter: foo
+        Body:
+        EndBody.
+                   

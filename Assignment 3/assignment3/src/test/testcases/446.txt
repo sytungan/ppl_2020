@@ -1,0 +1,14 @@
+
+        Function: main
+        Parameter: arg
+        Body:
+            While True Do
+                Var: x;
+                printStrLn(x);
+                While True Do
+                    Var: x;
+                EndWhile.
+            EndWhile.
+            Return;
+        EndBody.
+                   
