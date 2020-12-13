@@ -351,7 +351,7 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
                 return NotInfer()
             elif type(lstArg[i]) == Unknown and isinstance(ast.param[i], CallExpr) and type(lstParam[i]) == ArrayType:
                 if lstParam[i].dimen and type(lstParam[i].eletype) != Unknown:
-                    self.updateTypeInEnv(self.getNameOfAst(ast.param[i]), rhs, True)
+                    self.updateTypeInEnv(self.getNameOfAst(ast.param[i]), lstParam[i], True)
                 else:
                     return NotInfer()
             elif type(lstArg[i]) not in [Unknown, ArrayType] and type(lstParam[i]) == Unknown:
@@ -606,7 +606,7 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
                 raise TypeCannotBeInferred(ast)
             elif type(lstArg[i]) == Unknown and isinstance(ast.param[i], CallExpr) and type(lstParam[i]) == ArrayType:
                 if lstParam[i].dimen and type(lstParam[i].eletype) != Unknown:
-                    self.updateTypeInEnv(self.getNameOfAst(ast.param[i]), rhs, True)
+                    self.updateTypeInEnv(self.getNameOfAst(ast.param[i]), lstParam[i], True)
                 else:
                     raise TypeCannotBeInferred(ast)
             elif type(lstArg[i]) not in [Unknown, ArrayType] and type(lstParam[i]) == Unknown:
