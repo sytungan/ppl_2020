@@ -3,6 +3,10 @@
         Function: main
         Parameter: x, y
         Body:
-            Return main(1,main(x, True));
+            Return main(1, main(x, True));
+        EndBody.
+        Function: foo
+        Body:
+            Return main(1,2);
         EndBody.
                    

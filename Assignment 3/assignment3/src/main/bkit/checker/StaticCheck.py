@@ -341,41 +341,41 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
         funcName = ast.method.name
         if not self.matchNameInEnv('func', funcName, o):
             raise Undeclared(Function(), funcName)
-        lstArg = [self.visit(ele, o) for ele in ast.param]
         lstParam = (self.lookup(funcName, o, lambda x: x.name).mtype.intype)[:]
-
-        if len(lstArg) != len(lstParam):
+        if len(ast.param) != len(lstParam):
             raise TypeMismatchInExpression(ast)
-        for i in range(len(lstArg)):
-            if type(lstArg[i]) == NotInfer or type(lstParam[i]) == NotInfer:
+        for i in range(len(ast.param)):
+            arg = self.visit(ast.param[i], o)
+            lstParam = (self.lookup(funcName, o, lambda x: x.name).mtype.intype)[:]
+            if type(arg) == NotInfer or type(lstParam[i]) == NotInfer:
                 return NotInfer()
-            elif type(lstArg[i]) == Unknown and isinstance(ast.param[i], CallExpr) and type(lstParam[i]) == ArrayType:
+            elif type(arg) == Unknown and isinstance(ast.param[i], CallExpr) and type(lstParam[i]) == ArrayType:
                 if lstParam[i].dimen and type(lstParam[i].eletype) != Unknown:
                     self.updateTypeInEnv(self.getNameOfAst(ast.param[i]), lstParam[i], True)
                 else:
                     return NotInfer()
-            elif type(lstArg[i]) not in [Unknown, ArrayType] and type(lstParam[i]) == Unknown:
-                lstParam[i] = lstArg[i]
-            elif type(lstParam[i]) not in [Unknown, ArrayType] and type(lstArg[i]) == Unknown:
-                lstArg[i] = lstParam[i]
+            elif type(arg) not in [Unknown, ArrayType] and type(lstParam[i]) == Unknown:
+                lstParam[i] = arg
+            elif type(lstParam[i]) not in [Unknown, ArrayType] and type(arg) == Unknown:
+                arg = lstParam[i]
                 self.updateTypeInEnv(self.getNameOfAst(ast.param[i]), lstParam[i], o)
-            elif type(lstArg[i]) == Unknown and type(lstParam[i]) == Unknown:
+            elif type(arg) == Unknown and type(lstParam[i]) == Unknown:
                 return NotInfer()
-            elif (type(lstArg[i]) == ArrayType and type(lstParam[i]) == ArrayType):
-                if lstArg[i].dimen == lstParam[i].dimen:
-                    if type(lstArg[i].eletype) == Unknown and type(lstParam[i].eletype) == Unknown:
+            elif (type(arg) == ArrayType and type(lstParam[i]) == ArrayType):
+                if arg.dimen == lstParam[i].dimen:
+                    if type(arg.eletype) == Unknown and type(lstParam[i].eletype) == Unknown:
                         return NotInfer()
-                    elif type(lstArg[i].eletype) == Unknown and type(lstParam[i].eletype) != Unknown:
-                        lstArg[i]= lstParam[i]
+                    elif type(arg.eletype) == Unknown and type(lstParam[i].eletype) != Unknown:
+                        arg= lstParam[i]
                         self.updateTypeInEnv(self.getNameOfAst(ast.param[i]), lstParam[i].eletype, o)
-                    elif type(lstParam[i].eletype) == Unknown and type(lstArg[i].eletype) != Unknown:
-                        lstParam[i] = lstArg[i]
-                    elif type(lstArg[i].eletype) != type(lstParam[i].eletype):
+                    elif type(lstParam[i].eletype) == Unknown and type(arg.eletype) != Unknown:
+                        lstParam[i] = arg
+                    elif type(arg.eletype) != type(lstParam[i].eletype):
                         raise TypeMismatchInExpression(ast)
                 else:
                     raise TypeMismatchInExpression(ast)
                     
-            elif type(lstArg[i]) != type(lstParam[i]):
+            elif type(arg) != type(lstParam[i]):
                 raise TypeMismatchInExpression(ast)
             self.updateParamInEnv(funcName, lstParam, o)
         return self.getTypeInEnv(funcName, o, True)
@@ -404,9 +404,11 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
                 return NotInfer()
             else: # If it's Id
                 raise TypeMismatchInExpression(ast)
+        elif type(self.visit(ast.arr, o)) != ArrayType:
+            raise TypeMismatchInExpression(ast)
         elif (len(self.getTypeInEnv(self.getNameOfAst(ast.arr), o, True).dimen)) != len(ast.idx):
             raise TypeMismatchInExpression(ast) 
-        elif type(self.visit(ast.arr, o)) == ArrayType:
+        else:
             return self.visit(ast.arr, o).eletype  
     
     # lhs: LHS
@@ -495,12 +497,12 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
             raise TypeMismatchInStatement(ast)
         # Infer and check for expr2
         if type(self.visit(ast.expr2, o)) == Unknown:
-            self.updateTypeInEnv(self.getNameOfAst(ast.idx1), BoolType(), o)
+            self.updateTypeInEnv(self.getNameOfAst(ast.expr2), BoolType(), o)
         elif type(self.visit(ast.expr2, o)) != BoolType: 
             raise TypeMismatchInStatement(ast)
         # Infer and check for expr3
         if type(self.visit(ast.expr3, o)) == Unknown:
-            self.updateTypeInEnv(self.getNameOfAst(ast.idx1), IntType(), o)
+            self.updateTypeInEnv(self.getNameOfAst(ast.expr3), IntType(), o)
         elif type(self.visit(ast.expr3, o)) != IntType: 
             raise TypeMismatchInStatement(ast) 
         innerEnv = reduce(lambda env, ele: env + [self.visit(ele, env)], ast.loop[0], [])
@@ -597,38 +599,40 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
         lstArg = [self.visit(ele, o) for ele in ast.param]
         lstParam = (self.lookup(funcName, o, lambda x: x.name).mtype.intype)[:]
 
-        if len(lstArg) != len(lstParam):
+        if len(ast.param) != len(lstParam):
             raise TypeMismatchInStatement(ast)
-        for i in range(len(lstArg)):
-            if type(lstArg[i]) == NotInfer or type(lstParam[i]) == NotInfer:
+        for i in range(len(ast.param)):
+            arg = self.visit(ast.param[i], o)
+            lstParam = (self.lookup(funcName, o, lambda x: x.name).mtype.intype)[:]
+            if type(arg) == NotInfer or type(lstParam[i]) == NotInfer:
                 raise TypeCannotBeInferred(ast)
-            elif type(lstArg[i]) == Unknown and type(lstParam[i]) == Unknown:
+            elif type(arg) == Unknown and type(lstParam[i]) == Unknown:
                 raise TypeCannotBeInferred(ast)
-            elif type(lstArg[i]) == Unknown and isinstance(ast.param[i], CallExpr) and type(lstParam[i]) == ArrayType:
+            elif type(arg) == Unknown and isinstance(ast.param[i], CallExpr) and type(lstParam[i]) == ArrayType:
                 if lstParam[i].dimen and type(lstParam[i].eletype) != Unknown:
                     self.updateTypeInEnv(self.getNameOfAst(ast.param[i]), lstParam[i], True)
                 else:
                     raise TypeCannotBeInferred(ast)
-            elif type(lstArg[i]) not in [Unknown, ArrayType] and type(lstParam[i]) == Unknown:
-                lstParam[i] = lstArg[i]
-            elif type(lstParam[i]) not in [Unknown, ArrayType] and type(lstArg[i]) == Unknown:
-                lstArg[i] = lstParam[i]
+            elif type(arg) not in [Unknown, ArrayType] and type(lstParam[i]) == Unknown:
+                lstParam[i] = arg
+            elif type(lstParam[i]) not in [Unknown, ArrayType] and type(arg) == Unknown:
+                arg = lstParam[i]
                 self.updateTypeInEnv(self.getNameOfAst(ast.param[i]), lstParam[i], o)
-            elif (type(lstArg[i]) == ArrayType and type(lstParam[i]) == ArrayType):
-                if lstArg[i].dimen == lstParam[i].dimen:
-                    if type(lstArg[i].eletype) == Unknown and type(lstParam[i].eletype) == Unknown:
+            elif (type(arg) == ArrayType and type(lstParam[i]) == ArrayType):
+                if arg.dimen == lstParam[i].dimen:
+                    if type(arg.eletype) == Unknown and type(lstParam[i].eletype) == Unknown:
                         raise TypeCannotBeInferred(ast)
-                    elif type(lstArg[i].eletype) == Unknown and type(lstParam[i].eletype) != Unknown:
-                        lstArg[i]= lstParam[i]
+                    elif type(arg.eletype) == Unknown and type(lstParam[i].eletype) != Unknown:
+                        arg= lstParam[i]
                         self.updateTypeInEnv(self.getNameOfAst(ast.param[i]), lstParam[i].eletype, o)
-                    elif type(lstParam[i].eletype) == Unknown and type(lstArg[i].eletype) != Unknown:
-                        lstParam[i] = lstArg[i]
-                    elif type(lstArg[i].eletype) != type(lstParam[i].eletype):
+                    elif type(lstParam[i].eletype) == Unknown and type(arg.eletype) != Unknown:
+                        lstParam[i] = arg
+                    elif type(arg.eletype) != type(lstParam[i].eletype):
                         raise TypeMismatchInStatement(ast)
                 else:
                     raise TypeMismatchInStatement(ast)
                 
-            elif type(lstArg[i]) != type(lstParam[i]):
+            elif type(arg) != type(lstParam[i]):
                 raise TypeMismatchInStatement(ast)
             self.updateParamInEnv(funcName, lstParam, o)
     

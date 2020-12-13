@@ -733,10 +733,14 @@ class CheckSuite(unittest.TestCase):
         Function: main
         Parameter: x, y
         Body:
-            Return main(1,main(x, True));
+            Return main(1, main(x, True));
+        EndBody.
+        Function: foo
+        Body:
+            Return main(1,2);
         EndBody.
                    """
-        expect = str(TypeCannotBeInferred(Return(CallExpr(Id("main"),[IntLiteral(1),CallExpr(Id("main"),[Id("x"),BooleanLiteral(True)])]))))
+        expect = str(TypeMismatchInExpression(CallExpr(Id("main"),[IntLiteral(1),IntLiteral(2)])))
         self.assertTrue(TestChecker.test(input,expect,451))
 
     def test_type_missmatch_in_stm1(self):
