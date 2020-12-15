@@ -8,12 +8,19 @@ class CheckSuite(unittest.TestCase):
     def test_undeclared_function1(self):
         """Simple program: main"""
         input = """
-        Function: main             
+        Function: main
+        Parameter: main      
         Body: 
-            foo();
+            main = 2;
+            Return;
+        EndBody.
+        Function: foo      
+        Body: 
+            main(2.5);
+            Return 1;
         EndBody.
                    """
-        expect = str(Undeclared(Function(),"foo"))
+        expect = str(TypeMismatchInStatement(CallStmt(Id("main"),[FloatLiteral(2.5)])))
         self.assertTrue(TestChecker.test(input,expect,401))
 
     def test_undeclared_function5(self):
@@ -600,12 +607,13 @@ class CheckSuite(unittest.TestCase):
         Body:
             Var: x;
             If True Then
-                Var: x, y;
+                Var: y;
+                y = x;
             EndIf.
             Return;
         EndBody.
                    """
-        expect = str(TypeCannotBeInferred(If([(BooleanLiteral(True),[VarDecl(Id("x"),[],None),VarDecl(Id("y"),[],None)],[])],([],[]))))
+        expect = str(TypeCannotBeInferred(Assign(Id("y"),Id("x"))))
         self.assertTrue(TestChecker.test(input,expect,442))
 
     def test_type_cannot_be_inferred13(self):
@@ -617,11 +625,12 @@ class CheckSuite(unittest.TestCase):
                 Var: x = 3;
             ElseIf False Then
                 Var: y, z = 3;
+                y = x;
             EndIf.
             Return;
         EndBody.
                    """
-        expect = str(TypeCannotBeInferred(If([(BooleanLiteral(True),[VarDecl(Id("x"),[],IntLiteral(3))],[]),(BooleanLiteral(False),[VarDecl(Id("y"),[],None),VarDecl(Id("z"),[],IntLiteral(3))],[])],([],[]))))
+        expect = str(TypeCannotBeInferred(Assign(Id("y"),Id("x"))))
         self.assertTrue(TestChecker.test(input,expect,443))
 
     def test_type_cannot_be_inferred14(self):
@@ -633,12 +642,13 @@ class CheckSuite(unittest.TestCase):
                 Var: s;
                 print(s);
             Else 
-                Var: x;
+                Var: x,y;
+                x = y;
             EndIf.
             Return;
         EndBody.
                    """
-        expect = str(TypeCannotBeInferred(If([(BooleanLiteral(True),[VarDecl(Id("s"),[],None)],[CallStmt(Id("print"),[Id("s")])])],([VarDecl(Id("x"),[],None)],[]))))
+        expect = str(TypeCannotBeInferred(Assign(Id("x"),Id("y"))))
         self.assertTrue(TestChecker.test(input,expect,444))
 
     def test_type_cannot_be_inferred15(self):
@@ -649,12 +659,12 @@ class CheckSuite(unittest.TestCase):
             Var: i;
             For (i = 0, i < 10, 2) Do
                 Var: y;
-                main(i);
+                main(y);
             EndFor.
             Return;
         EndBody.
                    """
-        expect = str(TypeCannotBeInferred(For(Id("i"),IntLiteral(0),BinaryOp("<",Id("i"),IntLiteral(10)),IntLiteral(2),([VarDecl(Id("y"),[],None)],[CallStmt(Id("main"),[Id("i")])]))))
+        expect = str(TypeCannotBeInferred(CallStmt(Id("main"),[Id("y")])))
         self.assertTrue(TestChecker.test(input,expect,445))
 
     def test_type_cannot_be_inferred16(self):
@@ -667,12 +677,13 @@ class CheckSuite(unittest.TestCase):
                 printStrLn(x);
                 While True Do
                     Var: x;
+                    x = arg;
                 EndWhile.
             EndWhile.
             Return;
         EndBody.
                    """
-        expect = str(TypeCannotBeInferred(While(BooleanLiteral(True),([VarDecl(Id("x"),[],None)],[]))))
+        expect = str(TypeCannotBeInferred(Assign(Id("x"),Id("arg"))))
         self.assertTrue(TestChecker.test(input,expect,446))
 
     def test_type_cannot_be_inferred17(self):
@@ -682,13 +693,14 @@ class CheckSuite(unittest.TestCase):
         Body:
             Var: x;
             Do
-                Var: str;
+                Var: a, b;
+                a = b;
             While x   
             EndDo.
             Return;
         EndBody.
                    """
-        expect = str(TypeCannotBeInferred(Dowhile(([VarDecl(Id("str"),[],None)],[]),Id("x"))))
+        expect = str(TypeCannotBeInferred(Assign(Id("a"),Id("b"))))
         self.assertTrue(TestChecker.test(input,expect,447))
 
     def test_type_cannot_be_inferred18(self):
@@ -1405,6 +1417,10 @@ class CheckSuite(unittest.TestCase):
 
     def test_full_program9(self):
         input = """
+        Function: foo
+        Body:
+            Return;
+        EndBody.
         Function: main
         Body:
             Var: a = 3, b = 4, c = 5;
@@ -1417,10 +1433,10 @@ class CheckSuite(unittest.TestCase):
             ElseIf (a*a > b*b+c*c) || (b*b > a*a+c*c) || (c*c > a*a+b*b) Then print("Day la tam giac tu");
             Else print("Day la tam giac nhon");
             EndIf.
-            Return main();
+            Return foo();
         EndBody.
         """
-        expect = str(TypeCannotBeInferred(Return(CallExpr(Id("main"),[]))))
+        expect = str(TypeMismatchInStatement(Return(CallExpr(Id("foo"),[]))))
         self.assertTrue(TestChecker.test(input,expect,487))
 
     def test_full_program10(self):

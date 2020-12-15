@@ -1,1 +1,1 @@
-Type Cannot Be Inferred: For(Id(i),IntLiteral(0),BinaryOp(<,Id(i),IntLiteral(10)),IntLiteral(2),[VarDecl(Id(y))],[CallStmt(Id(main),[Id(i)])])
+Type Cannot Be Inferred: CallStmt(Id(main),[Id(y)])

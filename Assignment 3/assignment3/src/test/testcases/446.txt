@@ -7,6 +7,7 @@
                 printStrLn(x);
                 While True Do
                     Var: x;
+                    x = arg;
                 EndWhile.
             EndWhile.
             Return;

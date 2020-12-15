@@ -1,6 +1,13 @@
 
-        Function: main             
+        Function: main
+        Parameter: main      
         Body: 
-            foo();
+            main = 2;
+            Return;
+        EndBody.
+        Function: foo      
+        Body: 
+            main(2.5);
+            Return 1;
         EndBody.
                    

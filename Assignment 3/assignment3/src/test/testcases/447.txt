@@ -4,7 +4,8 @@
         Body:
             Var: x;
             Do
-                Var: str;
+                Var: a, b;
+                a = b;
             While x   
             EndDo.
             Return;

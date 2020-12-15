@@ -3,7 +3,8 @@
         Body:
             Var: x;
             If True Then
-                Var: x, y;
+                Var: y;
+                y = x;
             EndIf.
             Return;
         EndBody.

@@ -86,8 +86,11 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
 
         elif kind == 'func':
             for x in env:
-                if x.name == key and type(x.mtype) is MType:
-                    return True
+                if x.name == key:
+                    if type(x.mtype) is MType:
+                        return True
+                    else:
+                        return False
             return False
 
         elif kind == 'var':
@@ -121,6 +124,7 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
                             if id(env[-1].mtype.intype[i]) == id(x.mtype):
                                 env[-1].mtype.intype[i] = value
                     x.mtype = value
+                break
 
     def createNewEnv(self, envOuter, envInner):
         env = [] + envInner
@@ -133,7 +137,7 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
         for x in envOld:
             if self.matchNameInEnv('all', x.name, envNew):
                 if type(x.mtype) == MType and not self.matchNameInEnv('all', x.name, envExcept):
-                    x.mtype.intype = self.lookup(x.name, envNew, lambda ele: ele.name).mtype.intype
+                    x.mtype.intype = self.lookup(x.name, envNew, lambda ele: ele.name if type(ele.mtype) == MType else None).mtype.intype
                 if type(self.getTypeInEnv(x.name, envOld, False)) == Unknown and not self.matchNameInEnv('all', x.name, envExcept):
                     typeInEnvNew = self.getTypeInEnv(x.name ,envNew, False)
                     self.updateTypeInEnv(x.name, typeInEnvNew, envOld)
@@ -184,7 +188,7 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
 
     def updateParamInEnv(self, funcName, lstParamType, env):
         for x in env:
-            if x.name == funcName:
+            if x.name == funcName and type(x.mtype) == MType:
                 for i in range(len(x.mtype.intype)):
                     if type(x.mtype.intype[i]) == Unknown:
                         for j in range(len(env)):
@@ -234,6 +238,7 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
     # param: List[VarDecl]
     # body: Tuple[List[VarDecl],List[Stmt]]
     def visitFuncDecl(self, ast, o):
+        outerEnv = o[:]
         funcName = ast.name.name
         lstParam = reduce(lambda env, ele: env + [self.visit(ele, env)]  \
         if not self.matchNameInEnv('all', ele.variable.name, env) \
@@ -245,7 +250,13 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
         innerEnv = reduce(lambda env, ele: env + [self.visit(ele, env)], ast.body[0], lstParam)
         funcEnv = self.createNewEnv(o, innerEnv)
         # Move enclose function to end of env
-        funcEnv.append(funcEnv.pop(funcEnv.index(self.lookup(funcName, funcEnv, lambda x: x.name))))
+        if type(self.lookup(funcName, funcEnv, lambda x: x.name)) == MType:
+            encloseFunction = self.lookup(funcName, funcEnv, lambda x: x.name)
+            funcEnv.append(funcEnv.pop(funcEnv.index(encloseFunction)))
+        else:
+            encloseFunction = self.lookup(funcName, outerEnv, lambda x: x.name)
+            funcEnv.append(encloseFunction)
+        
         [self.visit(x, funcEnv) for x in ast.body[1]]
         # self.updateOldEnv(lstParam, [], funcEnv) # Update param with func env
         # lstParamType = [x.mtype for x in lstParam]
@@ -469,15 +480,15 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
             innerEnv = reduce(lambda env, ele: env + [self.visit(ele, env)], ifThenStm[1], [])
             ifThenEnv = self.createNewEnv(o, innerEnv)
             [self.visit(x, ifThenEnv) for x in ifThenStm[2]]
-            self.updateOldEnv(innerEnv, [], ifThenEnv)
-            self.checkNotInferInStm(innerEnv, ast)
+            # self.updateOldEnv(innerEnv, [], ifThenEnv)
+            # self.checkNotInferInStm(innerEnv, ast)
             self.updateOldEnv(o, innerEnv, ifThenEnv)
         if ast.elseStmt:
             innerEnv = reduce(lambda env, ele: env + [self.visit(ele, env)], ast.elseStmt[0], [])
             elseEnv = self.createNewEnv(o, innerEnv)
             [self.visit(x, elseEnv) for x in ast.elseStmt[1]]
-            self.updateOldEnv(innerEnv, [], elseEnv)
-            self.checkNotInferInStm(innerEnv, ast)
+            # self.updateOldEnv(innerEnv, [], elseEnv)
+            # self.checkNotInferInStm(innerEnv, ast)
             self.updateOldEnv(o, innerEnv, elseEnv)
 
     # idx1: Id
@@ -508,8 +519,8 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
         innerEnv = reduce(lambda env, ele: env + [self.visit(ele, env)], ast.loop[0], [])
         forEnv = self.createNewEnv(o, innerEnv)
         [self.visit(x, forEnv) for x in ast.loop[1]]
-        self.updateOldEnv(innerEnv, [], forEnv)
-        self.checkNotInferInStm(innerEnv, ast)
+        # self.updateOldEnv(innerEnv, [], forEnv)
+        # self.checkNotInferInStm(innerEnv, ast)
         self.updateOldEnv(o, innerEnv, forEnv)
     
     def visitContinue(self, ast, o):
@@ -524,6 +535,8 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
         funcRetType = o[-1].mtype.restype
         if ast.expr:
             retType = self.visit(ast.expr, o)
+            if type(retType) == VoidType: # Exp cannot be voidtype
+                raise TypeMismatchInStatement(ast)
         else:
             retType = VoidType()
         if type(retType) == NotInfer:
@@ -542,7 +555,7 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
             if type(retType) == ArrayType:
                 if type(retType.eletype) == Unknown:
                     raise TypeCannotBeInferred(ast)
-            self.updateTypeInEnv(o[-1].name, retType, o, True)
+            o[-1].mtype.restype = retType # Update type
         elif type(retType) == Unknown:
             if type(funcRetType) != VoidType:
                 self.updateTypeInEnv(self.getNameOfAst(ast.expr), retType, o, True)
@@ -564,8 +577,8 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
             raise TypeCannotBeInferred(ast)
         elif type(exp) != BoolType:
             raise TypeMismatchInStatement(ast)
-        self.updateOldEnv(innerEnv, [], doWhileEnv)
-        self.checkNotInferInStm(innerEnv, ast)
+        # self.updateOldEnv(innerEnv, [], doWhileEnv)
+        # self.checkNotInferInStm(innerEnv, ast)
         self.updateOldEnv(o, innerEnv, doWhileEnv)
 
     # exp: Expr
@@ -581,8 +594,8 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
         innerEnv = reduce(lambda env, ele: env + [self.visit(ele, env)], ast.sl[0], [])
         whileDoEnv = self.createNewEnv(o, innerEnv)
         [self.visit(x, whileDoEnv) for x in ast.sl[1]]
-        self.updateOldEnv(innerEnv, [], whileDoEnv)
-        self.checkNotInferInStm(innerEnv, ast)
+        # self.updateOldEnv(innerEnv, [], whileDoEnv)
+        # self.checkNotInferInStm(innerEnv, ast)
         self.updateOldEnv(o, innerEnv, whileDoEnv)
 
     # method:Id
@@ -596,7 +609,6 @@ Symbol("printStrLn",MType([StringType()],VoidType()))]
             self.updateTypeInEnv(funcName, VoidType(), o)
         elif type(retType) != VoidType:
             raise TypeMismatchInStatement(ast)
-        lstArg = [self.visit(ele, o) for ele in ast.param]
         lstParam = (self.lookup(funcName, o, lambda x: x.name).mtype.intype)[:]
 
         if len(ast.param) != len(lstParam):

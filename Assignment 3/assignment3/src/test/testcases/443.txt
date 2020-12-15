@@ -6,6 +6,7 @@
                 Var: x = 3;
             ElseIf False Then
                 Var: y, z = 3;
+                y = x;
             EndIf.
             Return;
         EndBody.

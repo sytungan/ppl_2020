@@ -1,1 +1,1 @@
-Type Cannot Be Inferred: While(BooleanLiteral(true),[VarDecl(Id(x))],[])
+Type Cannot Be Inferred: Assign(Id(x),Id(arg))

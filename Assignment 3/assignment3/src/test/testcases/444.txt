@@ -6,7 +6,8 @@
                 Var: s;
                 print(s);
             Else 
-                Var: x;
+                Var: x,y;
+                x = y;
             EndIf.
             Return;
         EndBody.
